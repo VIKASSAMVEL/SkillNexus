@@ -44,7 +44,7 @@ router.get('/', async (req, res) => {
 
     let query = `
       SELECT s.*, u.name as user_name, u.location as user_location,
-             u.latitude, u.longitude,
+             s.latitude, s.longitude,
              COALESCE(uts.overall_score, 0) as trust_score,
              COALESCE(uts.average_rating, 0) as average_rating,
              COALESCE(uts.rating_count, 0) as rating_count

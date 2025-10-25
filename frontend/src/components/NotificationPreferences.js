@@ -230,7 +230,7 @@ const NotificationPreferences = () => {
         </Typography>
 
         <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <FormControlLabel
               control={
                 <Switch
@@ -247,7 +247,7 @@ const NotificationPreferences = () => {
             </Typography>
           </Grid>
 
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <FormControlLabel
               control={
                 <Switch
@@ -278,7 +278,7 @@ const NotificationPreferences = () => {
         </Typography>
 
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={4}>
+          <Grid size={{ xs: 12, sm: 4 }}>
             <FormControlLabel
               control={
                 <Switch
@@ -292,7 +292,7 @@ const NotificationPreferences = () => {
             />
           </Grid>
 
-          <Grid item xs={12} sm={4}>
+          <Grid size={{ xs: 12, sm: 4 }}>
             <FormControlLabel
               control={
                 <Switch
@@ -306,7 +306,7 @@ const NotificationPreferences = () => {
             />
           </Grid>
 
-          <Grid item xs={12} sm={4}>
+          <Grid size={{ xs: 12, sm: 4 }}>
             <FormControlLabel
               control={
                 <Switch
@@ -330,7 +330,7 @@ const NotificationPreferences = () => {
         </Typography>
 
         <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <FormControlLabel
               control={
                 <Switch
@@ -347,7 +347,7 @@ const NotificationPreferences = () => {
             </Typography>
           </Grid>
 
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <FormControlLabel
               control={
                 <Switch
@@ -364,7 +364,7 @@ const NotificationPreferences = () => {
             </Typography>
           </Grid>
 
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <FormControlLabel
               control={
                 <Switch
@@ -381,7 +381,7 @@ const NotificationPreferences = () => {
             </Typography>
           </Grid>
 
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <FormControlLabel
               control={
                 <Switch
@@ -530,7 +530,7 @@ const NotificationPreferences = () => {
         </DialogTitle>
         <DialogContent>
           <Grid container spacing={2} sx={{ mt: 1 }}>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 fullWidth
                 label="Contact Name"
@@ -549,7 +549,7 @@ const NotificationPreferences = () => {
               />
             </Grid>
 
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <TextField
                 fullWidth
                 label="Email"
@@ -568,7 +568,7 @@ const NotificationPreferences = () => {
               />
             </Grid>
 
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <TextField
                 fullWidth
                 label="Phone"
@@ -586,7 +586,7 @@ const NotificationPreferences = () => {
               />
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 fullWidth
                 label="Relationship"
@@ -610,7 +610,7 @@ const NotificationPreferences = () => {
               </TextField>
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <FormControlLabel
                 control={
                   <Switch

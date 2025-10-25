@@ -255,7 +255,7 @@ const AvailabilityManager = () => {
                   ) : (
                     <Grid container spacing={2}>
                       {daySlots.map((slot, index) => (
-                        <Grid item xs={12} sm={6} md={4} key={slot.id}>
+                        <Grid size={{ xs: 12, sm: 6, md: 4 }} key={slot.id}>
                           <Fade in={true} style={{ transitionDelay: `${index * 50}ms` }}>
                             <Paper
                               elevation={0}

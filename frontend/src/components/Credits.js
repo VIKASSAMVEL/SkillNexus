@@ -188,7 +188,7 @@ const Credits = () => {
 
         <Grid container spacing={3}>
           {/* Current Balance */}
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <StyledCard>
               <CardContent sx={{ backgroundColor: '#1A2332 !important', p: 3 }}>
                 <Typography variant="h6" gutterBottom sx={{ color: '#E2E8F0' }}>
@@ -220,7 +220,7 @@ const Credits = () => {
           </Grid>
 
           {/* Quick Add Options */}
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <StyledCard>
               <CardContent sx={{ backgroundColor: '#1A2332 !important', p: 3 }}>
                 <Typography variant="h6" gutterBottom sx={{ color: '#E2E8F0' }}>
@@ -250,7 +250,7 @@ const Credits = () => {
           </Grid>
 
           {/* Transaction History */}
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <StyledCard>
               <CardContent sx={{ backgroundColor: '#1A2332 !important', p: 3 }}>
                 <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1, color: '#E2E8F0' }}>

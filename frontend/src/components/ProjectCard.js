@@ -517,7 +517,7 @@ const ProjectCard = ({ project, onUpdate }) => {
           </Typography>
 
           <Grid container spacing={3} sx={{ mb: 4 }}>
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Paper
                 elevation={0}
                 sx={{
@@ -564,7 +564,7 @@ const ProjectCard = ({ project, onUpdate }) => {
               </Paper>
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Paper
                 elevation={0}
                 sx={{

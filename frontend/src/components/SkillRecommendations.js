@@ -113,7 +113,7 @@ const SkillRecommendations = ({ userId, limit = 10, category = null }) => {
 
       <Grid container spacing={2}>
         {recommendations.map((recommendation) => (
-          <Grid item xs={12} md={6} key={recommendation.id}>
+          <Grid size={{ xs: 12, md: 6 }} key={recommendation.id}>
             <StyledCard>
               <CardContent>
                 <RecommendationScore score={recommendation.recommendation_score}>

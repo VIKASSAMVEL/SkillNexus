@@ -217,7 +217,7 @@ const Projects = () => {
             {/* Stats Cards */}
             <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
               <Grid container spacing={3} sx={{ maxWidth: 800, justifyContent: 'center' }}>
-                <Grid item xs={12} sm={4}>
+                <Grid size={{ xs: 12, sm: 4 }}>
                   <Zoom in={true} style={{ transitionDelay: '200ms' }}>
                     <Paper
                       elevation={0}
@@ -244,7 +244,7 @@ const Projects = () => {
                     </Paper>
                   </Zoom>
                 </Grid>
-                <Grid item xs={12} sm={4}>
+                <Grid size={{ xs: 12, sm: 4 }}>
                   <Zoom in={true} style={{ transitionDelay: '400ms' }}>
                     <Paper
                       elevation={0}
@@ -271,7 +271,7 @@ const Projects = () => {
                     </Paper>
                   </Zoom>
                 </Grid>
-                <Grid item xs={12} sm={4}>
+                <Grid size={{ xs: 12, sm: 4 }}>
                   <Zoom in={true} style={{ transitionDelay: '600ms' }}>
                     <Paper
                       elevation={0}
@@ -484,7 +484,7 @@ const Projects = () => {
                 Filter Projects
               </Typography>
               <Grid container spacing={3} alignItems="center">
-                <Grid item xs={12} md={3}>
+                <Grid size={{ xs: 12, md: 3 }}>
                   <FormControl fullWidth size="small">
                     <InputLabel sx={{ color: '#94A3B8', '&.Mui-focused': { color: '#14B8A6' } }}>Category</InputLabel>
                     <Select
@@ -524,7 +524,7 @@ const Projects = () => {
                   </FormControl>
                 </Grid>
 
-                <Grid item xs={12} md={3}>
+                <Grid size={{ xs: 12, md: 3 }}>
                   <FormControl fullWidth size="small">
                     <InputLabel sx={{ color: '#94A3B8', '&.Mui-focused': { color: '#14B8A6' } }}>Project Type</InputLabel>
                     <Select
@@ -556,7 +556,7 @@ const Projects = () => {
                   </FormControl>
                 </Grid>
 
-                <Grid item xs={12} md={3}>
+                <Grid size={{ xs: 12, md: 3 }}>
                   <FormControl fullWidth size="small">
                     <InputLabel sx={{ color: '#94A3B8', '&.Mui-focused': { color: '#14B8A6' } }}>Status</InputLabel>
                     <Select
@@ -587,7 +587,7 @@ const Projects = () => {
                   </FormControl>
                 </Grid>
 
-                <Grid item xs={12} md={3}>
+                <Grid size={{ xs: 12, md: 3 }}>
                   <Button
                     variant="outlined"
                     onClick={clearFilters}
@@ -683,7 +683,7 @@ const Projects = () => {
             ) : (
               <Grid container spacing={3} sx={{ width: '100%', m: 0 }}>
                 {projects.map((project, index) => (
-                  <Grid item xs={12} sm={6} md={4} key={project.id} sx={{ display: 'flex' }}>
+                  <Grid size={{ xs: 12, sm: 6, md: 4 }} key={project.id} sx={{ display: 'flex' }}>
                     <Grow
                       in={tabTransition}
                       timeout={600 + index * 100}
@@ -710,21 +710,6 @@ const Projects = () => {
 
       <Footer />
 
-      <style jsx global>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
-        }
-        .MuiMenuItem-root {
-          color: #E2E8F0 !important;
-        }
-        .MuiPopover-paper {
-          background-color: #1A2332 !important;
-        }
-        .MuiMenu-paper {
-          background-color: #1A2332 !important;
-        }
-      `}</style>
     </Box>
   );
 };

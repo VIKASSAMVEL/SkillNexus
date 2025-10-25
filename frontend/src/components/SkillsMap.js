@@ -71,13 +71,13 @@ const SkillsMap = ({ skills, onSkillSelect }) => {
         window.google.maps.event.removeListener(listener);
       });
     }
-  }, [map, skills, onSkillSelect, markers]);
+  }, [map, skills, onSkillSelect]);
 
   useEffect(() => {
     if (map && skills.length > 0) {
       updateMarkers();
     }
-  }, [map, skills, updateMarkers]);
+  }, [map, skills]); // Removed updateMarkers from dependencies to prevent infinite loop
 
   const renderMap = (status) => {
     switch (status) {
@@ -150,7 +150,7 @@ const SkillsMap = ({ skills, onSkillSelect }) => {
     return renderMap(Status.SUCCESS);
   };
 
-  if (apiKey === 'YOUR_API_KEY_HERE') {
+  if (!apiKey || apiKey === 'YOUR_API_KEY_HERE') {
     return (
       <Paper sx={{ p: 3, textAlign: 'center' }}>
         <Typography variant="h6" gutterBottom>

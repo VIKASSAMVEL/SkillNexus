@@ -223,7 +223,7 @@ const ConflictResolution = () => {
                       <Divider sx={{ bgcolor: '#1E293B', mb: 2 }} />
 
                       <Grid container spacing={2}>
-                        <Grid item xs={12} md={6}>
+                        <Grid size={{ xs: 12, md: 6 }}>
                           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                             <Event sx={{ color: '#14B8A6' }} />
                             <Typography variant="subtitle2" sx={{ color: '#E2E8F0' }}>
@@ -239,7 +239,7 @@ const ConflictResolution = () => {
                         </Grid>
 
                         {conflict.conflicting_session && (
-                          <Grid item xs={12} md={6}>
+                          <Grid size={{ xs: 12, md: 6 }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                               <Warning sx={{ color: '#EF4444' }} />
                               <Typography variant="subtitle2" sx={{ color: '#E2E8F0' }}>
@@ -331,7 +331,7 @@ const ConflictResolution = () => {
                 </Typography>
 
                 <Grid container spacing={3}>
-                  <Grid item xs={12} md={6}>
+                  <Grid size={{ xs: 12, md: 6 }}>
                     <DateTimePicker
                       label="New Start Time"
                       value={newStartTime}
@@ -353,7 +353,7 @@ const ConflictResolution = () => {
                     />
                   </Grid>
 
-                  <Grid item xs={12} md={6}>
+                  <Grid size={{ xs: 12, md: 6 }}>
                     <DateTimePicker
                       label="New End Time"
                       value={newEndTime}

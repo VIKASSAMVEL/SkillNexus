@@ -404,7 +404,7 @@ const SessionList = ({ sessions, onJoinSession, onStartSession, onEndSession }) 
   return (
     <Grid container spacing={3}>
       {sessions.map((session) => (
-        <Grid item xs={12} md={6} lg={4} key={session.id}>
+        <Grid size={{ xs: 12, md: 6, lg: 4 }} key={session.id}>
           <SessionCard
             session={session}
             onJoinSession={onJoinSession}
@@ -652,7 +652,7 @@ const CreateSessionDialog = ({ open, onClose, skills, onSessionCreated }) => {
 
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
           <Grid container spacing={3}>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 select
                 fullWidth
@@ -683,7 +683,7 @@ const CreateSessionDialog = ({ open, onClose, skills, onSessionCreated }) => {
               </TextField>
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <TextField
                 fullWidth
                 label="Date & Time"
@@ -708,7 +708,7 @@ const CreateSessionDialog = ({ open, onClose, skills, onSessionCreated }) => {
               />
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <TextField
                 fullWidth
                 label="Duration (minutes)"
@@ -732,7 +732,7 @@ const CreateSessionDialog = ({ open, onClose, skills, onSessionCreated }) => {
               />
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 select
                 fullWidth
@@ -760,7 +760,7 @@ const CreateSessionDialog = ({ open, onClose, skills, onSessionCreated }) => {
               </TextField>
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 fullWidth
                 multiline

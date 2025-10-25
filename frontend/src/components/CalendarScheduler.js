@@ -411,7 +411,7 @@ const CalendarScheduler = ({ teacherId, skillId, onBookingCreated }) => {
     return (
       <Grid container spacing={1}>
         {weekDays.map((day, index) => (
-          <Grid item xs={12} sm={6} md={12/7} key={index}>
+          <Grid size={{ xs: 12, sm: 6, md: 12/7 }} key={index}>
             <Paper
               elevation={0}
               sx={{
@@ -548,7 +548,7 @@ const CalendarScheduler = ({ teacherId, skillId, onBookingCreated }) => {
 
           {/* Teacher and Skill Selection */}
           <Grid container spacing={3} sx={{ mb: 3 }}>
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Paper
                 elevation={0}
                 sx={{
@@ -607,7 +607,7 @@ const CalendarScheduler = ({ teacherId, skillId, onBookingCreated }) => {
               </Paper>
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Paper
                 elevation={0}
                 sx={{
@@ -865,7 +865,7 @@ const CalendarScheduler = ({ teacherId, skillId, onBookingCreated }) => {
             )}
 
             <Grid container spacing={3}>
-              <Grid item xs={12} md={6}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <Typography variant="subtitle2" sx={{ color: '#E2E8F0', fontWeight: 600, mb: 1 }}>
                   Session Date & Time
                 </Typography>
@@ -877,7 +877,7 @@ const CalendarScheduler = ({ teacherId, skillId, onBookingCreated }) => {
                 </Typography>
               </Grid>
 
-              <Grid item xs={12} md={6}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <FormControl fullWidth sx={{ mb: 2 }}>
                   <InputLabel sx={{ color: '#94A3B8' }}>Session Type</InputLabel>
                   <Select
@@ -933,7 +933,7 @@ const CalendarScheduler = ({ teacherId, skillId, onBookingCreated }) => {
                 </FormControl>
               </Grid>
 
-              <Grid item xs={12} md={6}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <FormControl fullWidth sx={{ mb: 2 }}>
                   <InputLabel sx={{ color: '#94A3B8' }}>Timezone</InputLabel>
                   <Select
@@ -1026,7 +1026,7 @@ const CalendarScheduler = ({ teacherId, skillId, onBookingCreated }) => {
                 )}
               </Grid>
 
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <TextField
                   fullWidth
                   multiline

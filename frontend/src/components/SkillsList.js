@@ -397,16 +397,6 @@ const SkillsList = ({ onBookSkill, onViewSkillDetails }) => {
         />
       )}
 
-      <style jsx global>{`
-        .MuiMenuItem-root {
-          color: #E2E8F0 !important;
-        }
-        .MuiPopover-paper,
-        .MuiMenu-paper {
-          background-color: #1A2332 !important;
-          border: 1px solid #1E293B !important;
-        }
-      `}</style>
     </Box>
   );
 };

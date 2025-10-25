@@ -117,7 +117,7 @@ const Footer = () => {
         <Container maxWidth="lg" sx={{ px: { xs: 2, md: 4 } }}>
           <Grid container spacing={2}>
             {/* Column 1: Platform & Mission */}
-            <Grid item xs={12} md={3}>
+            <Grid size={{ xs: 12, md: 3 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                 <img
                   src="/logo.jpg"
@@ -168,7 +168,7 @@ community projects that make a difference              </Typography>
             </Grid>
 
             {/* Column 2: Contact & Legal */}
-            <Grid item xs={12} md={3}>
+            <Grid size={{ xs: 12, md: 3 }}>
               <Typography
                 variant="h6"
                 sx={{
@@ -234,7 +234,7 @@ community projects that make a difference              </Typography>
             </Grid>
 
             {/* Column 3: Quick Links */}
-            <Grid item xs={12} md={3}>
+            <Grid size={{ xs: 12, md: 3 }}>
               <Typography
                 variant="h6"
                 sx={{
@@ -315,7 +315,7 @@ community projects that make a difference              </Typography>
             </Grid>
 
             {/* Column 4: Trust & Support */}
-            <Grid item xs={12} md={3} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Grid size={{ xs: 12, md: 3 }} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <Typography
                 variant="h6"
                 sx={{

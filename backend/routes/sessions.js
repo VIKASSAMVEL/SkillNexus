@@ -128,7 +128,7 @@ router.get('/', authenticateToken, async (req, res) => {
         u1.email as learner_email,
         u2.name as provider_name,
         u2.email as provider_email,
-        sk.skill_name,
+        sk.name as skill_name,
         sk.category,
         sk.description as skill_description
       FROM sessions s
@@ -211,7 +211,7 @@ router.post('/', authenticateToken, async (req, res) => {
 
     // Validate that the skill and provider exist
     const [skills] = await pool.execute(
-      'SELECT * FROM skills WHERE id = ? AND provider_id = ?',
+      'SELECT * FROM skills WHERE id = ? AND user_id = ?',
       [skill_id, provider_id]
     );
 

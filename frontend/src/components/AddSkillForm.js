@@ -167,7 +167,7 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
 
           <Grid container spacing={2}>
             {/* Skill Name */}
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <Typography sx={{ color: '#94A3B8', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', mb: 1 }}>
                 📝 Skill Name
               </Typography>
@@ -220,7 +220,7 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
             </Grid>
 
             {/* Category */}
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <Typography sx={{ color: '#94A3B8', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', mb: 1 }}>
                 🏷️ Category
               </Typography>
@@ -289,7 +289,7 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
             </Grid>
 
             {/* Proficiency Level */}
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <Typography sx={{ color: '#94A3B8', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', mb: 1 }}>
                 🎯 Proficiency Level
               </Typography>
@@ -336,7 +336,7 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
             </Grid>
 
             {/* Price per Hour */}
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <Typography sx={{ color: '#94A3B8', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', mb: 1 }}>
                 ⏰ Price per Hour
               </Typography>
@@ -386,7 +386,7 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
             </Grid>
 
             {/* Price per Session */}
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <Typography sx={{ color: '#94A3B8', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', mb: 1 }}>
                 💰 Price per Session
               </Typography>
@@ -436,7 +436,7 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
             </Grid>
 
             {/* Availability */}
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <Typography sx={{ color: '#94A3B8', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', mb: 1 }}>
                 📅 Availability
               </Typography>
@@ -484,7 +484,7 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
             </Grid>
 
             {/* Description */}
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <Typography sx={{ color: '#94A3B8', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', mb: 1 }}>
                 📖 Description
               </Typography>

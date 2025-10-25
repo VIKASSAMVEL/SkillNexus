@@ -193,7 +193,7 @@ const BookingsList = () => {
       ) : (
         <Grid container spacing={3}>
           {bookings.map((booking, index) => (
-            <Grid item xs={12} md={6} lg={6} key={booking.id}>
+            <Grid size={{ xs: 12, md: 6, lg: 6 }} key={booking.id}>
               <Fade in={true} style={{ transitionDelay: `${index * 100}ms` }}>
                 <Paper
                   elevation={0}

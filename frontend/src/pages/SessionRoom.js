@@ -545,7 +545,7 @@ const SessionRoom = () => {
         <Box sx={{ flex: 1, p: 2 }}>
           <Grid container spacing={2}>
             {/* Local Video */}
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <VideoContainer>
                 <VideoElement
                   ref={localVideoRef}
@@ -573,7 +573,7 @@ const SessionRoom = () => {
 
             {/* Remote Videos */}
             {Array.from(remoteStreams.entries()).map(([userId, stream]) => (
-              <Grid item xs={12} md={6} key={userId}>
+              <Grid size={{ xs: 12, md: 6 }} key={userId}>
                 <VideoContainer>
                   <VideoElement
                     ref={(el) => {

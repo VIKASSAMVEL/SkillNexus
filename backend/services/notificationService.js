@@ -46,7 +46,7 @@ class NotificationService {
 
       // Get reminders that are due (within the next 5 minutes)
       const [reminders] = await pool.execute(`
-        SELECT sr.*, s.skill_name, s.scheduled_at, s.duration_minutes,
+        SELECT sr.*, sk.name as skill_name, s.scheduled_at, s.duration_minutes,
                u1.name as learner_name, u1.email as learner_email,
                u2.name as provider_name, u2.email as provider_email,
                unp.email_reminders, unp.sms_reminders, unp.timezone
@@ -54,6 +54,7 @@ class NotificationService {
         JOIN sessions s ON sr.session_id = s.id
         JOIN users u1 ON s.learner_id = u1.id
         JOIN users u2 ON s.provider_id = u2.id
+        LEFT JOIN skills sk ON s.skill_id = sk.id
         LEFT JOIN user_notification_preferences unp ON sr.user_id = unp.user_id
         WHERE sr.delivery_status = 'pending'
         AND sr.scheduled_time <= DATE_ADD(NOW(), INTERVAL 5 MINUTE)
@@ -470,7 +471,7 @@ class NotificationService {
       const sessionEnd = new Date(sessionStart.getTime() + duration * 60 * 1000);
 
       let query = `
-        SELECT s.*, u1.name as learner_name, u2.name as provider_name, sk.skill_name
+        SELECT s.*, u1.name as learner_name, u2.name as provider_name, sk.name as skill_name
         FROM sessions s
         JOIN users u1 ON s.learner_id = u1.id
         JOIN users u2 ON s.provider_id = u2.id
@@ -543,7 +544,7 @@ class NotificationService {
       const pool = getPool();
       const [sessions] = await pool.execute(`
         SELECT s.*, u1.name as learner_name, u1.email as learner_email,
-               u2.name as provider_name, u2.email as provider_email, sk.skill_name
+               u2.name as provider_name, u2.email as provider_email, sk.name as skill_name
         FROM sessions s
         JOIN users u1 ON s.learner_id = u1.id
         JOIN users u2 ON s.provider_id = u2.id

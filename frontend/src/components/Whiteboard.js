@@ -321,7 +321,7 @@ const Whiteboard = ({ socket, sessionId, isOpen, onClose }) => {
         <DialogContent sx={{ bgcolor: '#1A2332', p: 3 }}>
           <Grid container spacing={1}>
             {COLORS.map((colorOption) => (
-              <Grid item key={colorOption}>
+              <Grid size={{ xs: 2, sm: 1 }} key={colorOption}>
                 <ColorButton
                   color={colorOption}
                   selected={color === colorOption}

@@ -197,7 +197,7 @@ const UserPreferencesForm = ({ userId, onPreferencesUpdated }) => {
         <form onSubmit={handleSubmit}>
           <Grid container spacing={3}>
             {/* Learning Style */}
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <FormControl fullWidth>
                 <InputLabel>Learning Style</InputLabel>
                 <Select
@@ -214,7 +214,7 @@ const UserPreferencesForm = ({ userId, onPreferencesUpdated }) => {
             </Grid>
 
             {/* Experience Level */}
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <FormControl fullWidth>
                 <InputLabel>Experience Level</InputLabel>
                 <Select
@@ -230,7 +230,7 @@ const UserPreferencesForm = ({ userId, onPreferencesUpdated }) => {
             </Grid>
 
             {/* Session Preferences */}
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <FormControl fullWidth>
                 <InputLabel>Preferred Session Duration</InputLabel>
                 <Select
@@ -246,7 +246,7 @@ const UserPreferencesForm = ({ userId, onPreferencesUpdated }) => {
               </FormControl>
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <FormControl fullWidth>
                 <InputLabel>Preferred Session Frequency</InputLabel>
                 <Select
@@ -263,7 +263,7 @@ const UserPreferencesForm = ({ userId, onPreferencesUpdated }) => {
             </Grid>
 
             {/* Budget Range */}
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <Typography gutterBottom>Budget Range (per hour)</Typography>
               <Box px={2}>
                 <Slider
@@ -286,7 +286,7 @@ const UserPreferencesForm = ({ userId, onPreferencesUpdated }) => {
             </Grid>
 
             {/* Skill Goals */}
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 fullWidth
                 multiline
@@ -299,12 +299,12 @@ const UserPreferencesForm = ({ userId, onPreferencesUpdated }) => {
             </Grid>
 
             {/* Availability Preferences */}
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <Typography variant="h6" gutterBottom>
                 Availability Preferences
               </Typography>
               <Grid container spacing={2}>
-                <Grid item xs={6} sm={4}>
+                <Grid size={{ xs: 6, sm: 4 }}>
                   <FormControlLabel
                     control={
                       <Switch
@@ -315,7 +315,7 @@ const UserPreferencesForm = ({ userId, onPreferencesUpdated }) => {
                     label="Weekdays"
                   />
                 </Grid>
-                <Grid item xs={6} sm={4}>
+                <Grid size={{ xs: 6, sm: 4 }}>
                   <FormControlLabel
                     control={
                       <Switch
@@ -326,7 +326,7 @@ const UserPreferencesForm = ({ userId, onPreferencesUpdated }) => {
                     label="Weekends"
                   />
                 </Grid>
-                <Grid item xs={4} sm={2}>
+                <Grid size={{ xs: 4, sm: 2 }}>
                   <FormControlLabel
                     control={
                       <Switch
@@ -337,7 +337,7 @@ const UserPreferencesForm = ({ userId, onPreferencesUpdated }) => {
                     label="Mornings"
                   />
                 </Grid>
-                <Grid item xs={4} sm={2}>
+                <Grid size={{ xs: 4, sm: 2 }}>
                   <FormControlLabel
                     control={
                       <Switch
@@ -348,7 +348,7 @@ const UserPreferencesForm = ({ userId, onPreferencesUpdated }) => {
                     label="Afternoons"
                   />
                 </Grid>
-                <Grid item xs={4} sm={2}>
+                <Grid size={{ xs: 4, sm: 2 }}>
                   <FormControlLabel
                     control={
                       <Switch
@@ -363,7 +363,7 @@ const UserPreferencesForm = ({ userId, onPreferencesUpdated }) => {
             </Grid>
 
             {/* Skill Interests */}
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <Typography variant="h6" gutterBottom>
                 Skill Interests
               </Typography>
@@ -413,7 +413,7 @@ const UserPreferencesForm = ({ userId, onPreferencesUpdated }) => {
                       {category?.name}
                     </Typography>
                     <Grid container spacing={2}>
-                      <Grid item xs={12} sm={4}>
+                      <Grid size={{ xs: 12, sm: 4 }}>
                         <FormControl fullWidth size="small">
                           <InputLabel>Interest Level</InputLabel>
                           <Select
@@ -427,7 +427,7 @@ const UserPreferencesForm = ({ userId, onPreferencesUpdated }) => {
                           </Select>
                         </FormControl>
                       </Grid>
-                      <Grid item xs={12} sm={4}>
+                      <Grid size={{ xs: 12, sm: 4 }}>
                         <FormControl fullWidth size="small">
                           <InputLabel>Current Proficiency</InputLabel>
                           <Select
@@ -443,7 +443,7 @@ const UserPreferencesForm = ({ userId, onPreferencesUpdated }) => {
                           </Select>
                         </FormControl>
                       </Grid>
-                      <Grid item xs={12} sm={4}>
+                      <Grid size={{ xs: 12, sm: 4 }}>
                         <FormControl fullWidth size="small">
                           <InputLabel>Target Proficiency</InputLabel>
                           <Select
@@ -465,7 +465,7 @@ const UserPreferencesForm = ({ userId, onPreferencesUpdated }) => {
             </Grid>
 
             {/* Submit Button */}
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <Box display="flex" justifyContent="center" mt={3}>
                 <Button
                   type="submit"
