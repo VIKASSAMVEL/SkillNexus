@@ -225,8 +225,8 @@ const BookingsList = () => {
                     </Box>
                   </Box>
 
-                  <CardContent sx={{ '&:last-child': { pb: 2 } }}>
-                    <Box display="flex" alignItems="center" mb={2} sx={{ color: '#CBD5E1' }}>
+                  <CardContent sx={{ '&:last-child': { pb: 2 }, px: 3, py: 1.5 }}>
+                    <Box display="flex" alignItems="center" mb={1.5} sx={{ color: '#CBD5E1' }}>
                       <Person sx={{ mr: 1.5, fontSize: 20, color: '#14B8A6' }} />
                       <Typography variant="body2">
                         {booking.student_id === parseInt(localStorage.getItem('userId'))
@@ -235,7 +235,7 @@ const BookingsList = () => {
                       </Typography>
                     </Box>
 
-                    <Box display="flex" alignItems="center" mb={2} sx={{ color: '#CBD5E1' }}>
+                    <Box display="flex" alignItems="center" mb={1.5} sx={{ color: '#CBD5E1' }}>
                       <AccessTime sx={{ mr: 1.5, fontSize: 20, color: '#14B8A6' }} />
                       <Box>
                         <Typography variant="body2">
@@ -252,11 +252,11 @@ const BookingsList = () => {
                     </Box>
 
                     <Box sx={{ 
-                      p: 2, 
+                      p: 1.5, 
                       bgcolor: 'rgba(20, 184, 166, 0.05)', 
                       borderRadius: 1.5,
                       border: '1px solid rgba(20, 184, 166, 0.2)',
-                      mb: 2
+                      mb: 1.5
                     }}>
                       <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block' }}>
                         Duration
@@ -267,7 +267,7 @@ const BookingsList = () => {
                     </Box>
 
                     {booking.notes && (
-                      <Box mb={2}>
+                      <Box mb={1.5}>
                         <Typography variant="caption" sx={{ color: '#94A3B8' }}>
                           Notes:
                         </Typography>
