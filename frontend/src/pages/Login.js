@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Typography, TextField, Button, Paper, Box, Alert } from '@mui/material';
 import { useNavigate, Link } from 'react-router-dom';
+import api from '../services/api';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -24,14 +25,11 @@ const Login = () => {
     setError('');
 
     try {
-      // TODO: Implement login API call
-      console.log('Login attempt:', formData);
-
-      // Mock successful login
-      localStorage.setItem('token', 'mock-jwt-token');
+      const response = await api.post('/auth/login', formData);
+      localStorage.setItem('token', response.data.token);
       navigate('/profile');
     } catch (err) {
-      setError('Login failed. Please check your credentials.');
+      setError(err.response?.data?.message || 'Login failed. Please try again.');
     } finally {
       setLoading(false);
     }

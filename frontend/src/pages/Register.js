@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Typography, TextField, Button, Paper, Box, Alert } from '@mui/material';
 import { useNavigate, Link } from 'react-router-dom';
+import api from '../services/api';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -33,13 +34,17 @@ const Register = () => {
     setLoading(true);
 
     try {
-      // TODO: Implement registration API call
-      console.log('Registration attempt:', formData);
+      const response = await api.post('/auth/register', {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        location: formData.location
+      });
 
-      // Mock successful registration
-      navigate('/login');
+      localStorage.setItem('token', response.data.token);
+      navigate('/profile');
     } catch (err) {
-      setError('Registration failed. Please try again.');
+      setError(err.response?.data?.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
