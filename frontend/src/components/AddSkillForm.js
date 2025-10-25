@@ -142,8 +142,8 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
           )}
 
           <Grid container spacing={3}>
-            {/* Row 1: Skill Name and Category */}
-            <Grid item xs={12} sm={7}>
+            {/* Skill Name - Full Width */}
+            <Grid item xs={12}>
               <TextField
                 fullWidth
                 label="Skill Name"
@@ -181,7 +181,8 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
               />
             </Grid>
 
-            <Grid item xs={12} sm={5}>
+            {/* Category and Proficiency Level - Side by Side */}
+            <Grid item xs={12} sm={6}>
               <FormControl fullWidth required disabled={loading}>
                 <InputLabel sx={{ color: '#CBD5E1', '&.Mui-focused': { color: '#14B8A6' } }}>Category</InputLabel>
                 <Select
@@ -234,7 +235,43 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
               </FormControl>
             </Grid>
 
-            {/* Row 2: Description (Full Width) */}
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth disabled={loading}>
+                <InputLabel sx={{ color: '#CBD5E1', '&.Mui-focused': { color: '#14B8A6' } }}>Proficiency Level</InputLabel>
+                <Select
+                  value={formData.proficiency_level}
+                  label="Proficiency Level"
+                  onChange={(e) => handleInputChange('proficiency_level', e.target.value)}
+                  sx={{
+                    color: '#E2E8F0',
+                    bgcolor: '#1A2332',
+                    borderColor: '#1E293B',
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#1E293B'
+                    },
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#475569'
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#14B8A6'
+                    },
+                    '& .MuiSvgIcon-root': {
+                      color: '#14B8A6'
+                    },
+                    '& .MuiOutlinedInput-input': {
+                      py: 1.5
+                    }
+                  }}
+                >
+                  <MenuItem value="beginner" sx={{ bgcolor: '#1A2332', color: '#E2E8F0', '&:hover': { bgcolor: 'rgba(20, 184, 166, 0.15)' } }}>Beginner</MenuItem>
+                  <MenuItem value="intermediate" sx={{ bgcolor: '#1A2332', color: '#E2E8F0', '&:hover': { bgcolor: 'rgba(20, 184, 166, 0.15)' } }}>Intermediate</MenuItem>
+                  <MenuItem value="advanced" sx={{ bgcolor: '#1A2332', color: '#E2E8F0', '&:hover': { bgcolor: 'rgba(20, 184, 166, 0.15)' } }}>Advanced</MenuItem>
+                  <MenuItem value="expert" sx={{ bgcolor: '#1A2332', color: '#E2E8F0', '&:hover': { bgcolor: 'rgba(20, 184, 166, 0.15)' } }}>Expert</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+
+            {/* Description - Full Width */}
             <Grid item xs={12}>
               <TextField
                 fullWidth
@@ -275,73 +312,7 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
               />
             </Grid>
 
-            {/* Row 3: Proficiency Level and Availability */}
-            <Grid item xs={12} sm={6}>
-              <FormControl fullWidth disabled={loading}>
-                <InputLabel sx={{ color: '#CBD5E1', '&.Mui-focused': { color: '#14B8A6' } }}>Proficiency Level</InputLabel>
-                <Select
-                  value={formData.proficiency_level}
-                  label="Proficiency Level"
-                  onChange={(e) => handleInputChange('proficiency_level', e.target.value)}
-                  sx={{
-                    color: '#E2E8F0',
-                    bgcolor: '#1A2332',
-                    borderColor: '#1E293B',
-                    '& .MuiOutlinedInput-notchedOutline': {
-                      borderColor: '#1E293B'
-                    },
-                    '&:hover .MuiOutlinedInput-notchedOutline': {
-                      borderColor: '#475569'
-                    },
-                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                      borderColor: '#14B8A6'
-                    },
-                    '& .MuiSvgIcon-root': {
-                      color: '#14B8A6'
-                    },
-                    '& .MuiOutlinedInput-input': {
-                      py: 1.5
-                    }
-                  }}
-                >
-                  <MenuItem value="beginner" sx={{ bgcolor: '#1A2332', color: '#E2E8F0', '&:hover': { bgcolor: 'rgba(20, 184, 166, 0.15)' } }}>Beginner</MenuItem>
-                  <MenuItem value="intermediate" sx={{ bgcolor: '#1A2332', color: '#E2E8F0', '&:hover': { bgcolor: 'rgba(20, 184, 166, 0.15)' } }}>Intermediate</MenuItem>
-                  <MenuItem value="advanced" sx={{ bgcolor: '#1A2332', color: '#E2E8F0', '&:hover': { bgcolor: 'rgba(20, 184, 166, 0.15)' } }}>Advanced</MenuItem>
-                  <MenuItem value="expert" sx={{ bgcolor: '#1A2332', color: '#E2E8F0', '&:hover': { bgcolor: 'rgba(20, 184, 166, 0.15)' } }}>Expert</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <Box sx={{
-                display: 'flex',
-                alignItems: 'center',
-                height: '100%',
-                p: 2,
-                bgcolor: '#1A2332',
-                borderRadius: 1,
-                border: '1px solid #1E293B'
-              }}>
-                <Switch
-                  checked={formData.is_available}
-                  onChange={(e) => handleInputChange('is_available', e.target.checked)}
-                  disabled={loading}
-                  sx={{
-                    '& .MuiSwitch-switchBase.Mui-checked': {
-                      color: '#14B8A6'
-                    },
-                    '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-                      backgroundColor: '#14B8A6'
-                    }
-                  }}
-                />
-                <Typography sx={{ color: '#E2E8F0', fontWeight: 500, ml: 2 }}>
-                  Available for booking
-                </Typography>
-              </Box>
-            </Grid>
-
-            {/* Row 4: Price per Hour and Price per Session */}
+            {/* Price per Hour and Price per Session - Side by Side */}
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
@@ -410,6 +381,35 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
                   }
                 }}
               />
+            </Grid>
+
+            {/* Availability - Full Width */}
+            <Grid item xs={12}>
+              <Box sx={{
+                display: 'flex',
+                alignItems: 'center',
+                p: 2,
+                bgcolor: '#1A2332',
+                borderRadius: 1,
+                border: '1px solid #1E293B'
+              }}>
+                <Switch
+                  checked={formData.is_available}
+                  onChange={(e) => handleInputChange('is_available', e.target.checked)}
+                  disabled={loading}
+                  sx={{
+                    '& .MuiSwitch-switchBase.Mui-checked': {
+                      color: '#14B8A6'
+                    },
+                    '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                      backgroundColor: '#14B8A6'
+                    }
+                  }}
+                />
+                <Typography sx={{ color: '#E2E8F0', fontWeight: 600, ml: 2, fontSize: '1rem' }}>
+                  Available for booking
+                </Typography>
+              </Box>
             </Grid>
           </Grid>
         </DialogContent>
