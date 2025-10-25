@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Container } from '@mui/material';
+import { Box } from '@mui/material';
 
 // Components (to be created)
 import Header from './components/Header';
@@ -36,7 +36,7 @@ function App() {
       <Router>
         <div className="App">
           <Header />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          <Box sx={{ width: '100%', m: 0, p: 0 }}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
@@ -47,7 +47,7 @@ function App() {
               <Route path="/projects" element={<Projects />} />
               <Route path="/credits" element={<Credits />} />
             </Routes>
-          </Container>
+          </Box>
         </div>
       </Router>
     </ThemeProvider>

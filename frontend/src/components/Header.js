@@ -14,41 +14,154 @@ const Header = () => {
   const isLoggedIn = localStorage.getItem('token');
 
   return (
-    <AppBar position="static">
-      <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>
+    <AppBar 
+      position="static"
+      sx={{
+        bgcolor: '#0F172A',
+        boxShadow: '0 4px 12px rgba(20, 184, 166, 0.15)'
+      }}
+    >
+      <Toolbar sx={{ px: { xs: 2, md: 4 } }}>
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 700 }}>
+          <Link to="/" style={{ color: '#14B8A6', textDecoration: 'none' }}>
             Urban Skill Exchange
           </Link>
         </Typography>
         <Box sx={{ display: 'flex', gap: 2 }}>
-          <Button color="inherit" component={Link} to="/skills">
-            Skills
-          </Button>
-          <Button color="inherit" component={Link} to="/projects">
-            Projects
-          </Button>
+          {isLoggedIn && (
+            <>
+              <Button 
+                color="inherit" 
+                component={Link} 
+                to="/skills"
+                sx={{
+                  color: '#E2E8F0',
+                  '&:hover': {
+                    bgcolor: 'rgba(20, 184, 166, 0.1)',
+                    color: '#14B8A6',
+                    transform: 'translateY(-2px)'
+                  },
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                Skills
+              </Button>
+              <Button 
+                color="inherit" 
+                component={Link} 
+                to="/projects"
+                sx={{
+                  color: '#E2E8F0',
+                  '&:hover': {
+                    bgcolor: 'rgba(20, 184, 166, 0.1)',
+                    color: '#14B8A6',
+                    transform: 'translateY(-2px)'
+                  },
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                Projects
+              </Button>
+            </>
+          )}
           {isLoggedIn ? (
             <>
-              <Button color="inherit" component={Link} to="/profile">
+              <Button 
+                color="inherit" 
+                component={Link} 
+                to="/profile"
+                sx={{
+                  color: '#E2E8F0',
+                  '&:hover': {
+                    bgcolor: 'rgba(20, 184, 166, 0.1)',
+                    color: '#14B8A6',
+                    transform: 'translateY(-2px)'
+                  },
+                  transition: 'all 0.3s ease'
+                }}
+              >
                 Profile
               </Button>
-              <Button color="inherit" component={Link} to="/bookings">
+              <Button 
+                color="inherit" 
+                component={Link} 
+                to="/bookings"
+                sx={{
+                  color: '#E2E8F0',
+                  '&:hover': {
+                    bgcolor: 'rgba(20, 184, 166, 0.1)',
+                    color: '#14B8A6',
+                    transform: 'translateY(-2px)'
+                  },
+                  transition: 'all 0.3s ease'
+                }}
+              >
                 Bookings
               </Button>
-              <Button color="inherit" component={Link} to="/credits">
+              <Button 
+                color="inherit" 
+                component={Link} 
+                to="/credits"
+                sx={{
+                  color: '#E2E8F0',
+                  '&:hover': {
+                    bgcolor: 'rgba(20, 184, 166, 0.1)',
+                    color: '#14B8A6',
+                    transform: 'translateY(-2px)'
+                  },
+                  transition: 'all 0.3s ease'
+                }}
+              >
                 Credits
               </Button>
-              <Button color="inherit" onClick={handleLogout}>
+              <Button 
+                color="inherit" 
+                onClick={handleLogout}
+                sx={{
+                  color: '#E2E8F0',
+                  '&:hover': {
+                    bgcolor: 'rgba(20, 184, 166, 0.1)',
+                    color: '#14B8A6',
+                    transform: 'translateY(-2px)'
+                  },
+                  transition: 'all 0.3s ease'
+                }}
+              >
                 Logout
               </Button>
             </>
           ) : (
             <>
-              <Button color="inherit" component={Link} to="/login">
+              <Button 
+                color="inherit" 
+                component={Link} 
+                to="/login"
+                sx={{
+                  color: '#E2E8F0',
+                  '&:hover': {
+                    bgcolor: 'rgba(20, 184, 166, 0.1)',
+                    color: '#14B8A6',
+                    transform: 'translateY(-2px)'
+                  },
+                  transition: 'all 0.3s ease'
+                }}
+              >
                 Login
               </Button>
-              <Button color="inherit" component={Link} to="/register">
+              <Button 
+                color="inherit" 
+                component={Link} 
+                to="/register"
+                sx={{
+                  color: '#E2E8F0',
+                  '&:hover': {
+                    bgcolor: 'rgba(20, 184, 166, 0.1)',
+                    color: '#14B8A6',
+                    transform: 'translateY(-2px)'
+                  },
+                  transition: 'all 0.3s ease'
+                }}
+              >
                 Register
               </Button>
             </>
