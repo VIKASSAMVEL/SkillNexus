@@ -124,24 +124,55 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
         }
       }}
     >
-      <DialogTitle sx={{ bgcolor: 'rgba(20, 184, 166, 0.1)', borderBottom: '1px solid #1E293B', color: '#14B8A6', fontWeight: 700, fontSize: '1.5rem' }}>
-        Add New Skill
+      <DialogTitle sx={{ 
+        bgcolor: 'linear-gradient(135deg, rgba(20, 184, 166, 0.15) 0%, rgba(15, 118, 110, 0.1) 100%)',
+        borderBottom: '2px solid #14B8A6',
+        color: '#14B8A6',
+        fontWeight: 800,
+        fontSize: '1.75rem',
+        letterSpacing: '0.5px',
+        py: 2.5
+      }}>
+        ✨ Add New Skill
       </DialogTitle>
       <form onSubmit={handleSubmit}>
-        <DialogContent sx={{ bgcolor: '#0F172A', pt: 3, pb: 3 }}>
+        <DialogContent sx={{ bgcolor: '#0F172A', pt: 4, pb: 4, px: 3 }}>
           {error && (
-            <Alert severity="error" sx={{ mb: 3, bgcolor: 'rgba(239, 68, 68, 0.1)', color: '#FCA5A5', border: '1px solid #DC2626' }}>
+            <Alert severity="error" sx={{ 
+              mb: 3, 
+              bgcolor: 'rgba(239, 68, 68, 0.15)', 
+              color: '#FCA5A5', 
+              border: '1.5px solid #DC2626',
+              borderRadius: '8px',
+              fontWeight: 600,
+              fontSize: '0.95rem'
+            }}>
               {error}
             </Alert>
           )}
 
           {success && (
-            <Alert severity="success" sx={{ mb: 3, bgcolor: 'rgba(34, 197, 94, 0.1)', color: '#86EFAC', border: '1px solid #16A34A' }}>
-              Skill created successfully!
+            <Alert severity="success" sx={{ 
+              mb: 3, 
+              bgcolor: 'rgba(34, 197, 94, 0.15)', 
+              color: '#86EFAC', 
+              border: '1.5px solid #16A34A',
+              borderRadius: '8px',
+              fontWeight: 600,
+              fontSize: '0.95rem'
+            }}>
+              ✓ Skill created successfully!
             </Alert>
           )}
 
-          <Grid container spacing={3}>
+          <Grid container spacing={3.5}>
+            {/* Section Header: Basic Info */}
+            <Grid item xs={12}>
+              <Typography sx={{ color: '#94A3B8', fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', mb: 1 }}>
+                📝 Basic Information
+              </Typography>
+            </Grid>
+
             {/* Skill Name - Full Width */}
             <Grid item xs={12}>
               <TextField
@@ -151,30 +182,41 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
                 onChange={(e) => handleInputChange('name', e.target.value)}
                 required
                 disabled={loading}
+                placeholder="e.g., Web Development, Graphic Design, etc."
                 sx={{
                   '& .MuiInputBase-input': {
                     color: '#E2E8F0',
                     bgcolor: '#1A2332',
-                    borderRadius: 1,
-                    py: 1.5
+                    borderRadius: '8px',
+                    py: 2,
+                    px: 2,
+                    fontSize: '1.05rem',
+                    fontWeight: 500,
+                    transition: 'all 0.3s ease'
                   },
                   '& .MuiInputBase-input::placeholder': {
-                    color: '#94A3B8',
+                    color: '#64748B',
                     opacity: 0.7
                   },
                   '& .MuiOutlinedInput-root': {
                     borderColor: '#1E293B',
                     '&:hover fieldset': {
-                      borderColor: '#475569'
+                      borderColor: '#14B8A6',
+                      boxShadow: '0 0 0 3px rgba(20, 184, 166, 0.1)'
                     },
                     '&.Mui-focused fieldset': {
-                      borderColor: '#14B8A6'
+                      borderColor: '#14B8A6',
+                      borderWidth: '2px',
+                      boxShadow: '0 0 0 3px rgba(20, 184, 166, 0.1)'
                     }
                   },
                   '& .MuiInputLabel-root': {
                     color: '#CBD5E1',
+                    fontSize: '0.95rem',
+                    fontWeight: 600,
                     '&.Mui-focused': {
-                      color: '#14B8A6'
+                      color: '#14B8A6',
+                      fontWeight: 700
                     }
                   }
                 }}
@@ -184,7 +226,7 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
             {/* Category and Proficiency Level - Side by Side */}
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth required disabled={loading}>
-                <InputLabel sx={{ color: '#CBD5E1', '&.Mui-focused': { color: '#14B8A6' } }}>Category</InputLabel>
+                <InputLabel sx={{ color: '#CBD5E1', fontSize: '0.95rem', fontWeight: 600, '&.Mui-focused': { color: '#14B8A6', fontWeight: 700 } }}>Category</InputLabel>
                 <Select
                   value={formData.category}
                   label="Category"
@@ -193,20 +235,28 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
                     color: '#E2E8F0',
                     bgcolor: '#1A2332',
                     borderColor: '#1E293B',
+                    borderRadius: '8px',
+                    fontSize: '1.05rem',
+                    fontWeight: 500,
+                    transition: 'all 0.3s ease',
                     '& .MuiOutlinedInput-notchedOutline': {
                       borderColor: '#1E293B'
                     },
                     '&:hover .MuiOutlinedInput-notchedOutline': {
-                      borderColor: '#475569'
+                      borderColor: '#14B8A6',
+                      boxShadow: '0 0 0 3px rgba(20, 184, 166, 0.1)'
                     },
                     '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                      borderColor: '#14B8A6'
+                      borderColor: '#14B8A6',
+                      borderWidth: '2px',
+                      boxShadow: '0 0 0 3px rgba(20, 184, 166, 0.1)'
                     },
                     '& .MuiSvgIcon-root': {
-                      color: '#14B8A6'
+                      color: '#14B8A6',
+                      fontSize: '1.3rem'
                     },
                     '& .MuiOutlinedInput-input': {
-                      py: 1.5
+                      py: 2
                     }
                   }}
                 >
@@ -217,13 +267,18 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
                       sx={{
                         bgcolor: '#1A2332',
                         color: '#E2E8F0',
+                        fontSize: '1rem',
+                        fontWeight: 500,
                         '&:hover': {
-                          bgcolor: 'rgba(20, 184, 166, 0.15)'
+                          bgcolor: 'rgba(20, 184, 166, 0.2)',
+                          borderLeft: '3px solid #14B8A6'
                         },
                         '&.Mui-selected': {
-                          bgcolor: 'rgba(20, 184, 166, 0.2)',
+                          bgcolor: 'rgba(20, 184, 166, 0.25)',
+                          borderLeft: '3px solid #14B8A6',
+                          fontWeight: 700,
                           '&:hover': {
-                            bgcolor: 'rgba(20, 184, 166, 0.3)'
+                            bgcolor: 'rgba(20, 184, 166, 0.35)'
                           }
                         }
                       }}
@@ -237,7 +292,7 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
 
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth disabled={loading}>
-                <InputLabel sx={{ color: '#CBD5E1', '&.Mui-focused': { color: '#14B8A6' } }}>Proficiency Level</InputLabel>
+                <InputLabel sx={{ color: '#CBD5E1', fontSize: '0.95rem', fontWeight: 600, '&.Mui-focused': { color: '#14B8A6', fontWeight: 700 } }}>Proficiency Level</InputLabel>
                 <Select
                   value={formData.proficiency_level}
                   label="Proficiency Level"
@@ -246,29 +301,44 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
                     color: '#E2E8F0',
                     bgcolor: '#1A2332',
                     borderColor: '#1E293B',
+                    borderRadius: '8px',
+                    fontSize: '1.05rem',
+                    fontWeight: 500,
+                    transition: 'all 0.3s ease',
                     '& .MuiOutlinedInput-notchedOutline': {
                       borderColor: '#1E293B'
                     },
                     '&:hover .MuiOutlinedInput-notchedOutline': {
-                      borderColor: '#475569'
+                      borderColor: '#14B8A6',
+                      boxShadow: '0 0 0 3px rgba(20, 184, 166, 0.1)'
                     },
                     '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                      borderColor: '#14B8A6'
+                      borderColor: '#14B8A6',
+                      borderWidth: '2px',
+                      boxShadow: '0 0 0 3px rgba(20, 184, 166, 0.1)'
                     },
                     '& .MuiSvgIcon-root': {
-                      color: '#14B8A6'
+                      color: '#14B8A6',
+                      fontSize: '1.3rem'
                     },
                     '& .MuiOutlinedInput-input': {
-                      py: 1.5
+                      py: 2
                     }
                   }}
                 >
-                  <MenuItem value="beginner" sx={{ bgcolor: '#1A2332', color: '#E2E8F0', '&:hover': { bgcolor: 'rgba(20, 184, 166, 0.15)' } }}>Beginner</MenuItem>
-                  <MenuItem value="intermediate" sx={{ bgcolor: '#1A2332', color: '#E2E8F0', '&:hover': { bgcolor: 'rgba(20, 184, 166, 0.15)' } }}>Intermediate</MenuItem>
-                  <MenuItem value="advanced" sx={{ bgcolor: '#1A2332', color: '#E2E8F0', '&:hover': { bgcolor: 'rgba(20, 184, 166, 0.15)' } }}>Advanced</MenuItem>
-                  <MenuItem value="expert" sx={{ bgcolor: '#1A2332', color: '#E2E8F0', '&:hover': { bgcolor: 'rgba(20, 184, 166, 0.15)' } }}>Expert</MenuItem>
+                  <MenuItem value="beginner" sx={{ bgcolor: '#1A2332', color: '#E2E8F0', fontSize: '1rem', fontWeight: 500, '&:hover': { bgcolor: 'rgba(20, 184, 166, 0.2)', borderLeft: '3px solid #14B8A6' }, '&.Mui-selected': { bgcolor: 'rgba(20, 184, 166, 0.25)', borderLeft: '3px solid #14B8A6', fontWeight: 700 } }}>🌱 Beginner</MenuItem>
+                  <MenuItem value="intermediate" sx={{ bgcolor: '#1A2332', color: '#E2E8F0', fontSize: '1rem', fontWeight: 500, '&:hover': { bgcolor: 'rgba(20, 184, 166, 0.2)', borderLeft: '3px solid #14B8A6' }, '&.Mui-selected': { bgcolor: 'rgba(20, 184, 166, 0.25)', borderLeft: '3px solid #14B8A6', fontWeight: 700 } }}>📈 Intermediate</MenuItem>
+                  <MenuItem value="advanced" sx={{ bgcolor: '#1A2332', color: '#E2E8F0', fontSize: '1rem', fontWeight: 500, '&:hover': { bgcolor: 'rgba(20, 184, 166, 0.2)', borderLeft: '3px solid #14B8A6' }, '&.Mui-selected': { bgcolor: 'rgba(20, 184, 166, 0.25)', borderLeft: '3px solid #14B8A6', fontWeight: 700 } }}>🚀 Advanced</MenuItem>
+                  <MenuItem value="expert" sx={{ bgcolor: '#1A2332', color: '#E2E8F0', fontSize: '1rem', fontWeight: 500, '&:hover': { bgcolor: 'rgba(20, 184, 166, 0.2)', borderLeft: '3px solid #14B8A6' }, '&.Mui-selected': { bgcolor: 'rgba(20, 184, 166, 0.25)', borderLeft: '3px solid #14B8A6', fontWeight: 700 } }}>⭐ Expert</MenuItem>
                 </Select>
               </FormControl>
+            </Grid>
+
+            {/* Section Header: Pricing */}
+            <Grid item xs={12} sx={{ mt: 2 }}>
+              <Typography sx={{ color: '#94A3B8', fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', mb: 1 }}>
+                💰 Pricing
+              </Typography>
             </Grid>
 
             {/* Price per Hour and Price per Session - Side by Side */}
@@ -281,26 +351,37 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
                 onChange={(e) => handleInputChange('price_per_hour', e.target.value)}
                 inputProps={{ min: 0, step: 0.01 }}
                 disabled={loading}
+                placeholder="0.00"
                 sx={{
                   '& .MuiInputBase-input': {
                     color: '#E2E8F0',
                     bgcolor: '#1A2332',
-                    borderRadius: 1,
-                    py: 1.5
+                    borderRadius: '8px',
+                    py: 2,
+                    px: 2,
+                    fontSize: '1.05rem',
+                    fontWeight: 500,
+                    transition: 'all 0.3s ease'
                   },
                   '& .MuiOutlinedInput-root': {
                     borderColor: '#1E293B',
                     '&:hover fieldset': {
-                      borderColor: '#475569'
+                      borderColor: '#14B8A6',
+                      boxShadow: '0 0 0 3px rgba(20, 184, 166, 0.1)'
                     },
                     '&.Mui-focused fieldset': {
-                      borderColor: '#14B8A6'
+                      borderColor: '#14B8A6',
+                      borderWidth: '2px',
+                      boxShadow: '0 0 0 3px rgba(20, 184, 166, 0.1)'
                     }
                   },
                   '& .MuiInputLabel-root': {
                     color: '#CBD5E1',
+                    fontSize: '0.95rem',
+                    fontWeight: 600,
                     '&.Mui-focused': {
-                      color: '#14B8A6'
+                      color: '#14B8A6',
+                      fontWeight: 700
                     }
                   }
                 }}
@@ -316,30 +397,48 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
                 onChange={(e) => handleInputChange('price_per_session', e.target.value)}
                 inputProps={{ min: 0, step: 0.01 }}
                 disabled={loading}
+                placeholder="0.00"
                 sx={{
                   '& .MuiInputBase-input': {
                     color: '#E2E8F0',
                     bgcolor: '#1A2332',
-                    borderRadius: 1,
-                    py: 1.5
+                    borderRadius: '8px',
+                    py: 2,
+                    px: 2,
+                    fontSize: '1.05rem',
+                    fontWeight: 500,
+                    transition: 'all 0.3s ease'
                   },
                   '& .MuiOutlinedInput-root': {
                     borderColor: '#1E293B',
                     '&:hover fieldset': {
-                      borderColor: '#475569'
+                      borderColor: '#14B8A6',
+                      boxShadow: '0 0 0 3px rgba(20, 184, 166, 0.1)'
                     },
                     '&.Mui-focused fieldset': {
-                      borderColor: '#14B8A6'
+                      borderColor: '#14B8A6',
+                      borderWidth: '2px',
+                      boxShadow: '0 0 0 3px rgba(20, 184, 166, 0.1)'
                     }
                   },
                   '& .MuiInputLabel-root': {
                     color: '#CBD5E1',
+                    fontSize: '0.95rem',
+                    fontWeight: 600,
                     '&.Mui-focused': {
-                      color: '#14B8A6'
+                      color: '#14B8A6',
+                      fontWeight: 700
                     }
                   }
                 }}
               />
+            </Grid>
+
+            {/* Section Header: Availability */}
+            <Grid item xs={12} sx={{ mt: 2 }}>
+              <Typography sx={{ color: '#94A3B8', fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', mb: 1 }}>
+                📅 Availability
+              </Typography>
             </Grid>
 
             {/* Availability - Full Width */}
@@ -347,28 +446,53 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
               <Box sx={{
                 display: 'flex',
                 alignItems: 'center',
-                p: 2,
-                bgcolor: '#1A2332',
-                borderRadius: 1,
-                border: '1px solid #1E293B'
+                p: 2.5,
+                bgcolor: 'linear-gradient(135deg, rgba(20, 184, 166, 0.08) 0%, rgba(15, 118, 110, 0.05) 100%)',
+                borderRadius: '8px',
+                border: '1.5px solid rgba(20, 184, 166, 0.3)',
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  border: '1.5px solid #14B8A6',
+                  bgcolor: 'linear-gradient(135deg, rgba(20, 184, 166, 0.12) 0%, rgba(15, 118, 110, 0.08) 100%)'
+                }
               }}>
                 <Switch
                   checked={formData.is_available}
                   onChange={(e) => handleInputChange('is_available', e.target.checked)}
                   disabled={loading}
                   sx={{
+                    '& .MuiSwitch-switchBase': {
+                      color: '#64748B'
+                    },
                     '& .MuiSwitch-switchBase.Mui-checked': {
                       color: '#14B8A6'
                     },
                     '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
                       backgroundColor: '#14B8A6'
-                    }
+                    },
+                    '& .MuiSwitch-track': {
+                      backgroundColor: '#1E293B'
+                    },
+                    scale: 1.15
                   }}
                 />
-                <Typography sx={{ color: '#E2E8F0', fontWeight: 600, ml: 2, fontSize: '1rem' }}>
-                  Available for booking
+                <Typography sx={{ 
+                  color: '#E2E8F0', 
+                  fontWeight: 700, 
+                  ml: 2, 
+                  fontSize: '1rem',
+                  transition: 'all 0.3s ease'
+                }}>
+                  {formData.is_available ? '✓ Available for booking' : '○ Not available'}
                 </Typography>
               </Box>
+            </Grid>
+
+            {/* Section Header: Details */}
+            <Grid item xs={12} sx={{ mt: 2 }}>
+              <Typography sx={{ color: '#94A3B8', fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', mb: 1 }}>
+                📖 Details
+              </Typography>
             </Grid>
 
             {/* Description - Full Width (Moved to Last) */}
@@ -379,33 +503,44 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
                 value={formData.description}
                 onChange={(e) => handleInputChange('description', e.target.value)}
                 multiline
-                rows={4}
-                placeholder="Describe your skill and what you can offer..."
+                rows={5}
+                placeholder="Describe your skill, expertise, and what you can offer. Be specific about your experience and services..."
                 disabled={loading}
                 sx={{
                   '& .MuiInputBase-input': {
                     color: '#E2E8F0',
                     bgcolor: '#1A2332',
-                    borderRadius: 1,
-                    py: 1.5
+                    borderRadius: '8px',
+                    py: 2,
+                    px: 2,
+                    fontSize: '1rem',
+                    fontWeight: 400,
+                    lineHeight: '1.6',
+                    transition: 'all 0.3s ease'
                   },
                   '& .MuiInputBase-input::placeholder': {
-                    color: '#94A3B8',
+                    color: '#64748B',
                     opacity: 0.7
                   },
                   '& .MuiOutlinedInput-root': {
                     borderColor: '#1E293B',
                     '&:hover fieldset': {
-                      borderColor: '#475569'
+                      borderColor: '#14B8A6',
+                      boxShadow: '0 0 0 3px rgba(20, 184, 166, 0.1)'
                     },
                     '&.Mui-focused fieldset': {
-                      borderColor: '#14B8A6'
+                      borderColor: '#14B8A6',
+                      borderWidth: '2px',
+                      boxShadow: '0 0 0 3px rgba(20, 184, 166, 0.1)'
                     }
                   },
                   '& .MuiInputLabel-root': {
                     color: '#CBD5E1',
+                    fontSize: '0.95rem',
+                    fontWeight: 600,
                     '&.Mui-focused': {
-                      color: '#14B8A6'
+                      color: '#14B8A6',
+                      fontWeight: 700
                     }
                   }
                 }}
@@ -414,17 +549,33 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
           </Grid>
         </DialogContent>
 
-        <DialogActions sx={{ bgcolor: '#0F172A', borderTop: '1px solid #1E293B', p: 2, gap: 1 }}>
+        <DialogActions sx={{ 
+          bgcolor: '#0F172A', 
+          borderTop: '2px solid rgba(20, 184, 166, 0.2)', 
+          p: 3, 
+          gap: 2,
+          display: 'flex',
+          justifyContent: 'flex-end'
+        }}>
           <Button 
             onClick={handleClose} 
             disabled={loading}
             sx={{
               color: '#14B8A6',
               borderColor: '#14B8A6',
-              border: '1px solid #14B8A6',
+              border: '1.5px solid #14B8A6',
+              fontWeight: 700,
+              fontSize: '0.95rem',
+              px: 3,
+              py: 1,
+              borderRadius: '8px',
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px',
+              transition: 'all 0.3s ease',
               '&:hover': {
-                bgcolor: 'rgba(20, 184, 166, 0.1)',
-                borderColor: '#14B8A6'
+                bgcolor: 'rgba(20, 184, 166, 0.15)',
+                borderColor: '#14B8A6',
+                boxShadow: '0 0 15px rgba(20, 184, 166, 0.3)'
               }
             }}
           >
@@ -435,20 +586,29 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
             variant="contained"
             disabled={loading || !formData.name || !formData.category}
             sx={{
-              bgcolor: '#0F766E',
-              color: '#E2E8F0',
-              fontWeight: 700,
+              background: 'linear-gradient(135deg, #14B8A6 0%, #0F766E 100%)',
+              color: '#0F172A',
+              fontWeight: 800,
+              fontSize: '0.95rem',
+              px: 4,
+              py: 1,
+              borderRadius: '8px',
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px',
+              transition: 'all 0.3s ease',
+              boxShadow: '0 4px 15px rgba(20, 184, 166, 0.3)',
               '&:hover': {
-                bgcolor: '#14B8A6',
-                color: '#0F172A'
+                transform: 'translateY(-2px)',
+                boxShadow: '0 6px 20px rgba(20, 184, 166, 0.5)'
               },
               '&:disabled': {
-                bgcolor: '#1E293B',
-                color: '#64748B'
+                background: '#1E293B',
+                color: '#64748B',
+                boxShadow: 'none'
               }
             }}
           >
-            {loading ? <CircularProgress size={20} sx={{ color: '#14B8A6' }} /> : 'Add Skill'}
+            {loading ? <CircularProgress size={20} sx={{ color: '#14B8A6' }} /> : '✓ Add Skill'}
           </Button>
         </DialogActions>
       </form>
