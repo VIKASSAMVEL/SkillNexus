@@ -225,10 +225,10 @@ const BookingsList = () => {
                     </Box>
                   </Box>
 
-                  <CardContent sx={{ '&:last-child': { pb: 2 }, px: 4, py: 1.5, width: '100%' }}>
+                  <CardContent sx={{ '&:last-child': { pb: 2 }, px: 5, py: 1.5, width: '100%' }}>
                     <Box display="flex" alignItems="center" mb={1.5} sx={{ color: '#CBD5E1' }}>
-                      <Person sx={{ mr: 2, fontSize: 20, color: '#14B8A6' }} />
-                      <Typography variant="body2" sx={{ flex: 1 }}>
+                      <Person sx={{ mr: 3, fontSize: 22, color: '#14B8A6' }} />
+                      <Typography variant="body1" sx={{ flex: 1, fontWeight: 500 }}>
                         {booking.student_id === parseInt(localStorage.getItem('userId'))
                           ? `Teacher: ${booking.teacher_name}`
                           : `Student: ${booking.student_name}`}
@@ -236,43 +236,43 @@ const BookingsList = () => {
                     </Box>
 
                     <Box display="flex" alignItems="flex-start" mb={1.5} sx={{ color: '#CBD5E1' }}>
-                      <AccessTime sx={{ mr: 2, fontSize: 20, color: '#14B8A6', mt: 0.25, flexShrink: 0 }} />
+                      <AccessTime sx={{ mr: 3, fontSize: 22, color: '#14B8A6', mt: 0.25, flexShrink: 0 }} />
                       <Box sx={{ flex: 1 }}>
-                        <Typography variant="body2">
+                        <Typography variant="body1" sx={{ fontWeight: 500 }}>
                           {new Date(booking.booking_date).toLocaleDateString('en-US', { 
                             month: 'short', 
                             day: 'numeric', 
                             year: 'numeric' 
                           })}
                         </Typography>
-                        <Typography variant="caption" sx={{ color: '#94A3B8' }}>
+                        <Typography variant="body2" sx={{ color: '#94A3B8' }}>
                           {booking.start_time} - {booking.end_time}
                         </Typography>
                       </Box>
                     </Box>
 
                     <Box sx={{ 
-                      p: 1.5, 
+                      p: 2, 
                       bgcolor: 'rgba(20, 184, 166, 0.05)', 
                       borderRadius: 1.5,
                       border: '1px solid rgba(20, 184, 166, 0.2)',
                       mb: 1.5,
                       width: '100%'
                     }}>
-                      <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block' }}>
+                      <Typography variant="body2" sx={{ color: '#94A3B8', display: 'block', fontWeight: 600 }}>
                         Duration
                       </Typography>
-                      <Typography variant="body2" sx={{ color: '#14B8A6', fontWeight: 600 }}>
+                      <Typography variant="h6" sx={{ color: '#14B8A6', fontWeight: 700, mt: 0.5 }}>
                         {booking.duration_hours}h • ${booking.total_price}
                       </Typography>
                     </Box>
 
                     {booking.notes && (
                       <Box mb={1.5} sx={{ width: '100%' }}>
-                        <Typography variant="caption" sx={{ color: '#94A3B8' }}>
+                        <Typography variant="body2" sx={{ color: '#94A3B8', fontWeight: 600 }}>
                           Notes:
                         </Typography>
-                        <Typography variant="body2" sx={{ color: '#CBD5E1', fontStyle: 'italic', mt: 0.5 }}>
+                        <Typography variant="body1" sx={{ color: '#CBD5E1', fontStyle: 'italic', mt: 0.5 }}>
                           "{booking.notes}"
                         </Typography>
                       </Box>
