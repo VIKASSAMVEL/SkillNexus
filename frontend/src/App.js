@@ -13,7 +13,15 @@ import Profile from './pages/Profile';
 import Skills from './pages/Skills';
 import Bookings from './pages/Bookings';
 import Projects from './pages/Projects';
+import FAQ from './pages/FAQ';
+import TrustSafety from './pages/TrustSafety';
+import CommunityGuidelines from './pages/CommunityGuidelines';
+import ReportUser from './pages/ReportUser';
+import VerificationProcess from './pages/VerificationProcess';
+import TermsOfService from './pages/TermsOfService';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 import Credits from './components/Credits';
+import ScrollToTop from './components/ScrollToTop';
 
 const theme = createTheme({
   palette: {
@@ -34,6 +42,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
+        <ScrollToTop />
         <div className="App">
           <Header />
           <Box sx={{ width: '100%', m: 0, p: 0 }}>
@@ -45,6 +54,13 @@ function App() {
               <Route path="/skills" element={<Skills />} />
               <Route path="/bookings" element={<Bookings />} />
               <Route path="/projects" element={<Projects />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/trust-safety" element={<TrustSafety />} />
+              <Route path="/community-guidelines" element={<CommunityGuidelines />} />
+              <Route path="/report-user" element={<ReportUser />} />
+              <Route path="/verification-process" element={<VerificationProcess />} />
+              <Route path="/terms-of-service" element={<TermsOfService />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/credits" element={<Credits />} />
             </Routes>
           </Box>

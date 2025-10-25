@@ -8,10 +8,15 @@ const Header = () => {
   const handleLogout = () => {
     // TODO: Implement logout logic
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     navigate('/');
   };
 
-  const isLoggedIn = localStorage.getItem('token');
+  const isLoggedIn = () => {
+    const token = localStorage.getItem('token');
+    const user = localStorage.getItem('user');
+    return token && user;
+  };
 
   return (
     <AppBar 
@@ -28,7 +33,7 @@ const Header = () => {
           </Link>
         </Typography>
         <Box sx={{ display: 'flex', gap: 2 }}>
-          {isLoggedIn && (
+          {isLoggedIn() && (
             <>
               <Button 
                 color="inherit" 
@@ -64,7 +69,7 @@ const Header = () => {
               </Button>
             </>
           )}
-          {isLoggedIn ? (
+          {isLoggedIn() ? (
             <>
               <Button 
                 color="inherit" 
