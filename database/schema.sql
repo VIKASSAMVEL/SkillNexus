@@ -66,7 +66,7 @@ CREATE TABLE bookings (
     end_time TIME NOT NULL,
     duration_hours DECIMAL(4, 2),
     total_price DECIMAL(10, 2),
-    status ENUM('pending', 'confirmed', 'completed', 'cancelled') DEFAULT 'pending',
+    status ENUM('pending', 'confirmed', 'completed', 'cancelled', 'rejected') DEFAULT 'pending',
     notes TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

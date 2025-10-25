@@ -224,7 +224,7 @@ router.put('/:id/status', authenticateToken, async (req, res) => {
     const userId = req.user.userId;
     const { status, notes } = req.body;
 
-    if (!['confirmed', 'completed', 'cancelled'].includes(status)) {
+    if (!['confirmed', 'completed', 'cancelled', 'rejected'].includes(status)) {
       return res.status(400).json({ message: 'Invalid status' });
     }
 
@@ -242,12 +242,15 @@ router.put('/:id/status', authenticateToken, async (req, res) => {
 
     const booking = bookings[0];
 
-    // Only teacher can confirm, only teacher can complete, both can cancel
+    // Only teacher can confirm, only teacher can complete, both can cancel, only teacher can reject
     if (status === 'confirmed' && booking.teacher_id !== userId) {
       return res.status(403).json({ message: 'Only teacher can confirm booking' });
     }
     if (status === 'completed' && booking.teacher_id !== userId) {
       return res.status(403).json({ message: 'Only teacher can mark booking as completed' });
+    }
+    if (status === 'rejected' && booking.teacher_id !== userId) {
+      return res.status(403).json({ message: 'Only teacher can reject booking' });
     }
 
     // Update booking status
@@ -256,8 +259,8 @@ router.put('/:id/status', authenticateToken, async (req, res) => {
       [status, notes ? `\n[${new Date().toISOString()}] ${notes}` : '', bookingId]
     );
 
-    // Handle credit refunds for cancellations
-    if (status === 'cancelled' && booking.status !== 'completed') {
+    // Handle credit refunds for cancellations and rejections
+    if ((status === 'cancelled' || status === 'rejected') && booking.status !== 'completed') {
       // Refund student
       await pool.execute(
         'UPDATE user_credits SET balance = balance + ?, updated_at = CURRENT_TIMESTAMP WHERE user_id = ?',
@@ -271,10 +274,11 @@ router.put('/:id/status', authenticateToken, async (req, res) => {
       );
 
       // Record refund transactions
+      const refundType = status === 'rejected' ? 'Booking rejection refund' : 'Booking cancellation refund';
       await pool.execute(
         `INSERT INTO credit_transactions (user_id, amount, transaction_type, description, reference_id, reference_type)
-         VALUES (?, ?, 'refund', 'Booking cancellation refund', ?, 'booking')`,
-        [booking.student_id, booking.total_price, bookingId]
+         VALUES (?, ?, 'refund', ?, ?, 'booking')`,
+        [booking.student_id, booking.total_price, refundType, bookingId]
       );
     }
 
