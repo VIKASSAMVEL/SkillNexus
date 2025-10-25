@@ -165,16 +165,12 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
             </Alert>
           )}
 
-          <Grid container spacing={3.5}>
-            {/* Section Header: Basic Info */}
+          <Grid container spacing={2}>
+            {/* Row 1: Skill Name (Full) */}
             <Grid item xs={12}>
-              <Typography sx={{ color: '#94A3B8', fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', mb: 1 }}>
+              <Typography sx={{ color: '#94A3B8', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', mb: 1.5 }}>
                 📝 Basic Information
               </Typography>
-            </Grid>
-
-            {/* Skill Name - Full Width */}
-            <Grid item xs={12}>
               <TextField
                 fullWidth
                 label="Skill Name"
@@ -223,10 +219,10 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
               />
             </Grid>
 
-            {/* Category and Proficiency Level - Side by Side */}
-            <Grid item xs={12} sm={6}>
+            {/* Row 2: Category (Left) + Proficiency (Middle) + Availability (Right) */}
+            <Grid item xs={12} sm={6} md={4}>
               <FormControl fullWidth required disabled={loading}>
-                <InputLabel sx={{ color: '#CBD5E1', fontSize: '0.95rem', fontWeight: 600, '&.Mui-focused': { color: '#14B8A6', fontWeight: 700 } }}>Category</InputLabel>
+                <InputLabel sx={{ color: '#CBD5E1', fontSize: '0.9rem', fontWeight: 600, '&.Mui-focused': { color: '#14B8A6', fontWeight: 700 } }}>Category</InputLabel>
                 <Select
                   value={formData.category}
                   label="Category"
@@ -290,9 +286,9 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
               </FormControl>
             </Grid>
 
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={6} md={4}>
               <FormControl fullWidth disabled={loading}>
-                <InputLabel sx={{ color: '#CBD5E1', fontSize: '0.95rem', fontWeight: 600, '&.Mui-focused': { color: '#14B8A6', fontWeight: 700 } }}>Proficiency Level</InputLabel>
+                <InputLabel sx={{ color: '#CBD5E1', fontSize: '0.9rem', fontWeight: 600, '&.Mui-focused': { color: '#14B8A6', fontWeight: 700 } }}>Proficiency Level</InputLabel>
                 <Select
                   value={formData.proficiency_level}
                   label="Proficiency Level"
@@ -341,7 +337,60 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
               </Typography>
             </Grid>
 
-            {/* Price per Hour and Price per Session - Side by Side */}
+            {/* Row 3: Availability Toggle (Right) */}
+            <Grid item xs={12} md={4}>
+              <Box sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                p: 1.8,
+                bgcolor: 'linear-gradient(135deg, rgba(20, 184, 166, 0.08) 0%, rgba(15, 118, 110, 0.05) 100%)',
+                borderRadius: '8px',
+                border: '1.5px solid rgba(20, 184, 166, 0.3)',
+                transition: 'all 0.3s ease',
+                height: '100%',
+                '&:hover': {
+                  border: '1.5px solid #14B8A6',
+                  bgcolor: 'linear-gradient(135deg, rgba(20, 184, 166, 0.12) 0%, rgba(15, 118, 110, 0.08) 100%)'
+                }
+              }}>
+                <Typography sx={{ 
+                  color: '#E2E8F0', 
+                  fontWeight: 700, 
+                  fontSize: '0.9rem'
+                }}>
+                  📅 Available
+                </Typography>
+                <Switch
+                  checked={formData.is_available}
+                  onChange={(e) => handleInputChange('is_available', e.target.checked)}
+                  disabled={loading}
+                  sx={{
+                    '& .MuiSwitch-switchBase': {
+                      color: '#64748B'
+                    },
+                    '& .MuiSwitch-switchBase.Mui-checked': {
+                      color: '#14B8A6'
+                    },
+                    '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                      backgroundColor: '#14B8A6'
+                    },
+                    '& .MuiSwitch-track': {
+                      backgroundColor: '#1E293B'
+                    }
+                  }}
+                />
+              </Box>
+            </Grid>
+
+            {/* Section Header: Pricing */}
+            <Grid item xs={12} sx={{ mt: 1, mb: 1 }}>
+              <Typography sx={{ color: '#94A3B8', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>
+                💰 Pricing
+              </Typography>
+            </Grid>
+
+            {/* Row 4: Price per Hour (Left) + Price per Session (Right) */}
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
@@ -357,9 +406,9 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
                     color: '#E2E8F0',
                     bgcolor: '#1A2332',
                     borderRadius: '8px',
-                    py: 2,
+                    py: 1.8,
                     px: 2,
-                    fontSize: '1.05rem',
+                    fontSize: '1rem',
                     fontWeight: 500,
                     transition: 'all 0.3s ease'
                   },
@@ -377,7 +426,7 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
                   },
                   '& .MuiInputLabel-root': {
                     color: '#CBD5E1',
-                    fontSize: '0.95rem',
+                    fontSize: '0.9rem',
                     fontWeight: 600,
                     '&.Mui-focused': {
                       color: '#14B8A6',
@@ -403,9 +452,9 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
                     color: '#E2E8F0',
                     bgcolor: '#1A2332',
                     borderRadius: '8px',
-                    py: 2,
+                    py: 1.8,
                     px: 2,
-                    fontSize: '1.05rem',
+                    fontSize: '1rem',
                     fontWeight: 500,
                     transition: 'all 0.3s ease'
                   },
@@ -423,7 +472,7 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
                   },
                   '& .MuiInputLabel-root': {
                     color: '#CBD5E1',
-                    fontSize: '0.95rem',
+                    fontSize: '0.9rem',
                     fontWeight: 600,
                     '&.Mui-focused': {
                       color: '#14B8A6',
@@ -434,68 +483,14 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
               />
             </Grid>
 
-            {/* Section Header: Availability */}
-            <Grid item xs={12} sx={{ mt: 2 }}>
-              <Typography sx={{ color: '#94A3B8', fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', mb: 1 }}>
-                📅 Availability
-              </Typography>
-            </Grid>
-
-            {/* Availability - Full Width */}
-            <Grid item xs={12}>
-              <Box sx={{
-                display: 'flex',
-                alignItems: 'center',
-                p: 2.5,
-                bgcolor: 'linear-gradient(135deg, rgba(20, 184, 166, 0.08) 0%, rgba(15, 118, 110, 0.05) 100%)',
-                borderRadius: '8px',
-                border: '1.5px solid rgba(20, 184, 166, 0.3)',
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  border: '1.5px solid #14B8A6',
-                  bgcolor: 'linear-gradient(135deg, rgba(20, 184, 166, 0.12) 0%, rgba(15, 118, 110, 0.08) 100%)'
-                }
-              }}>
-                <Switch
-                  checked={formData.is_available}
-                  onChange={(e) => handleInputChange('is_available', e.target.checked)}
-                  disabled={loading}
-                  sx={{
-                    '& .MuiSwitch-switchBase': {
-                      color: '#64748B'
-                    },
-                    '& .MuiSwitch-switchBase.Mui-checked': {
-                      color: '#14B8A6'
-                    },
-                    '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-                      backgroundColor: '#14B8A6'
-                    },
-                    '& .MuiSwitch-track': {
-                      backgroundColor: '#1E293B'
-                    },
-                    scale: 1.15
-                  }}
-                />
-                <Typography sx={{ 
-                  color: '#E2E8F0', 
-                  fontWeight: 700, 
-                  ml: 2, 
-                  fontSize: '1rem',
-                  transition: 'all 0.3s ease'
-                }}>
-                  {formData.is_available ? '✓ Available for booking' : '○ Not available'}
-                </Typography>
-              </Box>
-            </Grid>
-
             {/* Section Header: Details */}
-            <Grid item xs={12} sx={{ mt: 2 }}>
-              <Typography sx={{ color: '#94A3B8', fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', mb: 1 }}>
+            <Grid item xs={12} sx={{ mt: 1, mb: 1 }}>
+              <Typography sx={{ color: '#94A3B8', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>
                 📖 Details
               </Typography>
             </Grid>
 
-            {/* Description - Full Width (Moved to Last) */}
+            {/* Row 5: Description (Full Width) */}
             <Grid item xs={12}>
               <TextField
                 fullWidth
@@ -511,9 +506,9 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
                     color: '#E2E8F0',
                     bgcolor: '#1A2332',
                     borderRadius: '8px',
-                    py: 2,
+                    py: 1.8,
                     px: 2,
-                    fontSize: '1rem',
+                    fontSize: '0.95rem',
                     fontWeight: 400,
                     lineHeight: '1.6',
                     transition: 'all 0.3s ease'
@@ -536,7 +531,7 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
                   },
                   '& .MuiInputLabel-root': {
                     color: '#CBD5E1',
-                    fontSize: '0.95rem',
+                    fontSize: '0.9rem',
                     fontWeight: 600,
                     '&.Mui-focused': {
                       color: '#14B8A6',
