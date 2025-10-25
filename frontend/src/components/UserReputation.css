@@ -1,9 +1,9 @@
 .user-reputation {
-  background: white;
+  background: #1A2332;
   border-radius: 12px;
   padding: 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e1e5e9;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border: 1px solid #1E293B;
 }
 
 .user-reputation__header {
@@ -12,14 +12,14 @@
   align-items: center;
   margin-bottom: 2rem;
   padding-bottom: 1rem;
-  border-bottom: 2px solid #f0f0f0;
+  border-bottom: 2px solid #1E293B;
 }
 
 .user-reputation__header h3 {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 600;
-  color: #333;
+  color: #E2E8F0;
 }
 
 .user-reputation__trust-level {
@@ -35,7 +35,7 @@
 .user-reputation__trust-badge {
   padding: 0.5rem 1rem;
   border-radius: 20px;
-  color: white;
+  color: #0F172A;
   font-weight: 600;
   font-size: 0.875rem;
   text-transform: uppercase;
@@ -52,15 +52,23 @@
 .user-reputation__stat {
   text-align: center;
   padding: 1.5rem;
-  background: #f8f9fa;
+  background: #0F172A;
   border-radius: 8px;
-  border: 1px solid #e1e5e9;
+  border: 1px solid #1E293B;
+  transition: all 0.3s ease;
+}
+
+.user-reputation__stat:hover {
+  background: #1A2332;
+  border-color: #14B8A6;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(20, 184, 166, 0.2);
 }
 
 .user-reputation__stat-value {
   font-size: 2rem;
   font-weight: 700;
-  color: #333;
+  color: #E2E8F0;
   margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
@@ -74,7 +82,7 @@
 
 .user-reputation__stat-label {
   font-size: 0.875rem;
-  color: #666;
+  color: #94A3B8;
   font-weight: 500;
 }
 
@@ -87,7 +95,7 @@
 .user-reputation__endorsements h4 {
   margin: 0 0 1rem 0;
   font-size: 1.25rem;
-  color: #333;
+  color: #E2E8F0;
   font-weight: 600;
 }
 
@@ -102,16 +110,17 @@
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  background: #f8f9fa;
+  background: #0F172A;
   border-radius: 8px;
-  border: 1px solid #e1e5e9;
-  transition: all 0.2s ease;
+  border: 1px solid #1E293B;
+  transition: all 0.3s ease;
 }
 
 .user-reputation__badge:hover {
-  background: #e9ecef;
+  background: #1A2332;
+  border-color: #14B8A6;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(20, 184, 166, 0.2);
 }
 
 .user-reputation__badge-icon {
@@ -121,9 +130,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: white;
+  background: #1A2332;
   border-radius: 50%;
-  border: 2px solid #dee2e6;
+  border: 2px solid #14B8A6;
 }
 
 .user-reputation__badge-info {
@@ -132,20 +141,20 @@
 
 .user-reputation__badge-name {
   font-weight: 600;
-  color: #333;
+  color: #E2E8F0;
   margin-bottom: 0.25rem;
 }
 
 .user-reputation__badge-desc {
   font-size: 0.875rem;
-  color: #666;
+  color: #94A3B8;
   margin-bottom: 0.25rem;
   line-height: 1.4;
 }
 
 .user-reputation__badge-date {
   font-size: 0.75rem;
-  color: #999;
+  color: #64748B;
 }
 
 .user-reputation__endorsements-list {
@@ -156,9 +165,15 @@
 
 .user-reputation__endorsement {
   padding: 1rem;
-  background: #f8f9fa;
+  background: #0F172A;
   border-radius: 8px;
-  border: 1px solid #e1e5e9;
+  border: 1px solid #1E293B;
+  transition: all 0.3s ease;
+}
+
+.user-reputation__endorsement:hover {
+  background: #1A2332;
+  border-color: #14B8A6;
 }
 
 .user-reputation__endorsement-header {
@@ -170,38 +185,38 @@
 
 .user-reputation__endorsement-skill {
   font-weight: 600;
-  color: #333;
+  color: #E2E8F0;
 }
 
 .user-reputation__endorsement-endorser {
   font-size: 0.875rem;
-  color: #666;
+  color: #94A3B8;
 }
 
 .user-reputation__endorsement-text {
   margin: 0.5rem 0;
   font-style: italic;
-  color: #555;
+  color: #CBD5E1;
   line-height: 1.5;
 }
 
 .user-reputation__endorsement-date {
   font-size: 0.75rem;
-  color: #999;
+  color: #64748B;
 }
 
 .user-reputation__endorsements-more {
   text-align: center;
   padding: 1rem;
-  color: #666;
+  color: #94A3B8;
   font-style: italic;
 }
 
 .user-reputation__trust-info {
-  background: #f8f9fa;
+  background: #0F172A;
   border-radius: 8px;
   padding: 1.5rem;
-  border: 1px solid #e1e5e9;
+  border: 1px solid #1E293B;
 }
 
 .user-reputation__trust-score {
@@ -211,14 +226,14 @@
 .user-reputation__trust-score-value {
   font-size: 1.125rem;
   font-weight: 600;
-  color: #333;
+  color: #E2E8F0;
   margin-bottom: 0.75rem;
 }
 
 .user-reputation__trust-score-bar {
   width: 100%;
   height: 8px;
-  background: #e1e5e9;
+  background: #1E293B;
   border-radius: 4px;
   overflow: hidden;
 }
@@ -232,7 +247,7 @@
 .user-reputation__trust-factors h5 {
   margin: 0 0 1rem 0;
   font-size: 1rem;
-  color: #333;
+  color: #E2E8F0;
   font-weight: 600;
 }
 
@@ -243,7 +258,7 @@
 
 .user-reputation__trust-factors li {
   margin-bottom: 0.5rem;
-  color: #555;
+  color: #CBD5E1;
   line-height: 1.5;
 }
 

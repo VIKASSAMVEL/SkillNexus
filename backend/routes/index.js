@@ -8,6 +8,9 @@ const bookingsRoutes = require('./bookings');
 const projectsRoutes = require('./projects');
 const usersRoutes = require('./users');
 const reviewsRoutes = require('./reviews');
+const recommendationsRoutes = require('./recommendations');
+const sessionsRoutes = require('./sessions');
+const notificationsRoutes = require('./notifications');
 
 // Mount routes
 router.use('/auth', authRoutes);
@@ -16,6 +19,9 @@ router.use('/bookings', bookingsRoutes);
 router.use('/projects', projectsRoutes);
 router.use('/users', usersRoutes);
 router.use('/reviews', reviewsRoutes);
+router.use('/recommendations', recommendationsRoutes);
+router.use('/sessions', sessionsRoutes);
+router.use('/notifications', notificationsRoutes);
 
 // Placeholder route
 router.get('/test', (req, res) => {

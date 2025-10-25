@@ -81,4 +81,23 @@ export const reviewsAPI = {
     api.get(`/reviews/analytics/${userId}`)
 };
 
+// AI Recommendations API calls
+export const recommendationsAPI = {
+  // Get personalized skill recommendations
+  getSkillRecommendations: (userId, params = {}) =>
+    api.get(`/recommendations/skills/${userId}`, { params }),
+
+  // Get learning path recommendations
+  getLearningPathRecommendations: (userId, params = {}) =>
+    api.get(`/recommendations/learning-paths/${userId}`, { params }),
+
+  // Get provider compatibility score
+  getProviderCompatibility: (learnerId, providerId) =>
+    api.get(`/recommendations/compatibility/${learnerId}/${providerId}`),
+
+  // Update user preferences and skill interests
+  updateUserPreferences: (userId, preferencesData) =>
+    api.post(`/recommendations/preferences/${userId}`, preferencesData)
+};
+
 export default api;

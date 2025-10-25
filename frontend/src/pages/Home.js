@@ -78,18 +78,32 @@ const Home = () => {
       >
         <Box sx={{ width: '100%', px: { xs: 0, sm: 0 }, position: 'relative', zIndex: 2 }}>
           <Box textAlign="center" sx={{ py: 4 }}>
-            <Typography
-              variant="h1"
-              component="h1"
-              sx={{
-                fontSize: { xs: '2.5rem', md: '4rem' },
-                fontWeight: 700,
-                mb: 3,
-                textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
-              }}
-            >
-              SkillNexus
-            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mb: 3, gap: '16px' }}>
+              <img
+                src="/logo.jpg"
+                alt="SkillNexus Logo"
+                style={{
+                  height: '100px',
+                  width: '100px',
+                  borderRadius: '50%',
+                  objectFit: 'cover'
+                }}
+              />
+              <Typography
+                variant="h1"
+                component="h1"
+                sx={{
+                  fontSize: { xs: '2.5rem', md: '4rem' },
+                  fontWeight: 700,
+                  textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+                  background: 'linear-gradient(45deg, #ffffff 30%, rgba(255,255,255,0.9) 90%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent'
+                }}
+              >
+                SkillNexus
+              </Typography>
+            </Box>
             <Typography
               variant="h5"
               component="p"

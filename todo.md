@@ -48,7 +48,7 @@
 - **Credit History**: Transparent tracking of earned/spent credits
 - **VIP Membership**: Credit-based premium membership tiers
 
-## 🤖 AI-Based Skill Recommendations and Matching
+## [/]🤖 AI-Based Skill Recommendations and Matching
 - **Smart Matching Algorithm**: ML-based matching of learners with providers
 - **Skill Gap Analysis**: AI recommendations for skill development paths
 - **Compatibility Scoring**: Personality and learning style matching
@@ -60,7 +60,7 @@
 - **Learning Style Assessment**: Adaptive recommendations based on user preferences
 - **Cross-Skill Connections**: Related skill suggestions and combinations
 
-## 💬 Real-Time Chat and Video Session Capabilities
+## [/] 💬 Real-Time Chat and Video Session Capabilities
 - **Integrated Chat System**: Real-time messaging during sessions
 - **Video Calling**: HD video sessions with screen sharing
 - **File Sharing**: Document and resource exchange during sessions

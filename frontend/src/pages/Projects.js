@@ -49,7 +49,7 @@ const Projects = () => {
 
   useEffect(() => {
     fetchProjects();
-  }, [activeTab, filters, fetchProjects]);
+  }, [activeTab, filters]);
 
   const fetchProjects = async () => {
     try {

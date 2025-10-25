@@ -27,11 +27,23 @@ const Header = () => {
       }}
     >
       <Toolbar sx={{ px: { xs: 2, md: 4 } }}>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 700 }}>
-          <Link to="/" style={{ color: '#14B8A6', textDecoration: 'none' }}>
-            SkillNexus
+        <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', gap: '12px' }}>
+            <img
+              src="/logo.jpg"
+              alt="SkillNexus Logo"
+              style={{
+                height: '48px',
+                width: '48px',
+                borderRadius: '50%',
+                objectFit: 'cover'
+              }}
+            />
+            <Typography variant="h6" sx={{ color: '#14B8A6', fontWeight: 700 }}>
+              SkillNexus
+            </Typography>
           </Link>
-        </Typography>
+        </Box>
         <Box sx={{ display: 'flex', gap: 2 }}>
           {isLoggedIn() && (
             <>
@@ -66,6 +78,38 @@ const Header = () => {
                 }}
               >
                 Projects
+              </Button>
+              <Button 
+                color="inherit" 
+                component={Link} 
+                to="/sessions"
+                sx={{
+                  color: '#E2E8F0',
+                  '&:hover': {
+                    bgcolor: 'rgba(20, 184, 166, 0.1)',
+                    color: '#14B8A6',
+                    transform: 'translateY(-2px)'
+                  },
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                Sessions
+              </Button>
+              <Button 
+                color="inherit" 
+                component={Link} 
+                to="/recommendations"
+                sx={{
+                  color: '#E2E8F0',
+                  '&:hover': {
+                    bgcolor: 'rgba(20, 184, 166, 0.1)',
+                    color: '#14B8A6',
+                    transform: 'translateY(-2px)'
+                  },
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                AI Recommendations
               </Button>
             </>
           )}
@@ -102,6 +146,38 @@ const Header = () => {
                 }}
               >
                 Bookings
+              </Button>
+              <Button 
+                color="inherit" 
+                component={Link} 
+                to="/notifications"
+                sx={{
+                  color: '#E2E8F0',
+                  '&:hover': {
+                    bgcolor: 'rgba(20, 184, 166, 0.1)',
+                    color: '#14B8A6',
+                    transform: 'translateY(-2px)'
+                  },
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                Notifications
+              </Button>
+              <Button 
+                color="inherit" 
+                component={Link} 
+                to="/conflicts"
+                sx={{
+                  color: '#E2E8F0',
+                  '&:hover': {
+                    bgcolor: 'rgba(20, 184, 166, 0.1)',
+                    color: '#14B8A6',
+                    transform: 'translateY(-2px)'
+                  },
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                Conflicts
               </Button>
               <Button 
                 color="inherit" 

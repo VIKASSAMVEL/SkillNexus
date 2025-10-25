@@ -118,16 +118,29 @@ const Footer = () => {
           <Grid container spacing={2}>
             {/* Column 1: Platform & Mission */}
             <Grid item xs={12} md={3}>
-              <Typography
-                variant="h6"
-                sx={{
-                  color: '#14B8A6',
-                  mb: 1,
-                  fontWeight: 700
-                }}
-              >
-                SkillNexus
-              </Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                <img
+                  src="/logo.jpg"
+                  alt="SkillNexus Logo"
+                  style={{
+                    height: '40px',
+                    width: '40px',
+                    borderRadius: '50%',
+                    objectFit: 'cover',
+                    marginRight: '8px'
+                  }}
+                />
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: '#14B8A6',
+                    fontWeight: 700,
+                    fontSize: '1.1rem'
+                  }}
+                >
+                  SkillNexus
+                </Typography>
+              </Box>
               <Typography
                 variant="body2"
                 sx={{
