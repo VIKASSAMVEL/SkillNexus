@@ -26,7 +26,7 @@ import {
   AccessTime,
   Person,
   CheckCircle,
-  Clock,
+  Schedule,
   AlertCircle
 } from '@mui/icons-material';
 import api from '../services/api';
@@ -166,7 +166,7 @@ const BookingsList = () => {
             borderRadius: 2
           }}
         >
-          <Clock sx={{ fontSize: 48, color: '#94A3B8', mb: 2, opacity: 0.5 }} />
+          <Schedule sx={{ fontSize: 48, color: '#94A3B8', mb: 2, opacity: 0.5 }} />
           <Typography variant="h6" sx={{ color: '#CBD5E1', mb: 1 }}>
             No bookings found
           </Typography>
@@ -201,7 +201,7 @@ const BookingsList = () => {
                       </Typography>
                       <Chip
                         label={booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
-                        icon={booking.status === 'confirmed' ? <CheckCircle /> : booking.status === 'pending' ? <Clock /> : <AlertCircle />}
+                        icon={booking.status === 'confirmed' ? <CheckCircle /> : booking.status === 'pending' ? <Schedule /> : <AlertCircle />}
                         size="small"
                         sx={{
                           bgcolor: booking.status === 'pending' ? 'rgba(251, 146, 60, 0.2)' :

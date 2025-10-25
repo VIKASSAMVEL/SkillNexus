@@ -24,7 +24,7 @@ import {
   Paper,
   Fade
 } from '@mui/material';
-import { Add, Delete, Edit, Clock } from '@mui/icons-material';
+import { Add, Delete, Edit, Schedule } from '@mui/icons-material';
 import api from '../services/api';
 
 const AvailabilityManager = () => {
@@ -203,15 +203,15 @@ const AvailabilityManager = () => {
           elevation={0}
           sx={{
             textAlign: 'center',
-            py: 6,
+            p: 4,
             bgcolor: '#1A2332',
             border: '2px dashed #1E293B',
-            borderRadius: 2
+            borderRadius: 3
           }}
         >
-          <Clock sx={{ fontSize: 48, color: '#94A3B8', mb: 2, opacity: 0.5 }} />
-          <Typography variant="h6" sx={{ color: '#CBD5E1', mb: 1 }}>
-            No availability slots set up yet
+          <Schedule sx={{ fontSize: 48, color: '#94A3B8', mb: 2, opacity: 0.5 }} />
+          <Typography variant="h6" sx={{ color: '#CBD5E1' }}>
+            No availability slots yet
           </Typography>
           <Typography variant="body2" sx={{ color: '#94A3B8' }}>
             Add your available time slots so students can book sessions with you.
