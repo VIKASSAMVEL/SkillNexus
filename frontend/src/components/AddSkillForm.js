@@ -271,47 +271,6 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
               </FormControl>
             </Grid>
 
-            {/* Description - Full Width */}
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Description"
-                value={formData.description}
-                onChange={(e) => handleInputChange('description', e.target.value)}
-                multiline
-                rows={4}
-                placeholder="Describe your skill and what you can offer..."
-                disabled={loading}
-                sx={{
-                  '& .MuiInputBase-input': {
-                    color: '#E2E8F0',
-                    bgcolor: '#1A2332',
-                    borderRadius: 1,
-                    py: 1.5
-                  },
-                  '& .MuiInputBase-input::placeholder': {
-                    color: '#94A3B8',
-                    opacity: 0.7
-                  },
-                  '& .MuiOutlinedInput-root': {
-                    borderColor: '#1E293B',
-                    '&:hover fieldset': {
-                      borderColor: '#475569'
-                    },
-                    '&.Mui-focused fieldset': {
-                      borderColor: '#14B8A6'
-                    }
-                  },
-                  '& .MuiInputLabel-root': {
-                    color: '#CBD5E1',
-                    '&.Mui-focused': {
-                      color: '#14B8A6'
-                    }
-                  }
-                }}
-              />
-            </Grid>
-
             {/* Price per Hour and Price per Session - Side by Side */}
             <Grid item xs={12} sm={6}>
               <TextField
@@ -410,6 +369,47 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
                   Available for booking
                 </Typography>
               </Box>
+            </Grid>
+
+            {/* Description - Full Width (Moved to Last) */}
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Description"
+                value={formData.description}
+                onChange={(e) => handleInputChange('description', e.target.value)}
+                multiline
+                rows={4}
+                placeholder="Describe your skill and what you can offer..."
+                disabled={loading}
+                sx={{
+                  '& .MuiInputBase-input': {
+                    color: '#E2E8F0',
+                    bgcolor: '#1A2332',
+                    borderRadius: 1,
+                    py: 1.5
+                  },
+                  '& .MuiInputBase-input::placeholder': {
+                    color: '#94A3B8',
+                    opacity: 0.7
+                  },
+                  '& .MuiOutlinedInput-root': {
+                    borderColor: '#1E293B',
+                    '&:hover fieldset': {
+                      borderColor: '#475569'
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#14B8A6'
+                    }
+                  },
+                  '& .MuiInputLabel-root': {
+                    color: '#CBD5E1',
+                    '&.Mui-focused': {
+                      color: '#14B8A6'
+                    }
+                  }
+                }}
+              />
             </Grid>
           </Grid>
         </DialogContent>
