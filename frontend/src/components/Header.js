@@ -53,12 +53,21 @@ const Header = () => {
                 to="/skills"
                 sx={{
                   color: '#E2E8F0',
+                  border: '1px solid rgba(226, 232, 240, 0.2)',
+                  borderRadius: '8px',
+                  px: 2,
+                  py: 1,
+                  mx: 0.5,
+                  fontWeight: 500,
+                  textTransform: 'none',
+                  transition: 'all 0.3s ease',
                   '&:hover': {
-                    bgcolor: 'rgba(20, 184, 166, 0.1)',
+                    bgcolor: 'rgba(20, 184, 166, 0.15)',
                     color: '#14B8A6',
-                    transform: 'translateY(-2px)'
-                  },
-                  transition: 'all 0.3s ease'
+                    borderColor: 'rgba(20, 184, 166, 0.5)',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 4px 12px rgba(20, 184, 166, 0.2)'
+                  }
                 }}
               >
                 Skills
@@ -69,12 +78,21 @@ const Header = () => {
                 to="/projects"
                 sx={{
                   color: '#E2E8F0',
+                  border: '1px solid rgba(226, 232, 240, 0.2)',
+                  borderRadius: '8px',
+                  px: 2,
+                  py: 1,
+                  mx: 0.5,
+                  fontWeight: 500,
+                  textTransform: 'none',
+                  transition: 'all 0.3s ease',
                   '&:hover': {
-                    bgcolor: 'rgba(20, 184, 166, 0.1)',
+                    bgcolor: 'rgba(20, 184, 166, 0.15)',
                     color: '#14B8A6',
-                    transform: 'translateY(-2px)'
-                  },
-                  transition: 'all 0.3s ease'
+                    borderColor: 'rgba(20, 184, 166, 0.5)',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 4px 12px rgba(20, 184, 166, 0.2)'
+                  }
                 }}
               >
                 Projects
@@ -85,12 +103,21 @@ const Header = () => {
                 to="/sessions"
                 sx={{
                   color: '#E2E8F0',
+                  border: '1px solid rgba(226, 232, 240, 0.2)',
+                  borderRadius: '8px',
+                  px: 2,
+                  py: 1,
+                  mx: 0.5,
+                  fontWeight: 500,
+                  textTransform: 'none',
+                  transition: 'all 0.3s ease',
                   '&:hover': {
-                    bgcolor: 'rgba(20, 184, 166, 0.1)',
+                    bgcolor: 'rgba(20, 184, 166, 0.15)',
                     color: '#14B8A6',
-                    transform: 'translateY(-2px)'
-                  },
-                  transition: 'all 0.3s ease'
+                    borderColor: 'rgba(20, 184, 166, 0.5)',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 4px 12px rgba(20, 184, 166, 0.2)'
+                  }
                 }}
               >
                 Sessions
@@ -101,12 +128,21 @@ const Header = () => {
                 to="/recommendations"
                 sx={{
                   color: '#E2E8F0',
+                  border: '1px solid rgba(226, 232, 240, 0.2)',
+                  borderRadius: '8px',
+                  px: 2,
+                  py: 1,
+                  mx: 0.5,
+                  fontWeight: 500,
+                  textTransform: 'none',
+                  transition: 'all 0.3s ease',
                   '&:hover': {
-                    bgcolor: 'rgba(20, 184, 166, 0.1)',
+                    bgcolor: 'rgba(20, 184, 166, 0.15)',
                     color: '#14B8A6',
-                    transform: 'translateY(-2px)'
-                  },
-                  transition: 'all 0.3s ease'
+                    borderColor: 'rgba(20, 184, 166, 0.5)',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 4px 12px rgba(20, 184, 166, 0.2)'
+                  }
                 }}
               >
                 AI Recommendations
@@ -121,12 +157,21 @@ const Header = () => {
                 to="/profile"
                 sx={{
                   color: '#E2E8F0',
+                  border: '1px solid rgba(226, 232, 240, 0.2)',
+                  borderRadius: '8px',
+                  px: 2,
+                  py: 1,
+                  mx: 0.5,
+                  fontWeight: 500,
+                  textTransform: 'none',
+                  transition: 'all 0.3s ease',
                   '&:hover': {
-                    bgcolor: 'rgba(20, 184, 166, 0.1)',
+                    bgcolor: 'rgba(20, 184, 166, 0.15)',
                     color: '#14B8A6',
-                    transform: 'translateY(-2px)'
-                  },
-                  transition: 'all 0.3s ease'
+                    borderColor: 'rgba(20, 184, 166, 0.5)',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 4px 12px rgba(20, 184, 166, 0.2)'
+                  }
                 }}
               >
                 Profile
@@ -137,12 +182,21 @@ const Header = () => {
                 to="/bookings"
                 sx={{
                   color: '#E2E8F0',
+                  border: '1px solid rgba(226, 232, 240, 0.2)',
+                  borderRadius: '8px',
+                  px: 2,
+                  py: 1,
+                  mx: 0.5,
+                  fontWeight: 500,
+                  textTransform: 'none',
+                  transition: 'all 0.3s ease',
                   '&:hover': {
-                    bgcolor: 'rgba(20, 184, 166, 0.1)',
+                    bgcolor: 'rgba(20, 184, 166, 0.15)',
                     color: '#14B8A6',
-                    transform: 'translateY(-2px)'
-                  },
-                  transition: 'all 0.3s ease'
+                    borderColor: 'rgba(20, 184, 166, 0.5)',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 4px 12px rgba(20, 184, 166, 0.2)'
+                  }
                 }}
               >
                 Bookings
@@ -153,12 +207,21 @@ const Header = () => {
                 to="/notifications"
                 sx={{
                   color: '#E2E8F0',
+                  border: '1px solid rgba(226, 232, 240, 0.2)',
+                  borderRadius: '8px',
+                  px: 2,
+                  py: 1,
+                  mx: 0.5,
+                  fontWeight: 500,
+                  textTransform: 'none',
+                  transition: 'all 0.3s ease',
                   '&:hover': {
-                    bgcolor: 'rgba(20, 184, 166, 0.1)',
+                    bgcolor: 'rgba(20, 184, 166, 0.15)',
                     color: '#14B8A6',
-                    transform: 'translateY(-2px)'
-                  },
-                  transition: 'all 0.3s ease'
+                    borderColor: 'rgba(20, 184, 166, 0.5)',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 4px 12px rgba(20, 184, 166, 0.2)'
+                  }
                 }}
               >
                 Notifications
@@ -169,12 +232,21 @@ const Header = () => {
                 to="/conflicts"
                 sx={{
                   color: '#E2E8F0',
+                  border: '1px solid rgba(226, 232, 240, 0.2)',
+                  borderRadius: '8px',
+                  px: 2,
+                  py: 1,
+                  mx: 0.5,
+                  fontWeight: 500,
+                  textTransform: 'none',
+                  transition: 'all 0.3s ease',
                   '&:hover': {
-                    bgcolor: 'rgba(20, 184, 166, 0.1)',
+                    bgcolor: 'rgba(20, 184, 166, 0.15)',
                     color: '#14B8A6',
-                    transform: 'translateY(-2px)'
-                  },
-                  transition: 'all 0.3s ease'
+                    borderColor: 'rgba(20, 184, 166, 0.5)',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 4px 12px rgba(20, 184, 166, 0.2)'
+                  }
                 }}
               >
                 Conflicts
@@ -185,12 +257,21 @@ const Header = () => {
                 to="/credits"
                 sx={{
                   color: '#E2E8F0',
+                  border: '1px solid rgba(226, 232, 240, 0.2)',
+                  borderRadius: '8px',
+                  px: 2,
+                  py: 1,
+                  mx: 0.5,
+                  fontWeight: 500,
+                  textTransform: 'none',
+                  transition: 'all 0.3s ease',
                   '&:hover': {
-                    bgcolor: 'rgba(20, 184, 166, 0.1)',
+                    bgcolor: 'rgba(20, 184, 166, 0.15)',
                     color: '#14B8A6',
-                    transform: 'translateY(-2px)'
-                  },
-                  transition: 'all 0.3s ease'
+                    borderColor: 'rgba(20, 184, 166, 0.5)',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 4px 12px rgba(20, 184, 166, 0.2)'
+                  }
                 }}
               >
                 Credits
@@ -200,12 +281,21 @@ const Header = () => {
                 onClick={handleLogout}
                 sx={{
                   color: '#E2E8F0',
+                  border: '1px solid rgba(226, 232, 240, 0.2)',
+                  borderRadius: '8px',
+                  px: 2,
+                  py: 1,
+                  mx: 0.5,
+                  fontWeight: 500,
+                  textTransform: 'none',
+                  transition: 'all 0.3s ease',
                   '&:hover': {
-                    bgcolor: 'rgba(20, 184, 166, 0.1)',
-                    color: '#14B8A6',
-                    transform: 'translateY(-2px)'
-                  },
-                  transition: 'all 0.3s ease'
+                    bgcolor: 'rgba(239, 68, 68, 0.15)',
+                    color: '#EF4444',
+                    borderColor: 'rgba(239, 68, 68, 0.5)',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 4px 12px rgba(239, 68, 68, 0.2)'
+                  }
                 }}
               >
                 Logout
@@ -219,12 +309,21 @@ const Header = () => {
                 to="/login"
                 sx={{
                   color: '#E2E8F0',
+                  border: '1px solid rgba(226, 232, 240, 0.2)',
+                  borderRadius: '8px',
+                  px: 2,
+                  py: 1,
+                  mx: 0.5,
+                  fontWeight: 500,
+                  textTransform: 'none',
+                  transition: 'all 0.3s ease',
                   '&:hover': {
-                    bgcolor: 'rgba(20, 184, 166, 0.1)',
+                    bgcolor: 'rgba(20, 184, 166, 0.15)',
                     color: '#14B8A6',
-                    transform: 'translateY(-2px)'
-                  },
-                  transition: 'all 0.3s ease'
+                    borderColor: 'rgba(20, 184, 166, 0.5)',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 4px 12px rgba(20, 184, 166, 0.2)'
+                  }
                 }}
               >
                 Login
@@ -234,13 +333,22 @@ const Header = () => {
                 component={Link} 
                 to="/register"
                 sx={{
-                  color: '#E2E8F0',
+                  bgcolor: '#14B8A6',
+                  color: '#0F172A',
+                  border: '1px solid #14B8A6',
+                  borderRadius: '8px',
+                  px: 2,
+                  py: 1,
+                  mx: 0.5,
+                  fontWeight: 600,
+                  textTransform: 'none',
+                  transition: 'all 0.3s ease',
                   '&:hover': {
-                    bgcolor: 'rgba(20, 184, 166, 0.1)',
-                    color: '#14B8A6',
-                    transform: 'translateY(-2px)'
-                  },
-                  transition: 'all 0.3s ease'
+                    bgcolor: '#0F766E',
+                    borderColor: '#0F766E',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 4px 12px rgba(20, 184, 166, 0.4)'
+                  }
                 }}
               >
                 Register

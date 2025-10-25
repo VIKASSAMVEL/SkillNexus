@@ -86,13 +86,23 @@ const LocationSearch = ({ onLocationSearch, onLocationChange }) => {
     setError(null);
 
     try {
-      // Geocode the entered location
-      const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location)}&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`
-      );
+      // Try multiple geocoding approaches for better results
+      let geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location)}&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
+
+      // For city names, try adding "India" if it's a common Indian city
+      const indianCities = ['chennai', 'mumbai', 'delhi', 'bangalore', 'hyderabad', 'pune', 'kolkata', 'ahmedabad'];
+      if (indianCities.some(city => location.toLowerCase().includes(city))) {
+        geocodingUrl += '&region=in';
+      }
+
+      console.log('Geocoding URL:', geocodingUrl); // Debug log
+
+      const response = await fetch(geocodingUrl);
       const data = await response.json();
 
-      if (data.results && data.results[0]) {
+      console.log('Geocoding response:', data); // Debug log
+
+      if (data.status === 'OK' && data.results && data.results[0]) {
         const { lat, lng } = data.results[0].geometry.location;
         const address = data.results[0].formatted_address;
 
@@ -104,12 +114,39 @@ const LocationSearch = ({ onLocationSearch, onLocationChange }) => {
             radius
           });
         }
+      } else if (data.status === 'ZERO_RESULTS') {
+        // Try a more specific search
+        const fallbackUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location + ', India')}&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
+        console.log('Trying fallback geocoding:', fallbackUrl);
+
+        const fallbackResponse = await fetch(fallbackUrl);
+        const fallbackData = await fallbackResponse.json();
+
+        if (fallbackData.status === 'OK' && fallbackData.results && fallbackData.results[0]) {
+          const { lat, lng } = fallbackData.results[0].geometry.location;
+          const address = fallbackData.results[0].formatted_address;
+
+          if (onLocationSearch) {
+            onLocationSearch({
+              latitude: lat,
+              longitude: lng,
+              address,
+              radius
+            });
+          }
+        } else {
+          setError(`Location "${location}" not found. Please try a more specific address like "${location}, State" or "${location}, Country".`);
+        }
+      } else if (data.status === 'REQUEST_DENIED') {
+        setError('Geocoding API access denied. Please check your Google Maps API key configuration.');
+      } else if (data.status === 'OVER_QUERY_LIMIT') {
+        setError('Geocoding API quota exceeded. Please try again later.');
       } else {
-        setError('Location not found. Please try a different address.');
+        setError(`Geocoding failed: ${data.status}. Please try a different address format.`);
       }
     } catch (error) {
       console.error('Error geocoding location:', error);
-      setError('Error searching for location. Please try again.');
+      setError('Network error while searching for location. Please check your internet connection and try again.');
     } finally {
       setLoading(false);
     }

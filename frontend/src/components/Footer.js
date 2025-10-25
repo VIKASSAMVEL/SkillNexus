@@ -449,7 +449,8 @@ community projects that make a difference              </Typography>
                 textAlign: { xs: 'center', md: 'right' }
               }}
             >
-              Built with ❤️ for community empowerment
+              Built with ❤️ for community empowerment.
+              Developed by Team Rejections.
             </Typography>
           </Box>
         </Container>
