@@ -140,7 +140,7 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
             </Alert>
           )}
 
-          <Grid container spacing={3}>
+          <Grid container spacing={4}>
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
@@ -153,7 +153,8 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
                   '& .MuiInputBase-input': {
                     color: '#E2E8F0',
                     bgcolor: '#1A2332',
-                    borderRadius: 1
+                    borderRadius: 1,
+                    py: 1.5
                   },
                   '& .MuiInputBase-input::placeholder': {
                     color: '#94A3B8',
@@ -200,6 +201,9 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
                     },
                     '& .MuiSvgIcon-root': {
                       color: '#14B8A6'
+                    },
+                    '& .MuiOutlinedInput-input': {
+                      py: 1.5
                     }
                   }}
                 >
@@ -235,14 +239,15 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
                 value={formData.description}
                 onChange={(e) => handleInputChange('description', e.target.value)}
                 multiline
-                rows={3}
+                rows={4}
                 placeholder="Describe your skill and what you can offer..."
                 disabled={loading}
                 sx={{
                   '& .MuiInputBase-input': {
                     color: '#E2E8F0',
                     bgcolor: '#1A2332',
-                    borderRadius: 1
+                    borderRadius: 1,
+                    py: 1.5
                   },
                   '& .MuiInputBase-input::placeholder': {
                     color: '#94A3B8',
@@ -289,6 +294,9 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
                     },
                     '& .MuiSvgIcon-root': {
                       color: '#14B8A6'
+                    },
+                    '& .MuiOutlinedInput-input': {
+                      py: 1.5
                     }
                   }}
                 >
@@ -318,10 +326,11 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
                   />
                 }
                 label={
-                  <Typography sx={{ color: '#E2E8F0', fontWeight: 500 }}>
+                  <Typography sx={{ color: '#E2E8F0', fontWeight: 500, ml: 1 }}>
                     Available for booking
                   </Typography>
                 }
+                sx={{ py: 0.5 }}
               />
             </Grid>
 
@@ -338,7 +347,8 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
                   '& .MuiInputBase-input': {
                     color: '#E2E8F0',
                     bgcolor: '#1A2332',
-                    borderRadius: 1
+                    borderRadius: 1,
+                    py: 1.5
                   },
                   '& .MuiOutlinedInput-root': {
                     borderColor: '#1E293B',
@@ -372,7 +382,8 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
                   '& .MuiInputBase-input': {
                     color: '#E2E8F0',
                     bgcolor: '#1A2332',
-                    borderRadius: 1
+                    borderRadius: 1,
+                    py: 1.5
                   },
                   '& .MuiOutlinedInput-root': {
                     borderColor: '#1E293B',
