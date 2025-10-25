@@ -15,7 +15,8 @@ import {
   Grid,
   Alert,
   CircularProgress,
-  Typography
+  Typography,
+  Box
 } from '@mui/material';
 import api from '../services/api';
 
@@ -127,21 +128,22 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
         Add New Skill
       </DialogTitle>
       <form onSubmit={handleSubmit}>
-        <DialogContent sx={{ bgcolor: '#0F172A', pt: 3 }}>
+        <DialogContent sx={{ bgcolor: '#0F172A', pt: 3, pb: 3 }}>
           {error && (
-            <Alert severity="error" sx={{ mb: 2, bgcolor: 'rgba(239, 68, 68, 0.1)', color: '#FCA5A5', border: '1px solid #DC2626' }}>
+            <Alert severity="error" sx={{ mb: 3, bgcolor: 'rgba(239, 68, 68, 0.1)', color: '#FCA5A5', border: '1px solid #DC2626' }}>
               {error}
             </Alert>
           )}
 
           {success && (
-            <Alert severity="success" sx={{ mb: 2, bgcolor: 'rgba(34, 197, 94, 0.1)', color: '#86EFAC', border: '1px solid #16A34A' }}>
+            <Alert severity="success" sx={{ mb: 3, bgcolor: 'rgba(34, 197, 94, 0.1)', color: '#86EFAC', border: '1px solid #16A34A' }}>
               Skill created successfully!
             </Alert>
           )}
 
-          <Grid container spacing={4}>
-            <Grid item xs={12} sm={6}>
+          <Grid container spacing={3}>
+            {/* Row 1: Skill Name and Category */}
+            <Grid item xs={12} sm={7}>
               <TextField
                 fullWidth
                 label="Skill Name"
@@ -179,7 +181,7 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
               />
             </Grid>
 
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={5}>
               <FormControl fullWidth required disabled={loading}>
                 <InputLabel sx={{ color: '#CBD5E1', '&.Mui-focused': { color: '#14B8A6' } }}>Category</InputLabel>
                 <Select
@@ -232,6 +234,7 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
               </FormControl>
             </Grid>
 
+            {/* Row 2: Description (Full Width) */}
             <Grid item xs={12}>
               <TextField
                 fullWidth
@@ -272,6 +275,7 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
               />
             </Grid>
 
+            {/* Row 3: Proficiency Level and Availability */}
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth disabled={loading}>
                 <InputLabel sx={{ color: '#CBD5E1', '&.Mui-focused': { color: '#14B8A6' } }}>Proficiency Level</InputLabel>
@@ -309,31 +313,35 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
             </Grid>
 
             <Grid item xs={12} sm={6}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={formData.is_available}
-                    onChange={(e) => handleInputChange('is_available', e.target.checked)}
-                    disabled={loading}
-                    sx={{
-                      '& .MuiSwitch-switchBase.Mui-checked': {
-                        color: '#14B8A6'
-                      },
-                      '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-                        backgroundColor: '#14B8A6'
-                      }
-                    }}
-                  />
-                }
-                label={
-                  <Typography sx={{ color: '#E2E8F0', fontWeight: 500, ml: 1 }}>
-                    Available for booking
-                  </Typography>
-                }
-                sx={{ py: 0.5 }}
-              />
+              <Box sx={{
+                display: 'flex',
+                alignItems: 'center',
+                height: '100%',
+                p: 2,
+                bgcolor: '#1A2332',
+                borderRadius: 1,
+                border: '1px solid #1E293B'
+              }}>
+                <Switch
+                  checked={formData.is_available}
+                  onChange={(e) => handleInputChange('is_available', e.target.checked)}
+                  disabled={loading}
+                  sx={{
+                    '& .MuiSwitch-switchBase.Mui-checked': {
+                      color: '#14B8A6'
+                    },
+                    '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                      backgroundColor: '#14B8A6'
+                    }
+                  }}
+                />
+                <Typography sx={{ color: '#E2E8F0', fontWeight: 500, ml: 2 }}>
+                  Available for booking
+                </Typography>
+              </Box>
             </Grid>
 
+            {/* Row 4: Price per Hour and Price per Session */}
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
