@@ -338,7 +338,7 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
             {/* Price per Hour */}
             <Grid item xs={12}>
               <Typography sx={{ color: '#94A3B8', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', mb: 1 }}>
-                � Price per Hour
+                ⏰ Price per Hour
               </Typography>
               <TextField
                 fullWidth
@@ -486,7 +486,7 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
             {/* Description */}
             <Grid item xs={12}>
               <Typography sx={{ color: '#94A3B8', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', mb: 1 }}>
-                � Description
+                📖 Description
               </Typography>
               <TextField
                 fullWidth
