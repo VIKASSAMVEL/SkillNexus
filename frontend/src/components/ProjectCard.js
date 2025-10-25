@@ -150,13 +150,14 @@ const ProjectCard = ({ project, onUpdate }) => {
           transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
           borderRadius: 3,
           border: '1px solid',
-          borderColor: 'divider',
+          borderColor: '#1E293B',
+          bgcolor: '#1A2332',
           position: 'relative',
           overflow: 'hidden',
           '&:hover': {
             transform: 'translateY(-8px)',
-            boxShadow: '0 20px 40px rgba(0,0,0,0.12)',
-            borderColor: 'primary.main'
+            boxShadow: '0 20px 40px rgba(20, 184, 166, 0.15)',
+            borderColor: '#14B8A6'
           },
           '&::before': {
             content: '""',
@@ -166,13 +167,13 @@ const ProjectCard = ({ project, onUpdate }) => {
             right: 0,
             height: 4,
             background: `linear-gradient(90deg, ${
-              project.status === 'active' ? '#4caf50' :
-              project.status === 'planning' ? '#2196f3' :
-              project.status === 'completed' ? '#9e9e9e' : '#f44336'
+              project.status === 'active' ? '#10B981' :
+              project.status === 'planning' ? '#14B8A6' :
+              project.status === 'completed' ? '#64748B' : '#EF4444'
             }, ${
-              project.status === 'active' ? '#66bb6a' :
-              project.status === 'planning' ? '#64b5f6' :
-              project.status === 'completed' ? '#bdbdbd' : '#ef5350'
+              project.status === 'active' ? '#34D399' :
+              project.status === 'planning' ? '#2DD4BF' :
+              project.status === 'completed' ? '#94A3B8' : '#F87171'
             })`
           }
         }}
@@ -193,7 +194,8 @@ const ProjectCard = ({ project, onUpdate }) => {
                 display: '-webkit-box',
                 WebkitLineClamp: 2,
                 WebkitBoxOrient: 'vertical',
-                overflow: 'hidden'
+                overflow: 'hidden',
+                color: '#E2E8F0'
               }}
             >
               {project.title}
@@ -202,12 +204,15 @@ const ProjectCard = ({ project, onUpdate }) => {
               {getStatusIcon(project.status)}
               <Chip
                 label={project.status.charAt(0).toUpperCase() + project.status.slice(1)}
-                color={getStatusColor(project.status)}
                 size="small"
                 sx={{
                   fontWeight: 600,
                   fontSize: '0.75rem',
                   transition: 'all 0.3s ease',
+                  bgcolor: project.status === 'active' ? '#10B981' :
+                           project.status === 'planning' ? '#14B8A6' :
+                           project.status === 'completed' ? '#64748B' : '#EF4444',
+                  color: '#0F172A',
                   '&:hover': {
                     transform: 'scale(1.05)'
                   }
@@ -218,14 +223,14 @@ const ProjectCard = ({ project, onUpdate }) => {
 
           <Typography
             variant="body2"
-            color="text.secondary"
-            mb={3}
             sx={{
               display: '-webkit-box',
               WebkitLineClamp: 3,
               WebkitBoxOrient: 'vertical',
               overflow: 'hidden',
-              lineHeight: 1.5
+              lineHeight: 1.5,
+              color: '#CBD5E1',
+              mb: 3
             }}
           >
             {project.description}
@@ -237,7 +242,8 @@ const ProjectCard = ({ project, onUpdate }) => {
                 width: 32,
                 height: 32,
                 mr: 1.5,
-                bgcolor: 'primary.main',
+                bgcolor: '#0F766E',
+                color: '#14B8A6',
                 fontSize: '0.875rem',
                 fontWeight: 600
               }}
@@ -245,10 +251,10 @@ const ProjectCard = ({ project, onUpdate }) => {
               {project.creator_name.charAt(0).toUpperCase()}
             </Avatar>
             <Box>
-              <Typography variant="body2" sx={{ fontWeight: 500 }}>
+              <Typography variant="body2" sx={{ fontWeight: 500, color: '#E2E8F0' }}>
                 {project.creator_name}
               </Typography>
-              <Typography variant="caption" color="text.secondary">
+              <Typography variant="caption" sx={{ color: '#94A3B8' }}>
                 Project Creator
               </Typography>
             </Box>
@@ -257,8 +263,8 @@ const ProjectCard = ({ project, onUpdate }) => {
           <Box display="flex" flexDirection="column" gap={1.5} mb={3}>
             {project.location && (
               <Box display="flex" alignItems="center">
-                <LocationOn sx={{ mr: 1, fontSize: 18, color: 'text.secondary' }} />
-                <Typography variant="body2" color="text.secondary">
+                <LocationOn sx={{ mr: 1, fontSize: 18, color: '#14B8A6' }} />
+                <Typography variant="body2" sx={{ color: '#CBD5E1' }}>
                   {project.location}
                 </Typography>
               </Box>
@@ -266,14 +272,14 @@ const ProjectCard = ({ project, onUpdate }) => {
 
             <Box display="flex" alignItems="center" justifyContent="space-between">
               <Box display="flex" alignItems="center">
-                <PeopleIcon sx={{ mr: 1, fontSize: 18, color: 'text.secondary' }} />
-                <Typography variant="body2" color="text.secondary">
+                <PeopleIcon sx={{ mr: 1, fontSize: 18, color: '#14B8A6' }} />
+                <Typography variant="body2" sx={{ color: '#CBD5E1' }}>
                   {project.current_participants || 0}
                   {project.max_participants && `/${project.max_participants}`} participants
                 </Typography>
               </Box>
               {project.max_participants && (
-                <Typography variant="caption" color="text.secondary">
+                <Typography variant="caption" sx={{ color: '#94A3B8' }}>
                   {Math.round(getProgressValue())}% full
                 </Typography>
               )}
@@ -286,15 +292,15 @@ const ProjectCard = ({ project, onUpdate }) => {
                 sx={{
                   height: 6,
                   borderRadius: 3,
-                  bgcolor: 'grey.200',
+                  bgcolor: '#0F766E',
                   '& .MuiLinearProgress-bar': {
                     borderRadius: 3,
                     background: `linear-gradient(90deg, ${
-                      getProgressValue() > 80 ? '#f44336' :
-                      getProgressValue() > 60 ? '#ff9800' : '#4caf50'
+                      getProgressValue() > 80 ? '#EF4444' :
+                      getProgressValue() > 60 ? '#F59E0B' : '#10B981'
                     }, ${
-                      getProgressValue() > 80 ? '#e57373' :
-                      getProgressValue() > 60 ? '#ffb74d' : '#81c784'
+                      getProgressValue() > 80 ? '#F87171' :
+                      getProgressValue() > 60 ? '#FBBF24' : '#34D399'
                     })`
                   }
                 }}
@@ -306,26 +312,31 @@ const ProjectCard = ({ project, onUpdate }) => {
             <Chip
               label={project.category}
               size="small"
-              variant="outlined"
               sx={{
                 fontWeight: 500,
+                bgcolor: '#0F766E',
+                color: '#14B8A6',
+                border: '1px solid #14B8A6',
                 transition: 'all 0.3s ease',
                 '&:hover': {
                   transform: 'scale(1.05)',
-                  boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                  boxShadow: '0 4px 12px rgba(20, 184, 166, 0.3)'
                 }
               }}
             />
             <Chip
               label={getProjectTypeLabel(project.project_type)}
               size="small"
-              color={getProjectTypeColor(project.project_type)}
               sx={{
                 fontWeight: 500,
+                bgcolor: project.project_type === 'community_service' ? '#10B981' :
+                         project.project_type === 'educational' ? '#F59E0B' :
+                         project.project_type === 'creative' ? '#8B5CF6' : '#14B8A6',
+                color: '#0F172A',
                 transition: 'all 0.3s ease',
                 '&:hover': {
                   transform: 'scale(1.05)',
-                  boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                  boxShadow: '0 4px 12px rgba(20, 184, 166, 0.3)'
                 }
               }}
             />
@@ -333,8 +344,8 @@ const ProjectCard = ({ project, onUpdate }) => {
 
           {(project.start_date || project.end_date) && (
             <Box display="flex" alignItems="center" mt={2}>
-              <Event sx={{ mr: 1, fontSize: 16, color: 'text.secondary' }} />
-              <Typography variant="body2" color="text.secondary">
+              <Event sx={{ mr: 1, fontSize: 16, color: '#14B8A6' }} />
+              <Typography variant="body2" sx={{ color: '#CBD5E1' }}>
                 {project.start_date && formatDate(project.start_date)}
                 {project.start_date && project.end_date && ' - '}
                 {project.end_date && formatDate(project.end_date)}
@@ -349,9 +360,11 @@ const ProjectCard = ({ project, onUpdate }) => {
             endIcon={<ArrowForward />}
             sx={{
               fontWeight: 600,
+              color: '#14B8A6',
               transition: 'all 0.3s ease',
               '&:hover': {
-                transform: 'translateX(4px)'
+                transform: 'translateX(4px)',
+                color: '#2DD4BF'
               }
             }}
           >
@@ -371,10 +384,14 @@ const ProjectCard = ({ project, onUpdate }) => {
                 sx={{
                   fontWeight: 600,
                   borderRadius: 2,
+                  bgcolor: '#0F766E',
+                  color: '#E2E8F0',
                   transition: 'all 0.3s ease',
                   '&:hover': {
                     transform: 'scale(1.05)',
-                    boxShadow: '0 6px 20px rgba(76, 175, 80, 0.3)'
+                    bgcolor: '#14B8A6',
+                    color: '#0F172A',
+                    boxShadow: '0 6px 20px rgba(20, 184, 166, 0.3)'
                   }
                 }}
               >
@@ -385,7 +402,6 @@ const ProjectCard = ({ project, onUpdate }) => {
               <Button
                 size="small"
                 variant="outlined"
-                color="error"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleLeaveProject();
@@ -394,10 +410,14 @@ const ProjectCard = ({ project, onUpdate }) => {
                 sx={{
                   fontWeight: 600,
                   borderRadius: 2,
+                  color: '#EF4444',
+                  borderColor: '#EF4444',
                   transition: 'all 0.3s ease',
                   '&:hover': {
                     transform: 'scale(1.05)',
-                    boxShadow: '0 6px 20px rgba(244, 67, 54, 0.3)'
+                    borderColor: '#F87171',
+                    color: '#F87171',
+                    boxShadow: '0 6px 20px rgba(239, 68, 68, 0.3)'
                   }
                 }}
               >
@@ -419,21 +439,28 @@ const ProjectCard = ({ project, onUpdate }) => {
         PaperProps={{
           sx: {
             borderRadius: 3,
-            boxShadow: '0 32px 64px rgba(0,0,0,0.2)'
+            boxShadow: '0 32px 64px rgba(0,0,0,0.2)',
+            bgcolor: '#0F172A',
+            backgroundImage: 'none'
           }
         }}
       >
-        <DialogTitle sx={{ pb: 1 }}>
+        <DialogTitle sx={{ pb: 1, bgcolor: '#0F172A' }}>
           <Box display="flex" alignItems="center" justifyContent="space-between">
-            <Typography variant="h5" component="h1" sx={{ fontWeight: 700 }}>
+            <Typography variant="h5" component="h1" sx={{ fontWeight: 700, color: '#E2E8F0' }}>
               {project.title}
             </Typography>
             <Box display="flex" gap={1}>
               {getStatusIcon(project.status)}
               <Chip
                 label={project.status.charAt(0).toUpperCase() + project.status.slice(1)}
-                color={getStatusColor(project.status)}
-                sx={{ fontWeight: 600 }}
+                sx={{
+                  fontWeight: 600,
+                  bgcolor: project.status === 'active' ? '#10B981' :
+                           project.status === 'planning' ? '#14B8A6' :
+                           project.status === 'completed' ? '#64748B' : '#EF4444',
+                  color: '#0F172A'
+                }}
               />
             </Box>
           </Box>
@@ -441,19 +468,28 @@ const ProjectCard = ({ project, onUpdate }) => {
             <Chip
               label={project.category}
               size="small"
-              variant="outlined"
-              sx={{ fontWeight: 500 }}
+              sx={{
+                fontWeight: 500,
+                bgcolor: '#0F766E',
+                color: '#14B8A6',
+                border: '1px solid #14B8A6'
+              }}
             />
             <Chip
               label={getProjectTypeLabel(project.project_type)}
               size="small"
-              color={getProjectTypeColor(project.project_type)}
-              sx={{ fontWeight: 500 }}
+              sx={{
+                fontWeight: 500,
+                bgcolor: project.project_type === 'community_service' ? '#10B981' :
+                         project.project_type === 'educational' ? '#F59E0B' :
+                         project.project_type === 'creative' ? '#8B5CF6' : '#14B8A6',
+                color: '#0F172A'
+              }}
             />
           </Box>
         </DialogTitle>
 
-        <DialogContent sx={{ pt: 2 }}>
+        <DialogContent sx={{ pt: 2, bgcolor: '#0F172A' }}>
           {error && (
             <Fade in={true}>
               <Alert
@@ -461,7 +497,10 @@ const ProjectCard = ({ project, onUpdate }) => {
                 sx={{
                   mb: 3,
                   borderRadius: 2,
-                  boxShadow: '0 4px 12px rgba(211, 47, 47, 0.1)'
+                  boxShadow: '0 4px 12px rgba(211, 47, 47, 0.1)',
+                  bgcolor: '#7F1D1D',
+                  color: '#FCA5A5',
+                  border: '1px solid #DC2626'
                 }}
               >
                 {error}
@@ -469,10 +508,10 @@ const ProjectCard = ({ project, onUpdate }) => {
             </Fade>
           )}
 
-          <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: 'primary.main' }}>
+          <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: '#14B8A6' }}>
             Description
           </Typography>
-          <Typography variant="body1" paragraph sx={{ lineHeight: 1.7, mb: 4 }}>
+          <Typography variant="body1" paragraph sx={{ lineHeight: 1.7, mb: 4, color: '#CBD5E1' }}>
             {project.description}
           </Typography>
 
@@ -484,37 +523,37 @@ const ProjectCard = ({ project, onUpdate }) => {
                   p: 3,
                   borderRadius: 2,
                   border: '1px solid',
-                  borderColor: 'divider',
-                  background: 'linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%)'
+                  borderColor: '#1E293B',
+                  bgcolor: '#1A2332'
                 }}
               >
-                <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600 }}>
+                <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, color: '#14B8A6' }}>
                   Project Details
                 </Typography>
                 <Box display="flex" flexDirection="column" gap={2}>
                   <Box display="flex" alignItems="center">
-                    <Person sx={{ mr: 2, color: 'text.secondary' }} />
+                    <Person sx={{ mr: 2, color: '#14B8A6' }} />
                     <Box>
-                      <Typography variant="body2" color="text.secondary">Created by</Typography>
-                      <Typography variant="body1" sx={{ fontWeight: 500 }}>{project.creator_name}</Typography>
+                      <Typography variant="body2" sx={{ color: '#94A3B8' }}>Created by</Typography>
+                      <Typography variant="body1" sx={{ fontWeight: 500, color: '#E2E8F0' }}>{project.creator_name}</Typography>
                     </Box>
                   </Box>
 
                   {project.location && (
                     <Box display="flex" alignItems="center">
-                      <LocationOn sx={{ mr: 2, color: 'text.secondary' }} />
+                      <LocationOn sx={{ mr: 2, color: '#14B8A6' }} />
                       <Box>
-                        <Typography variant="body2" color="text.secondary">Location</Typography>
-                        <Typography variant="body1" sx={{ fontWeight: 500 }}>{project.location}</Typography>
+                        <Typography variant="body2" sx={{ color: '#94A3B8' }}>Location</Typography>
+                        <Typography variant="body1" sx={{ fontWeight: 500, color: '#E2E8F0' }}>{project.location}</Typography>
                       </Box>
                     </Box>
                   )}
 
                   <Box display="flex" alignItems="center">
-                    <Group sx={{ mr: 2, color: 'text.secondary' }} />
+                    <Group sx={{ mr: 2, color: '#14B8A6' }} />
                     <Box>
-                      <Typography variant="body2" color="text.secondary">Participants</Typography>
-                      <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                      <Typography variant="body2" sx={{ color: '#94A3B8' }}>Participants</Typography>
+                      <Typography variant="body1" sx={{ fontWeight: 500, color: '#E2E8F0' }}>
                         {project.current_participants || 0}
                         {project.max_participants && `/${project.max_participants}`}
                       </Typography>
@@ -531,37 +570,37 @@ const ProjectCard = ({ project, onUpdate }) => {
                   p: 3,
                   borderRadius: 2,
                   border: '1px solid',
-                  borderColor: 'divider',
-                  background: 'linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%)'
+                  borderColor: '#1E293B',
+                  bgcolor: '#1A2332'
                 }}
               >
-                <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600 }}>
+                <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, color: '#14B8A6' }}>
                   Timeline
                 </Typography>
                 {(project.start_date || project.end_date) ? (
                   <Box display="flex" flexDirection="column" gap={2}>
                     {project.start_date && (
                       <Box display="flex" alignItems="center">
-                        <CalendarToday sx={{ mr: 2, color: 'primary.main' }} />
+                        <CalendarToday sx={{ mr: 2, color: '#14B8A6' }} />
                         <Box>
-                          <Typography variant="body2" color="text.secondary">Start Date</Typography>
-                          <Typography variant="body1" sx={{ fontWeight: 500 }}>{formatDate(project.start_date)}</Typography>
+                          <Typography variant="body2" sx={{ color: '#94A3B8' }}>Start Date</Typography>
+                          <Typography variant="body1" sx={{ fontWeight: 500, color: '#E2E8F0' }}>{formatDate(project.start_date)}</Typography>
                         </Box>
                       </Box>
                     )}
 
                     {project.end_date && (
                       <Box display="flex" alignItems="center">
-                        <CheckCircle sx={{ mr: 2, color: 'success.main' }} />
+                        <CheckCircle sx={{ mr: 2, color: '#10B981' }} />
                         <Box>
-                          <Typography variant="body2" color="text.secondary">End Date</Typography>
-                          <Typography variant="body1" sx={{ fontWeight: 500 }}>{formatDate(project.end_date)}</Typography>
+                          <Typography variant="body2" sx={{ color: '#94A3B8' }}>End Date</Typography>
+                          <Typography variant="body1" sx={{ fontWeight: 500, color: '#E2E8F0' }}>{formatDate(project.end_date)}</Typography>
                         </Box>
                       </Box>
                     )}
                   </Box>
                 ) : (
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" sx={{ color: '#94A3B8' }}>
                     No specific timeline set for this project.
                   </Typography>
                 )}
@@ -576,12 +615,12 @@ const ProjectCard = ({ project, onUpdate }) => {
                 p: 3,
                 borderRadius: 2,
                 border: '1px solid',
-                borderColor: 'divider',
-                background: 'linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%)'
+                borderColor: '#1E293B',
+                bgcolor: '#1A2332'
               }}
             >
-              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, display: 'flex', alignItems: 'center' }}>
-                <PeopleIcon sx={{ mr: 1, color: 'primary.main' }} />
+              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, display: 'flex', alignItems: 'center', color: '#E2E8F0' }}>
+                <PeopleIcon sx={{ mr: 1, color: '#14B8A6' }} />
                 Participants ({project.participants.length})
               </Typography>
               <List sx={{ py: 0 }}>
@@ -591,7 +630,8 @@ const ProjectCard = ({ project, onUpdate }) => {
                       <ListItemAvatar>
                         <Avatar
                           sx={{
-                            bgcolor: participant.role === 'creator' ? 'primary.main' : 'secondary.main',
+                            bgcolor: participant.role === 'creator' ? '#0F766E' : '#0F766E',
+                            color: '#14B8A6',
                             fontWeight: 600
                           }}
                         >
@@ -601,27 +641,32 @@ const ProjectCard = ({ project, onUpdate }) => {
                       <ListItemText
                         primary={
                           <Box display="flex" alignItems="center" gap={1}>
-                            <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                            <Typography variant="body1" sx={{ fontWeight: 500, color: '#E2E8F0' }}>
                               {participant.name}
                             </Typography>
                             {participant.role === 'creator' && (
                               <Chip
                                 label="Creator"
                                 size="small"
-                                color="primary"
-                                sx={{ fontSize: '0.7rem', height: 20 }}
+                                sx={{
+                                  fontSize: '0.7rem',
+                                  height: 20,
+                                  bgcolor: '#0F766E',
+                                  color: '#14B8A6',
+                                  border: '1px solid #14B8A6'
+                                }}
                               />
                             )}
                           </Box>
                         }
                         secondary={
-                          <Typography variant="body2" color="text.secondary">
+                          <Typography variant="body2" sx={{ color: '#94A3B8' }}>
                             Joined {new Date(participant.joined_at).toLocaleDateString()}
                           </Typography>
                         }
                       />
                     </ListItem>
-                    {index < project.participants.length - 1 && <Divider sx={{ mx: 0 }} />}
+                    {index < project.participants.length - 1 && <Divider sx={{ mx: 0, borderColor: '#1E293B' }} />}
                   </React.Fragment>
                 ))}
               </List>
@@ -629,13 +674,15 @@ const ProjectCard = ({ project, onUpdate }) => {
           )}
         </DialogContent>
 
-        <DialogActions sx={{ p: 3, pt: 2, gap: 1 }}>
+        <DialogActions sx={{ p: 3, pt: 2, gap: 1, bgcolor: '#0F172A' }}>
           <Button
             onClick={() => setDetailsOpen(false)}
             sx={{
               borderRadius: 2,
               fontWeight: 600,
-              px: 3
+              px: 3,
+              color: '#14B8A6',
+              '&:hover': { bgcolor: 'rgba(20, 184, 166, 0.1)' }
             }}
           >
             Close
@@ -649,10 +696,14 @@ const ProjectCard = ({ project, onUpdate }) => {
                 borderRadius: 2,
                 fontWeight: 600,
                 px: 3,
+                bgcolor: '#0F766E',
+                color: '#E2E8F0',
                 transition: 'all 0.3s ease',
                 '&:hover': {
                   transform: 'scale(1.02)',
-                  boxShadow: '0 6px 20px rgba(76, 175, 80, 0.3)'
+                  bgcolor: '#14B8A6',
+                  color: '#0F172A',
+                  boxShadow: '0 6px 20px rgba(20, 184, 166, 0.3)'
                 }
               }}
             >
@@ -662,17 +713,20 @@ const ProjectCard = ({ project, onUpdate }) => {
           {canLeave && (
             <Button
               variant="outlined"
-              color="error"
               onClick={handleLeaveProject}
               disabled={leaving}
               sx={{
                 borderRadius: 2,
                 fontWeight: 600,
                 px: 3,
+                color: '#EF4444',
+                borderColor: '#EF4444',
                 transition: 'all 0.3s ease',
                 '&:hover': {
                   transform: 'scale(1.02)',
-                  boxShadow: '0 6px 20px rgba(244, 67, 54, 0.3)'
+                  borderColor: '#F87171',
+                  color: '#F87171',
+                  boxShadow: '0 6px 20px rgba(239, 68, 68, 0.3)'
                 }
               }}
             >
