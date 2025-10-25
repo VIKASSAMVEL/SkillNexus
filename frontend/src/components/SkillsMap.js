@@ -7,43 +7,51 @@ import {
   Typography
 } from '@mui/material';
 
-const SkillsMap = ({ skills, onSkillSelect }) => {
-  const [map, setMap] = useState(null);
-  const [markers, setMarkers] = useState([]);
-  const [googleLoaded, setGoogleLoaded] = useState(false);
-  const mapRef = useRef(null);
-
-  // Google Maps API Key - loaded from environment variables
-  const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
-
-  // Load Google Maps script
-  useEffect(() => {
-    if (window.google) {
-      setGoogleLoaded(true);
+// Load Leaflet CSS and JS
+const loadLeaflet = () => {
+  return new Promise((resolve, reject) => {
+    if (window.L) {
+      resolve(window.L);
       return;
     }
 
-    window.initMap = () => {
-      setGoogleLoaded(true);
-    };
+    // Load CSS
+    const cssLink = document.createElement('link');
+    cssLink.rel = 'stylesheet';
+    cssLink.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    document.head.appendChild(cssLink);
 
+    // Load JS
     const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap`;
-    script.async = true;
+    script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    script.onload = () => resolve(window.L);
+    script.onerror = reject;
     document.head.appendChild(script);
+  });
+};
 
-    return () => {
-      // Cleanup
-      if (window.initMap) {
-        delete window.initMap;
-      }
-    };
-  }, [apiKey]);
+const SkillsMap = ({ skills, onSkillSelect }) => {
+  const [map, setMap] = useState(null);
+  const [markers, setMarkers] = useState([]);
+  const [leafletLoaded, setLeafletLoaded] = useState(false);
+  const mapRef = useRef(null);
+
+  // Load Leaflet
+  useEffect(() => {
+    loadLeaflet()
+      .then(() => {
+        console.log('Leaflet loaded successfully');
+        setLeafletLoaded(true);
+      })
+      .catch((error) => {
+        console.error('Failed to load Leaflet:', error);
+      });
+  }, []);
 
   useEffect(() => {
     if (map && skills.length > 0) {
       // Clear existing markers
-      markers.forEach(marker => marker.setMap(null));
+      markers.forEach(marker => map.removeLayer(marker));
 
       const newMarkers = skills
         .filter(skill => skill.latitude && skill.longitude)
@@ -58,18 +66,14 @@ const SkillsMap = ({ skills, onSkillSelect }) => {
             return null;
           }
 
-          const marker = new window.google.maps.Marker({
-            position: { lat: lat, lng: lng },
-            map: map,
-            title: `${skill.name} - ${skill.user_name}`,
-          });
-
-          // Add click listener
-          marker.addListener('click', () => {
-            if (onSkillSelect) {
-              onSkillSelect(skill);
-            }
-          });
+          const marker = window.L.marker([lat, lng])
+            .addTo(map)
+            .bindPopup(`<b>${skill.name}</b><br/>${skill.user_name}`)
+            .on('click', () => {
+              if (onSkillSelect) {
+                onSkillSelect(skill);
+              }
+            });
 
           return marker;
         })
@@ -79,34 +83,49 @@ const SkillsMap = ({ skills, onSkillSelect }) => {
 
       // Fit bounds to show all markers
       if (newMarkers.length > 0) {
-        const bounds = new window.google.maps.LatLngBounds();
-        newMarkers.forEach(marker => {
-          bounds.extend(marker.position);
-        });
-        map.fitBounds(bounds);
+        const group = new window.L.featureGroup(newMarkers);
+        map.fitBounds(group.getBounds().pad(0.1));
 
         // Don't zoom in too much for single markers
-        const listener = window.google.maps.event.addListener(map, 'idle', () => {
-          if (map.getZoom() > 15) map.setZoom(15);
-          window.google.maps.event.removeListener(listener);
-        });
+        if (newMarkers.length === 1 && map.getZoom() > 15) {
+          map.setZoom(15);
+        }
       }
     }
   }, [map, skills, onSkillSelect]); // Removed markers from dependencies to prevent infinite loop
 
   const MapComponent = () => {
-    const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [refReady, setRefReady] = useState(false);
 
     useEffect(() => {
-      // If Google Maps is loaded, stop loading and let the ref callback handle initialization
-      if (window.google && window.google.maps && window.google.maps.Map) {
-        setIsLoading(false);
-      }
-    }, [refReady, map]);
+      if (mapRef.current && !map && leafletLoaded && window.L) {
+        try {
+          console.log('Initializing map...');
+          const newMap = window.L.map(mapRef.current).setView([40.7128, -74.0060], 10); // Default to NYC
 
-    if (isLoading) {
+          // Add OpenStreetMap tiles
+          window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            maxZoom: 19,
+          }).addTo(newMap);
+
+          console.log('Map initialized successfully');
+          setMap(newMap);
+        } catch (error) {
+          console.error('Map initialization error:', error);
+          setError(error.message);
+        }
+      } else {
+        console.log('Map init conditions not met:', {
+          hasRef: !!mapRef.current,
+          hasMap: !!map,
+          leafletLoaded,
+          hasWindowL: !!window.L
+        });
+      }
+    }, [leafletLoaded, map]);
+
+    if (!leafletLoaded) {
       return (
         <Box display="flex" justifyContent="center" alignItems="center" height="400px">
           <CircularProgress />
@@ -118,23 +137,13 @@ const SkillsMap = ({ skills, onSkillSelect }) => {
       return (
         <Alert severity="error" sx={{ m: 2 }}>
           <Typography variant="h6" gutterBottom>
-            Google Maps Failed to Load
+            OpenStreetMap Failed to Load
           </Typography>
           <Typography variant="body2" paragraph>
             Error: {error}
           </Typography>
           <Typography variant="body2" paragraph>
-            This is usually caused by one of these issues:
-          </Typography>
-          <Box component="ul" sx={{ pl: 2, mb: 2 }}>
-            <li><strong>Ad blocker or privacy extension</strong> - Try disabling uBlock Origin, AdBlock, or similar extensions</li>
-            <li><strong>Maps JavaScript API not enabled</strong> - Enable it in Google Cloud Console</li>
-            <li><strong>API key restrictions</strong> - Allow localhost:3000 in HTTP referrers</li>
-            <li><strong>Billing not enabled</strong> - Required even for free tier</li>
-            <li><strong>Invalid API key</strong> - Check your Google Cloud Console</li>
-          </Box>
-          <Typography variant="body2" sx={{ fontFamily: 'monospace', bgcolor: 'grey.100', p: 1, borderRadius: 1 }}>
-            API Key: {apiKey ? `${apiKey.substring(0, 20)}...` : 'Not configured'}
+            This is usually caused by network connectivity issues. Please check your internet connection and try again.
           </Typography>
         </Alert>
       );
@@ -142,27 +151,7 @@ const SkillsMap = ({ skills, onSkillSelect }) => {
 
     return (
       <Box
-        ref={(el) => {
-          mapRef.current = el;
-          setRefReady(!!el);
-          if (el && !map && window.google && window.google.maps && window.google.maps.Map) {
-            try {
-              const newMap = new window.google.maps.Map(el, {
-                center: { lat: 40.7128, lng: -74.0060 }, // Default to NYC
-                zoom: 10,
-                styles: [
-                  {
-                    featureType: 'poi',
-                    stylers: [{ visibility: 'off' }]
-                  }
-                ]
-              });
-              setMap(newMap);
-            } catch (error) {
-              setError(error.message);
-            }
-          }
-        }}
+        ref={mapRef}
         sx={{
           height: '400px',
           width: '100%',
@@ -172,30 +161,6 @@ const SkillsMap = ({ skills, onSkillSelect }) => {
       />
     );
   };
-
-  if (!apiKey || apiKey === 'YOUR_API_KEY_HERE') {
-    return (
-      <Paper sx={{ p: 3, textAlign: 'center' }}>
-        <Typography variant="h6" gutterBottom>
-          Map Unavailable
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Google Maps API key not configured. Please add REACT_APP_GOOGLE_MAPS_API_KEY to your environment variables.
-        </Typography>
-        <Typography variant="body2" sx={{ mt: 2, fontFamily: 'monospace', bgcolor: 'grey.100', p: 1, borderRadius: 1 }}>
-          Current API Key: {apiKey ? `${apiKey.substring(0, 20)}...` : 'Not set'}
-        </Typography>
-      </Paper>
-    );
-  }
-
-  if (!googleLoaded) {
-    return (
-      <Box display="flex" justifyContent="center" alignItems="center" height="400px">
-        <CircularProgress />
-      </Box>
-    );
-  }
 
   return (
     <Box>

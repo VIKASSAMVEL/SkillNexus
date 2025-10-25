@@ -21,8 +21,7 @@ const LocationSearch = ({ onLocationSearch, onLocationChange }) => {
   const [error, setError] = useState(null);
   const [currentLocation, setCurrentLocation] = useState(null);
 
-  // Google Geocoding API Key
-  const geocodingApiKey = process.env.REACT_APP_GOOGLE_GEOCODING_API_KEY;
+  // Using OpenStreetMap Nominatim for geocoding (free, no API key required)
 
   const handleGetCurrentLocation = () => {
     setLoading(true);
@@ -40,14 +39,14 @@ const LocationSearch = ({ onLocationSearch, onLocationChange }) => {
         setCurrentLocation({ latitude, longitude });
 
         try {
-          // Reverse geocode to get address
+          // Reverse geocode to get address using Nominatim
           const response = await fetch(
-            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${geocodingApiKey}`
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&addressdetails=1`
           );
           const data = await response.json();
 
-          if (data.results && data.results[0]) {
-            const address = data.results[0].formatted_address;
+          if (data && data.display_name) {
+            const address = data.display_name;
             setLocation(address);
 
             if (onLocationChange) {
@@ -89,14 +88,8 @@ const LocationSearch = ({ onLocationSearch, onLocationChange }) => {
     setError(null);
 
     try {
-      // Try multiple geocoding approaches for better results
-      let geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location)}&key=${geocodingApiKey}`;
-
-      // For city names, try adding "India" if it's a common Indian city
-      const indianCities = ['chennai', 'mumbai', 'delhi', 'bangalore', 'hyderabad', 'pune', 'kolkata', 'ahmedabad'];
-      if (indianCities.some(city => location.toLowerCase().includes(city))) {
-        geocodingUrl += '&region=in';
-      }
+      // Use Nominatim for geocoding
+      const geocodingUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(location)}&addressdetails=1&limit=1`;
 
       console.log('Geocoding URL:', geocodingUrl); // Debug log
 
@@ -105,9 +98,11 @@ const LocationSearch = ({ onLocationSearch, onLocationChange }) => {
 
       console.log('Geocoding response:', data); // Debug log
 
-      if (data.status === 'OK' && data.results && data.results[0]) {
-        const { lat, lng } = data.results[0].geometry.location;
-        const address = data.results[0].formatted_address;
+      if (data && data.length > 0) {
+        const result = data[0];
+        const lat = parseFloat(result.lat);
+        const lng = parseFloat(result.lon);
+        const address = result.display_name;
 
         if (onLocationSearch) {
           onLocationSearch({
@@ -117,17 +112,19 @@ const LocationSearch = ({ onLocationSearch, onLocationChange }) => {
             radius
           });
         }
-      } else if (data.status === 'ZERO_RESULTS') {
-        // Try a more specific search
-        const fallbackUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location + ', India')}&key=${geocodingApiKey}`;
+      } else {
+        // Try a more specific search for Indian locations
+        const fallbackUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(location + ', India')}&addressdetails=1&limit=1`;
         console.log('Trying fallback geocoding:', fallbackUrl);
 
         const fallbackResponse = await fetch(fallbackUrl);
         const fallbackData = await fallbackResponse.json();
 
-        if (fallbackData.status === 'OK' && fallbackData.results && fallbackData.results[0]) {
-          const { lat, lng } = fallbackData.results[0].geometry.location;
-          const address = fallbackData.results[0].formatted_address;
+        if (fallbackData && fallbackData.length > 0) {
+          const result = fallbackData[0];
+          const lat = parseFloat(result.lat);
+          const lng = parseFloat(result.lon);
+          const address = result.display_name;
 
           if (onLocationSearch) {
             onLocationSearch({
@@ -140,12 +137,6 @@ const LocationSearch = ({ onLocationSearch, onLocationChange }) => {
         } else {
           setError(`Location "${location}" not found. Please try a more specific address like "${location}, State" or "${location}, Country".`);
         }
-      } else if (data.status === 'REQUEST_DENIED') {
-        setError('Geocoding API access denied. Please check your Google Maps API key configuration.');
-      } else if (data.status === 'OVER_QUERY_LIMIT') {
-        setError('Geocoding API quota exceeded. Please try again later.');
-      } else {
-        setError(`Geocoding failed: ${data.status}. Please try a different address format.`);
       }
     } catch (error) {
       console.error('Error geocoding location:', error);
@@ -187,10 +178,10 @@ const LocationSearch = ({ onLocationSearch, onLocationChange }) => {
           {error}
           {error.includes('API') && (
             <Box sx={{ mt: 1, fontSize: '0.875rem' }}>
-              <strong>API Setup Check:</strong>
-              <br />• Enable <strong>Geocoding API</strong> in Google Cloud Console
-              <br />• Ensure your API key allows <strong>Geocoding API</strong> requests
-              <br />• Check that <strong>localhost:3000</strong> is in HTTP referrers (if restricted)
+              <strong>Geocoding Service:</strong>
+              <br />• Using OpenStreetMap Nominatim (free, no API key required)
+              <br />• Rate limited to ~1 request/second
+              <br />• For best results, include country/state in your search
             </Box>
           )}
         </Alert>
