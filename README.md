@@ -124,15 +124,251 @@ Create a robust, scalable, and user-friendly full-stack web application that not
 4. Book sessions or join community projects
 5. Rate and review interactions to build reputation
 
+## Detailed Project Views
+
+### Frontend Pages & Features
+
+#### 1. **Authentication Pages**
+- **Login.js**: Secure login interface with email and password validation
+  - JWT token-based session management
+  - Error handling and user feedback
+  
+- **Register.js**: User registration with profile creation
+  - Email validation and password requirements
+  - Initial profile setup with location
+
+#### 2. **Home Page (Home.js)**
+- Platform overview and key features showcase
+- Quick navigation to main features
+- Welcome section for new and returning users
+- Call-to-action buttons for skill discovery and listing
+
+#### 3. **Skills Management**
+- **Skills.js**: Main skills browsing and discovery interface
+  - Grid view of available skills
+  - Category filtering
+  - Search and sort functionality
+  - Responsive design for all devices
+
+- **SkillsList.js**: Enhanced list view component
+  - Detailed skill information
+  - User profiles and ratings
+  - Availability status
+
+- **SkillCard.js**: Individual skill card component
+  - Skill name, category, and pricing
+  - User rating and review count
+  - Quick action buttons
+
+- **SkillDetails.js**: Comprehensive skill detail view
+  - Full skill description and requirements
+  - User profile information
+  - Availability calendar
+  - Booking interface
+  - User reviews and testimonials
+
+- **AddSkillForm.js**: Skill creation and editing interface
+  - Form fields for skill details (title, description, category)
+  - Pricing configuration (hourly and session rates)
+  - Category selection
+  - Availability scheduling
+  - Dark theme styled form with section headers
+
+#### 4. **Location & Mapping**
+- **SkillsMap.js**: Interactive Google Maps integration
+  - Location-based skill discovery
+  - Skill markers on map
+  - Radius filtering for nearby skills
+  - Current location detection
+
+- **LocationSearch.js**: Location input and search component
+  - Address autocomplete
+  - Radius selector
+  - Map view integration
+
+#### 5. **Booking & Scheduling**
+- **Bookings.js**: Main booking management page
+  - View upcoming and past bookings
+  - Booking status tracking
+  - Cancellation functionality
+  - Booking history
+
+- **BookingForm.js**: Booking creation interface
+  - Date and time selection
+  - Duration configuration
+  - Session notes
+  - Price calculation
+
+- **BookingsList.js**: List of all bookings
+  - Filterable by status (confirmed, pending, completed)
+  - User information
+  - Action buttons
+
+- **AvailabilityManager.js**: Schedule and availability management
+  - Calendar interface for setting availability
+  - Time slot configuration
+  - Recurring availability patterns
+  - Time zone support
+
+#### 6. **Projects**
+- **Projects.js**: Community projects page
+  - Browse available projects
+  - Project filtering and search
+  - Project creation interface
+  - Participation management
+
+- **CreateProjectDialog.js**: Modal for project creation
+  - Project details input
+  - Participant management
+  - Timeline and milestones
+  - Project category selection
+
+- **ProjectCard.js**: Individual project card
+  - Project overview
+  - Participant count
+  - Progress indicator
+  - Join button
+
+#### 7. **User Profile**
+- **Profile.js**: User profile management
+  - Profile information display and editing
+  - Skill listing
+  - Ratings and reviews
+  - Booking history
+  - Account settings
+
+#### 8. **Trust & Safety Pages**
+- **VerificationProcess.js**: Identity verification workflow
+  - Verification steps and requirements
+  - Document upload
+  - Status tracking
+
+- **TrustSafety.js**: Platform trust and safety information
+  - Safety guidelines
+  - Verification badges
+  - User protections
+
+- **ReportUser.js**: User reporting interface
+  - Issue categorization
+  - Detailed issue description
+  - Evidence upload
+  - Report tracking
+
+#### 9. **Community & Support**
+- **CommunityGuidelines.js**: Platform rules and best practices
+  - Code of conduct
+  - Dos and don'ts
+  - Community expectations
+
+- **FAQ.js**: Frequently asked questions
+  - Common questions and answers
+  - Search functionality
+  - Contact support links
+
+#### 10. **Legal & Policy Pages**
+- **TermsOfService.js**: Platform terms and conditions
+  - User rights and responsibilities
+  - Service terms
+  - Limitation of liability
+
+- **PrivacyPolicy.js**: Data privacy and protection
+  - Data collection practices
+  - User rights
+  - GDPR compliance information
+
+#### 11. **Other Components**
+- **Header.js**: Navigation bar
+  - Logo and branding
+  - Navigation links
+  - User menu
+  - Dark/light theme toggle
+  - Responsive mobile menu
+
+- **Footer.js**: Site footer
+  - Quick links
+  - Social media links
+  - Trust & Safety section
+  - Community guidelines links
+  - Copyright information
+
+- **Credits.js**: Platform credits and attribution
+  - Team and contributors
+  - Open-source libraries
+  - Acknowledgments
+
+- **ScrollToTop.js**: Utility component
+  - Scroll-to-top button
+  - Smooth scrolling
+
+### Backend Routes & API
+
+#### **Auth Routes (auth.js)**
+- User registration and login
+- Profile management
+- JWT token handling
+
+#### **Skills Routes (skills.js)**
+- CRUD operations for skills
+- Category management
+- Search and filtering
+- Skill availability management
+
+#### **Bookings Routes (bookings.js)**
+- Create and manage bookings
+- Booking status updates
+- Availability checking
+- Schedule conflict detection
+
+#### **Projects Routes (projects.js)**
+- Project CRUD operations
+- Project participation
+- Milestone tracking
+- Collaborator management
+
+#### **Index Routes (index.js)**
+- Main route configuration
+- Health check endpoint
+- Route mounting
+
+### Database Tables
+
+1. **users** - User profiles and authentication
+2. **skills** - Skill listings and details
+3. **skill_categories** - Skill categorization
+4. **bookings** - Booking records and scheduling
+5. **projects** - Community projects
+6. **project_participants** - Project collaboration data
+7. **reviews** - User ratings and testimonials
+8. **availability** - User availability schedules
+9. **messages** - Chat and communication
+10. **notifications** - System notifications
+11. **credits** - User credit/incentive tracking
+12. **verification_status** - User verification records
+
+### UI/UX Features
+
+- **Dark Theme**: Modern dark interface throughout the application
+- **Responsive Design**: Mobile-first approach with breakpoint support
+- **Material-UI**: Professional component library
+- **Interactive Maps**: Google Maps integration for location-based features
+- **Form Validation**: Client and server-side validation
+- **Real-time Feedback**: Loading states and error handling
+- **Accessibility**: WCAG 2.1 compliance considerations
+
 ## Screenshots
 
 [Include screenshots or GIFs demonstrating the application's flow]
 
-- Home Page
-- User Profile
-- Skill Search
-- Booking Interface
-- Community Projects
+- Home Page - Platform overview and feature highlights
+- Login/Register - Authentication interface
+- Skills Discovery - Browsing and filtering skills
+- Skills Map - Location-based skill search
+- Skill Details - Individual skill information with booking
+- Add Skill - Create and manage your skills
+- User Profile - Profile management and history
+- Bookings - Schedule and manage sessions
+- Projects - Community collaboration interface
+- Trust & Safety - Verification and safety features
 
 ## Links
 
