@@ -25,15 +25,15 @@ import { recommendationsAPI } from '../services/api';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   marginBottom: theme.spacing(2),
-  backgroundColor: '#1A2332',
+  backgroundColor: '#1A2332 !important',
   borderColor: '#1E293B',
   border: '1px solid #1E293B',
   borderRadius: '12px',
+  transition: 'all 0.3s ease',
   '&:hover': {
     boxShadow: '0 20px 40px rgba(20, 184, 166, 0.15)',
     borderColor: '#14B8A6',
     transform: 'translateY(-4px)',
-    transition: 'all 0.3s ease'
   },
 }));
 
@@ -121,8 +121,8 @@ const LearningPathRecommendations = ({ userId }) => {
       </Typography>
 
       {learningPaths.map((path, index) => (
-        <StyledCard key={index}>
-          <CardContent sx={{ p: 3 }}>
+        <StyledCard key={index} sx={{ backgroundColor: '#1A2332 !important' }}>
+          <CardContent sx={{ p: 3, backgroundColor: '#1A2332 !important' }}>
             <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={2}>
               <Box>
                 <Typography variant="h6" component="div" mb={1} sx={{ color: '#E2E8F0', fontWeight: 600 }}>
