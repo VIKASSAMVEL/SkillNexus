@@ -53,13 +53,13 @@ Create a robust, scalable, and user-friendly full-stack web application that not
 
 ## Tech Stack
 
-- **Frontend**: React.js
+- **Frontend**: React.js with Material-UI, React Router
 - **Backend**: Node.js, Express.js
 - **Database**: MySQL
 - **Authentication**: JWT
 - **Geo-Location**: Google Maps API
 - **Real-time Features**: Socket.io for chat
-- **Deployment**: xampp
+- **Deployment**: XAMPP (local), Vercel/Railway (production)
 
 ## Setup and Installation Instructions
 
@@ -139,10 +139,25 @@ Create a robust, scalable, and user-friendly full-stack web application that not
 - [Describe high-level architecture, e.g., microservices, monolithic]
 
 ### Database Schema
-- [Describe main entities: Users, Skills, Bookings, Projects, etc.]
+- **Users**: User profiles, authentication, location data
+- **Skills**: User skills, categories, pricing, availability
+- **Bookings**: Skill exchange sessions, scheduling, payments
+- **Projects**: Community projects, participants, progress tracking
+- **Reviews**: Ratings and testimonials for trust building
+- **Messages**: Real-time chat functionality
+- **Credits**: Incentive system for participation
+- **Notifications**: System and user notifications
 
 ### API Endpoints
-- [List key API endpoints with descriptions]
+- `GET /api/health` - Health check
+- `POST /api/auth/login` - User login
+- `POST /api/auth/register` - User registration
+- `GET /api/users/profile` - Get user profile
+- `GET /api/skills` - List available skills
+- `POST /api/bookings` - Create booking
+- `GET /api/projects` - List community projects
+- `POST /api/reviews` - Submit review
+- `GET /api/messages` - Get chat messages
 
 ## Implementation Details
 
