@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Typography, Container, Paper, Box, TextField, Button, Alert, Avatar } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
@@ -17,11 +17,7 @@ const Profile = () => {
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchProfile();
-  }, []);
-
-  const fetchProfile = async () => {
+  const fetchProfile = useCallback(async () => {
     try {
       const response = await api.get('/auth/profile');
       setUser(response.data.user);
@@ -40,7 +36,11 @@ const Profile = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [navigate]);
+
+  useEffect(() => {
+    fetchProfile();
+  }, [fetchProfile]);
 
   const handleChange = (e) => {
     setFormData({

@@ -13,6 +13,7 @@ import Profile from './pages/Profile';
 import Skills from './pages/Skills';
 import Bookings from './pages/Bookings';
 import Projects from './pages/Projects';
+import Credits from './components/Credits';
 
 const theme = createTheme({
   palette: {
@@ -44,6 +45,7 @@ function App() {
               <Route path="/skills" element={<Skills />} />
               <Route path="/bookings" element={<Bookings />} />
               <Route path="/projects" element={<Projects />} />
+              <Route path="/credits" element={<Credits />} />
             </Routes>
           </Container>
         </div>

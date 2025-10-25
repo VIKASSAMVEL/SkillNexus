@@ -3,11 +3,15 @@ const router = express.Router();
 
 // Import route modules
 const { router: authRoutes } = require('./auth');
+const skillsRoutes = require('./skills');
+const bookingsRoutes = require('./bookings');
 // const userRoutes = require('./users');
 // const skillRoutes = require('./skills');
 
 // Mount routes
 router.use('/auth', authRoutes);
+router.use('/skills', skillsRoutes);
+router.use('/bookings', bookingsRoutes);
 // router.use('/users', userRoutes);
 // router.use('/skills', skillRoutes);
 

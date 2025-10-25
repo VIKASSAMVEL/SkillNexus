@@ -167,6 +167,113 @@ router.get('/profile', authenticateToken, async (req, res) => {
   }
 });
 
+// Get user credits
+router.get('/credits', authenticateToken, async (req, res) => {
+  try {
+    const pool = getPool();
+    const [credits] = await pool.execute(
+      'SELECT balance, total_earned, total_spent, created_at, updated_at FROM user_credits WHERE user_id = ?',
+      [req.user.userId]
+    );
+
+    if (credits.length === 0) {
+      // Initialize credits for new user
+      await pool.execute(
+        'INSERT INTO user_credits (user_id, balance, total_earned, total_spent) VALUES (?, 0.00, 0.00, 0.00)',
+        [req.user.userId]
+      );
+      return res.json({
+        balance: 0.00,
+        total_earned: 0.00,
+        total_spent: 0.00,
+        created_at: new Date(),
+        updated_at: new Date()
+      });
+    }
+
+    res.json({
+      balance: parseFloat(credits[0].balance),
+      total_earned: parseFloat(credits[0].total_earned),
+      total_spent: parseFloat(credits[0].total_spent),
+      created_at: credits[0].created_at,
+      updated_at: credits[0].updated_at
+    });
+  } catch (error) {
+    console.error('Credits fetch error:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Add credits to user account
+router.post('/credits/add', authenticateToken, async (req, res) => {
+  try {
+    const { amount, payment_method = 'demo' } = req.body;
+
+    if (!amount || amount <= 0) {
+      return res.status(400).json({ message: 'Invalid amount' });
+    }
+
+    const pool = getPool();
+    const userId = req.user.userId;
+
+    // Check if user has credits record
+    const [existingCredits] = await pool.execute(
+      'SELECT id FROM user_credits WHERE user_id = ?',
+      [userId]
+    );
+
+    if (existingCredits.length === 0) {
+      // Create credits record
+      await pool.execute(
+        'INSERT INTO user_credits (user_id, balance, total_earned, total_spent) VALUES (?, ?, 0.00, 0.00)',
+        [userId, amount]
+      );
+    } else {
+      // Update existing credits
+      await pool.execute(
+        'UPDATE user_credits SET balance = balance + ?, updated_at = CURRENT_TIMESTAMP WHERE user_id = ?',
+        [amount, userId]
+      );
+    }
+
+    // Record the credit purchase transaction
+    await pool.execute(
+      `INSERT INTO credit_transactions (user_id, amount, transaction_type, description, reference_type)
+       VALUES (?, ?, 'bonus', 'Credit purchase', 'system')`,
+      [userId, amount]
+    );
+
+    res.json({
+      message: 'Credits added successfully',
+      amount: amount
+    });
+  } catch (error) {
+    console.error('Add credits error:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Get credit transaction history
+router.get('/credits/transactions', authenticateToken, async (req, res) => {
+  try {
+    const pool = getPool();
+    const [transactions] = await pool.execute(
+      'SELECT * FROM credit_transactions WHERE user_id = ? ORDER BY created_at DESC LIMIT 50',
+      [req.user.userId]
+    );
+
+    res.json({ 
+      transactions: transactions.map(t => ({
+        ...t,
+        amount: parseFloat(t.amount)
+      }))
+    });
+  } catch (error) {
+    console.error('Transactions fetch error:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 // Update user profile
 router.put('/profile', authenticateToken, async (req, res) => {
   try {

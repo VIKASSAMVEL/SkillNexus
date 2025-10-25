@@ -13,7 +13,7 @@ const Home = () => {
       </Typography>
 
       <Grid container spacing={4} sx={{ mt: 4 }}>
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <Card>
             <CardContent>
               <Typography variant="h5" component="h2" gutterBottom>
@@ -29,7 +29,7 @@ const Home = () => {
           </Card>
         </Grid>
 
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <Card>
             <CardContent>
               <Typography variant="h5" component="h2" gutterBottom>
@@ -45,7 +45,7 @@ const Home = () => {
           </Card>
         </Grid>
 
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <Card>
             <CardContent>
               <Typography variant="h5" component="h2" gutterBottom>

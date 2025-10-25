@@ -1,0 +1,30 @@
+
+2
+
+Automatic Zoom
+WEB HACKATHON
+Problem Statement:
+In rapidly growing urban environments, many individuals possess unique skills—rangingfrom digital expertise to traditional crafts, tutoring, fitness, or language abilities—but
+lack a streamlined, trustworthy way to share or monetize these skills within their
+immediate communities. Conversely, residents often seek local, affordable, and verified
+help or learning opportunities but struggle to connect with the right people in their
+vicinity.
+Challenge:
+Build a full-stack web platform that enables users to create profiles, list their skills orlearning needs, and connect with others in their locality for skill exchange, micro-
+consulting, or collaborative projects.
+Core Platform Features:
+1. User Authentication & Verification:    * Secure sign-up/login.    * Optional identity verification.    * Skill validation through peer reviews or digital badges.2. Geo-Location Matching:    * Users can discover and filter skill offerings or requests.    * Search within a customizable radius.3. Booking & Scheduling:    * Built-in calendar for scheduling sessions.    * Automated reminders and conflict detection.4. Reputation System:    * Ratings, testimonials, and skill endorsements to foster trust and reliability.5. Community Projects:    * Users can propose or join collaborative projects (e.g., building a community garden,coding a local website, organizing a workshop).6. Incentive Mechanism:    * Optional token or credit system to encourage participation.    * Credits can be redeemed for services or donated to community causes.
+WEB HACKATHON
+7. Accessibility & Inclusivity: Features for differently-abled users, such as voice navigation, high-contrast modes,and language localization.
+Bonus Points For:
+* Integrating AI-based skill recommendations or matching algorithms.* Real-time chat or video session capabilities.* Providing an Open API for third-party integrations (e.g., local NGOs, educationalinstitutions).
+Objective:
+Create a robust, scalable, and user-friendly full-stack web application that not onlyfacilitates hyperlocal skill exchange but also strengthens community bonds and fosters
+economic empowerment in urban neighborhoods.
+Submission Guidelines
+All participating teams must submit the following items before the deadline. Incompletesubmissions will not be evaluated.
+1. GitHub Repository:
+ * A public GitHub repository containing all the source code for the project. * The repository must include a comprehensive `README.md` file with: * Project Title and a brief description. * Tech Stack used (Frontend, Backend, Database, etc.). * Setup and Installation Instructions (clear steps to run the project locally). * Screenshots or a GIF/video demonstrating the application's flow. * Links to the deployed project and the project report. * The commit history must reflect work done during the hackathon.
+2. Deployed Application:
+ * A live, publicly accessible URL where the application is hosted (e.g., Vercel, Netlify,
+Heroku, Render). * The deployed version must be fully functional, demonstrating all core features.
