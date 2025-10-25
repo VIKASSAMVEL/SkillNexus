@@ -88,7 +88,7 @@ const Home = () => {
                 textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
               }}
             >
-              Urban Skill Exchange
+              SkillNexus
             </Typography>
             <Typography
               variant="h5"
@@ -692,7 +692,7 @@ const Home = () => {
             }}
             endIcon={<ArrowForwardIcon />}
           >
-            Join Urban Skill Exchange
+            Join SkillNexus
           </Button>
         </Box>
       </Box>

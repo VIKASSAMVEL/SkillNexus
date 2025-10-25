@@ -32,7 +32,7 @@ app.use('/api', routes);
 // Basic route
 app.get('/', (req, res) => {
   res.json({
-    message: 'Urban Skill Exchange API',
+    message: 'SkillNexus API',
     version: '1.0.0',
     status: 'running'
   });

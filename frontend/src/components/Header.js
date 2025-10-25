@@ -24,7 +24,7 @@ const Header = () => {
       <Toolbar sx={{ px: { xs: 2, md: 4 } }}>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 700 }}>
           <Link to="/" style={{ color: '#14B8A6', textDecoration: 'none' }}>
-            Urban Skill Exchange
+            SkillNexus
           </Link>
         </Typography>
         <Box sx={{ display: 'flex', gap: 2 }}>

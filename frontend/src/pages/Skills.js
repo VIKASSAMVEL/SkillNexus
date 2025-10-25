@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
   Typography,
-  Container,
   Button,
   Box,
   Alert,
@@ -12,6 +11,7 @@ import SkillsList from '../components/SkillsList';
 import AddSkillForm from '../components/AddSkillForm';
 import SkillDetails from '../components/SkillDetails';
 import BookingForm from '../components/BookingForm';
+import Footer from '../components/Footer';
 
 const Skills = () => {
   const [addSkillOpen, setAddSkillOpen] = useState(false);
@@ -61,31 +61,55 @@ const Skills = () => {
   };
 
   return (
-    <Container maxWidth="lg">
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
-        <Box>
-          <Typography variant="h4" component="h1" gutterBottom>
-            Skills Exchange
-          </Typography>
-          <Typography variant="body1" color="text.secondary">
-            Discover new skills, share your expertise, and connect with local talent
-          </Typography>
-        </Box>
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<AddIcon />}
-          onClick={handleAddSkill}
-          size="large"
-        >
-          Add Your Skill
-        </Button>
-      </Box>
+    <Box sx={{ 
+      bgcolor: '#0F172A', 
+      color: '#E2E8F0', 
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      width: '100%',
+      m: 0,
+      p: 0
+    }}>
+      <Box sx={{ flex: 1, py: 4, px: { xs: 2, md: 4 } }}>
+        <Box sx={{ maxWidth: 'lg', mx: 'auto' }}>
+          <Box display="flex" justifyContent="space-between" alignItems="center" mb={4} sx={{ flexDirection: { xs: 'column', md: 'row' }, gap: 2 }}>
+            <Box>
+              <Typography 
+                variant="h4" 
+                component="h1" 
+                gutterBottom
+                sx={{ color: '#14B8A6', fontWeight: 600 }}
+              >
+                Skills Exchange
+              </Typography>
+              <Typography variant="body1" sx={{ color: '#94A3B8' }}>
+                Discover new skills, share your expertise, and connect with local talent
+              </Typography>
+            </Box>
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              onClick={handleAddSkill}
+              size="large"
+              sx={{ 
+                bgcolor: '#0F766E',
+                '&:hover': { 
+                  bgcolor: '#14B8A6'
+                },
+                whiteSpace: 'nowrap'
+              }}
+            >
+              Add Your Skill
+            </Button>
+          </Box>
 
-      <SkillsList
-        onBookSkill={handleBookSkill}
-        onViewSkillDetails={handleViewSkillDetails}
-      />
+          <SkillsList
+            onBookSkill={handleBookSkill}
+            onViewSkillDetails={handleViewSkillDetails}
+          />
+        </Box>
+      </Box>
 
       {/* Add Skill Dialog */}
       <AddSkillForm
@@ -126,7 +150,9 @@ const Skills = () => {
           {snackbar.message}
         </Alert>
       </Snackbar>
-    </Container>
+      
+      <Footer />
+    </Box>
   );
 };
 

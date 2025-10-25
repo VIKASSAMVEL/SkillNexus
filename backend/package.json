@@ -1,7 +1,7 @@
 {
   "name": "urban-skill-exchange-backend",
   "version": "1.0.0",
-  "description": "Backend API for Urban Skill Exchange platform",
+  "description": "Backend API for SkillNexus platform",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

@@ -25,7 +25,7 @@ const Footer = () => {
               fontWeight: 700
             }}
           >
-            Urban Skill Exchange
+            SkillNexus
           </Typography>
           <Typography
             variant="body2"
@@ -44,7 +44,7 @@ const Footer = () => {
               display: 'block'
             }}
           >
-            © {currentYear} Urban Skill Exchange. All rights reserved.
+            © {currentYear} SkillNexus. All rights reserved.
           </Typography>
         </Box>
       </Container>

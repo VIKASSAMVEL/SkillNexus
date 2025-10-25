@@ -37,6 +37,7 @@ import {
 } from '@mui/icons-material';
 import ProjectCard from '../components/ProjectCard';
 import CreateProjectDialog from '../components/CreateProjectDialog';
+import Footer from '../components/Footer';
 import api from '../services/api';
 
 const Projects = () => {
@@ -128,7 +129,7 @@ const Projects = () => {
 
   if (loading && projects.length === 0) {
     return (
-      <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Container maxWidth="lg" sx={{ py: 4, minHeight: '100vh' }}>
         <Box
           display="flex"
           flexDirection="column"
@@ -136,23 +137,25 @@ const Projects = () => {
           alignItems="center"
           minHeight="400px"
           sx={{
-            background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
+            background: 'radial-gradient(circle at top right, rgba(20, 184, 166, 0.1), rgba(15, 23, 42, 0.5))',
+            bgcolor: '#0F172A',
             borderRadius: 4,
-            p: 4
+            p: 4,
+            border: '1px solid #1E293B'
           }}
         >
           <CircularProgress
             size={60}
             thickness={4}
             sx={{
-              color: 'primary.main',
+              color: '#14B8A6',
               mb: 3,
               '& .MuiCircularProgress-circle': {
                 strokeLinecap: 'round',
               }
             }}
           />
-          <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 500 }}>
+          <Typography variant="h6" sx={{ color: '#94A3B8', fontWeight: 500 }}>
             Loading amazing projects...
           </Typography>
         </Box>
@@ -161,11 +164,11 @@ const Projects = () => {
   }
 
   return (
-    <Box sx={{ minHeight: '100vh', backgroundColor: '#fafafa' }}>
+    <Box sx={{ minHeight: '100vh', bgcolor: '#0F172A', display: 'flex', flexDirection: 'column' }}>
       {/* Hero Section */}
       <Box
         sx={{
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          background: 'linear-gradient(135deg, #0F766E 0%, #0D5656 50%, #14B8A6 100%)',
           color: 'white',
           py: { xs: 6, md: 8 },
           position: 'relative',
@@ -182,7 +185,7 @@ const Projects = () => {
                 fontWeight: 700,
                 mb: 2,
                 textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
-                background: 'linear-gradient(45deg, #ffffff 30%, rgba(255,255,255,0.8) 90%)',
+                background: 'linear-gradient(45deg, #ffffff 30%, rgba(255,255,255,0.9) 90%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent'
               }}
@@ -194,10 +197,11 @@ const Projects = () => {
               sx={{
                 fontSize: { xs: '1.1rem', md: '1.3rem' },
                 mb: 4,
-                opacity: 0.9,
+                opacity: 0.95,
                 maxWidth: 700,
                 mx: 'auto',
-                lineHeight: 1.6
+                lineHeight: 1.6,
+                color: '#E2E8F0'
               }}
             >
               Join collaborative initiatives that make a difference in your community.
@@ -213,21 +217,21 @@ const Projects = () => {
                     sx={{
                       p: 2,
                       textAlign: 'center',
-                      bgcolor: 'rgba(255,255,255,0.1)',
+                      bgcolor: 'rgba(20, 184, 166, 0.15)',
                       backdropFilter: 'blur(10px)',
-                      border: '1px solid rgba(255,255,255,0.2)',
+                      border: '1px solid rgba(20, 184, 166, 0.3)',
                       borderRadius: 3,
                       transition: 'all 0.3s ease',
                       '&:hover': {
                         transform: 'translateY(-4px)',
-                        bgcolor: 'rgba(255,255,255,0.15)'
+                        bgcolor: 'rgba(20, 184, 166, 0.25)'
                       }
                     }}
                   >
-                    <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
+                    <Typography variant="h4" sx={{ fontWeight: 700, mb: 1, color: '#E2E8F0' }}>
                       {stats.total}
                     </Typography>
-                    <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                    <Typography variant="body2" sx={{ opacity: 0.9, color: '#CBD5E1' }}>
                       Total Projects
                     </Typography>
                   </Paper>
@@ -240,21 +244,21 @@ const Projects = () => {
                     sx={{
                       p: 2,
                       textAlign: 'center',
-                      bgcolor: 'rgba(255,255,255,0.1)',
+                      bgcolor: 'rgba(20, 184, 166, 0.15)',
                       backdropFilter: 'blur(10px)',
-                      border: '1px solid rgba(255,255,255,0.2)',
+                      border: '1px solid rgba(20, 184, 166, 0.3)',
                       borderRadius: 3,
                       transition: 'all 0.3s ease',
                       '&:hover': {
                         transform: 'translateY(-4px)',
-                        bgcolor: 'rgba(255,255,255,0.15)'
+                        bgcolor: 'rgba(20, 184, 166, 0.25)'
                       }
                     }}
                   >
-                    <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
+                    <Typography variant="h4" sx={{ fontWeight: 700, mb: 1, color: '#E2E8F0' }}>
                       {stats.active}
                     </Typography>
-                    <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                    <Typography variant="body2" sx={{ opacity: 0.9, color: '#CBD5E1' }}>
                       Active Now
                     </Typography>
                   </Paper>
@@ -267,21 +271,21 @@ const Projects = () => {
                     sx={{
                       p: 2,
                       textAlign: 'center',
-                      bgcolor: 'rgba(255,255,255,0.1)',
+                      bgcolor: 'rgba(20, 184, 166, 0.15)',
                       backdropFilter: 'blur(10px)',
-                      border: '1px solid rgba(255,255,255,0.2)',
+                      border: '1px solid rgba(20, 184, 166, 0.3)',
                       borderRadius: 3,
                       transition: 'all 0.3s ease',
                       '&:hover': {
                         transform: 'translateY(-4px)',
-                        bgcolor: 'rgba(255,255,255,0.15)'
+                        bgcolor: 'rgba(20, 184, 166, 0.25)'
                       }
                     }}
                   >
-                    <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
+                    <Typography variant="h4" sx={{ fontWeight: 700, mb: 1, color: '#E2E8F0' }}>
                       {stats.completed}
                     </Typography>
-                    <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                    <Typography variant="body2" sx={{ opacity: 0.9, color: '#CBD5E1' }}>
                       Completed
                     </Typography>
                   </Paper>
@@ -296,19 +300,19 @@ const Projects = () => {
                 startIcon={<Add />}
                 onClick={handleCreateProject}
                 sx={{
-                  bgcolor: 'rgba(255,255,255,0.2)',
-                  backdropFilter: 'blur(10px)',
-                  border: '1px solid rgba(255,255,255,0.3)',
+                  bgcolor: '#14B8A6',
+                  color: '#0F172A',
                   px: 4,
                   py: 1.5,
                   fontSize: '1.1rem',
                   fontWeight: 600,
                   borderRadius: 3,
-                  boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
+                  boxShadow: '0 8px 32px rgba(20, 184, 166, 0.3)',
                   '&:hover': {
-                    bgcolor: 'rgba(255,255,255,0.3)',
+                    bgcolor: '#0F766E',
+                    color: '#E2E8F0',
                     transform: 'translateY(-2px) scale(1.02)',
-                    boxShadow: '0 12px 40px rgba(0,0,0,0.15)'
+                    boxShadow: '0 12px 40px rgba(20, 184, 166, 0.4)'
                   },
                   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
                 }}
@@ -328,7 +332,7 @@ const Projects = () => {
             width: 80,
             height: 80,
             borderRadius: '50%',
-            bgcolor: 'rgba(255,255,255,0.1)',
+            bgcolor: 'rgba(20, 184, 166, 0.15)',
             animation: 'float 8s ease-in-out infinite'
           }}
         />
@@ -340,13 +344,13 @@ const Projects = () => {
             width: 60,
             height: 60,
             borderRadius: '50%',
-            bgcolor: 'rgba(255,255,255,0.1)',
+            bgcolor: 'rgba(20, 184, 166, 0.15)',
             animation: 'float 6s ease-in-out infinite reverse'
           }}
         />
       </Box>
 
-      <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Container maxWidth="lg" sx={{ py: 4, flex: 1 }}>
         {error && (
           <Fade in={true}>
             <Alert
@@ -354,7 +358,10 @@ const Projects = () => {
               sx={{
                 mb: 3,
                 borderRadius: 2,
-                boxShadow: '0 4px 12px rgba(211, 47, 47, 0.1)'
+                boxShadow: '0 4px 12px rgba(211, 47, 47, 0.1)',
+                bgcolor: '#dc2626',
+                color: '#E2E8F0',
+                '& .MuiAlert-icon': { color: '#E2E8F0' }
               }}
             >
               {error}
@@ -370,8 +377,9 @@ const Projects = () => {
               mb: 4,
               borderRadius: 3,
               border: '1px solid',
-              borderColor: 'divider',
-              overflow: 'hidden'
+              borderColor: '#1E293B',
+              overflow: 'hidden',
+              bgcolor: '#1A2332'
             }}
           >
             <Tabs
@@ -383,20 +391,23 @@ const Projects = () => {
                   py: 2,
                   fontWeight: 600,
                   fontSize: '0.95rem',
+                  color: '#94A3B8',
                   transition: 'all 0.3s ease',
                   '&:hover': {
-                    bgcolor: 'action.hover',
+                    bgcolor: '#0F766E',
+                    color: '#14B8A6',
                     transform: 'translateY(-1px)'
                   },
                   '&.Mui-selected': {
-                    bgcolor: 'primary.main',
-                    color: 'white',
-                    boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)'
+                    bgcolor: '#0F766E',
+                    color: '#14B8A6',
+                    boxShadow: '0 4px 12px rgba(20, 184, 166, 0.3)'
                   }
                 },
                 '& .MuiTabs-indicator': {
                   height: 3,
-                  borderRadius: '3px 3px 0 0'
+                  borderRadius: '3px 3px 0 0',
+                  bgcolor: '#14B8A6'
                 }
               }}
             >
@@ -434,10 +445,16 @@ const Projects = () => {
               px: 3,
               py: 1,
               fontWeight: 600,
+              color: '#14B8A6',
+              borderColor: '#1E293B',
+              bgcolor: '#1A2332',
               transition: 'all 0.3s ease',
               '&:hover': {
+                borderColor: '#14B8A6',
+                bgcolor: '#0F766E',
+                color: '#E2E8F0',
                 transform: 'translateY(-1px)',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                boxShadow: '0 4px 12px rgba(20, 184, 166, 0.3)'
               }
             }}
           >
@@ -451,26 +468,35 @@ const Projects = () => {
                 p: 3,
                 borderRadius: 3,
                 border: '1px solid',
-                borderColor: 'divider',
-                background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)'
+                borderColor: '#1E293B',
+                bgcolor: '#1A2332'
               }}
             >
-              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: 'primary.main' }}>
+              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: '#14B8A6' }}>
                 Filter Projects
               </Typography>
               <Grid container spacing={3} alignItems="center">
                 <Grid item xs={12} md={3}>
                   <FormControl fullWidth size="small">
-                    <InputLabel>Category</InputLabel>
+                    <InputLabel sx={{ color: '#94A3B8', '&.Mui-focused': { color: '#14B8A6' } }}>Category</InputLabel>
                     <Select
                       value={filters.category}
                       label="Category"
                       onChange={(e) => handleFilterChange('category', e.target.value)}
                       sx={{
                         borderRadius: 2,
+                        color: '#E2E8F0',
                         '& .MuiOutlinedInput-notchedOutline': {
-                          borderRadius: 2
-                        }
+                          borderRadius: 2,
+                          borderColor: '#1E293B'
+                        },
+                        '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#14B8A6'
+                        },
+                        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#14B8A6'
+                        },
+                        '& .MuiSvgIcon-root': { color: '#14B8A6' }
                       }}
                     >
                       <MenuItem value="">All Categories</MenuItem>
@@ -492,16 +518,25 @@ const Projects = () => {
 
                 <Grid item xs={12} md={3}>
                   <FormControl fullWidth size="small">
-                    <InputLabel>Project Type</InputLabel>
+                    <InputLabel sx={{ color: '#94A3B8', '&.Mui-focused': { color: '#14B8A6' } }}>Project Type</InputLabel>
                     <Select
                       value={filters.project_type}
                       label="Project Type"
                       onChange={(e) => handleFilterChange('project_type', e.target.value)}
                       sx={{
                         borderRadius: 2,
+                        color: '#E2E8F0',
                         '& .MuiOutlinedInput-notchedOutline': {
-                          borderRadius: 2
-                        }
+                          borderRadius: 2,
+                          borderColor: '#1E293B'
+                        },
+                        '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#14B8A6'
+                        },
+                        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#14B8A6'
+                        },
+                        '& .MuiSvgIcon-root': { color: '#14B8A6' }
                       }}
                     >
                       <MenuItem value="">All Types</MenuItem>
@@ -515,16 +550,25 @@ const Projects = () => {
 
                 <Grid item xs={12} md={3}>
                   <FormControl fullWidth size="small">
-                    <InputLabel>Status</InputLabel>
+                    <InputLabel sx={{ color: '#94A3B8', '&.Mui-focused': { color: '#14B8A6' } }}>Status</InputLabel>
                     <Select
                       value={filters.status}
                       label="Status"
                       onChange={(e) => handleFilterChange('status', e.target.value)}
                       sx={{
                         borderRadius: 2,
+                        color: '#E2E8F0',
                         '& .MuiOutlinedInput-notchedOutline': {
-                          borderRadius: 2
-                        }
+                          borderRadius: 2,
+                          borderColor: '#1E293B'
+                        },
+                        '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#14B8A6'
+                        },
+                        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#14B8A6'
+                        },
+                        '& .MuiSvgIcon-root': { color: '#14B8A6' }
                       }}
                     >
                       <MenuItem value="">All Status</MenuItem>
@@ -544,10 +588,16 @@ const Projects = () => {
                       py: 1,
                       borderRadius: 2,
                       fontWeight: 600,
+                      color: '#14B8A6',
+                      borderColor: '#1E293B',
+                      bgcolor: '#1A2332',
                       transition: 'all 0.3s ease',
                       '&:hover': {
+                        borderColor: '#14B8A6',
+                        bgcolor: '#0F766E',
+                        color: '#E2E8F0',
                         transform: 'translateY(-1px)',
-                        boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                        boxShadow: '0 4px 12px rgba(20, 184, 166, 0.3)'
                       }
                     }}
                   >
@@ -571,8 +621,8 @@ const Projects = () => {
                     textAlign: 'center',
                     borderRadius: 4,
                     border: '2px dashed',
-                    borderColor: 'divider',
-                    background: 'linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%)'
+                    borderColor: '#1E293B',
+                    bgcolor: '#1A2332'
                   }}
                 >
                   <Avatar
@@ -581,16 +631,16 @@ const Projects = () => {
                       height: 80,
                       mx: 'auto',
                       mb: 3,
-                      bgcolor: 'primary.main',
-                      boxShadow: '0 8px 24px rgba(102, 126, 234, 0.3)'
+                      bgcolor: '#0F766E',
+                      boxShadow: '0 8px 24px rgba(20, 184, 166, 0.3)'
                     }}
                   >
-                    <GroupWork sx={{ fontSize: 40, color: 'white' }} />
+                    <GroupWork sx={{ fontSize: 40, color: '#14B8A6' }} />
                   </Avatar>
-                  <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>
+                  <Typography variant="h5" gutterBottom sx={{ fontWeight: 600, color: '#E2E8F0' }}>
                     {activeTab === 'all' ? 'No projects found' : `No ${getTabLabel(activeTab).toLowerCase()} found`}
                   </Typography>
-                  <Typography variant="body1" color="text.secondary" mb={4} sx={{ maxWidth: 400, mx: 'auto' }}>
+                  <Typography variant="body1" color="#94A3B8" mb={4} sx={{ maxWidth: 400, mx: 'auto' }}>
                     {activeTab === 'all'
                       ? 'Be the first to create a community project and inspire others to join!'
                       : 'Start by creating your own project or joining existing community initiatives.'
@@ -606,10 +656,14 @@ const Projects = () => {
                       py: 1.5,
                       borderRadius: 3,
                       fontWeight: 600,
-                      boxShadow: '0 4px 16px rgba(102, 126, 234, 0.3)',
+                      bgcolor: '#0F766E',
+                      color: '#E2E8F0',
+                      boxShadow: '0 4px 16px rgba(20, 184, 166, 0.3)',
                       '&:hover': {
+                        bgcolor: '#14B8A6',
+                        color: '#0F172A',
                         transform: 'translateY(-2px) scale(1.02)',
-                        boxShadow: '0 8px 24px rgba(102, 126, 234, 0.4)'
+                        boxShadow: '0 8px 24px rgba(20, 184, 166, 0.4)'
                       },
                       transition: 'all 0.3s ease'
                     }}
@@ -646,10 +700,21 @@ const Projects = () => {
         />
       </Container>
 
+      <Footer />
+
       <style jsx global>{`
         @keyframes float {
           0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(-20px); }
+        }
+        .MuiMenuItem-root {
+          color: #E2E8F0 !important;
+        }
+        .MuiPopover-paper {
+          background-color: #1A2332 !important;
+        }
+        .MuiMenu-paper {
+          background-color: #1A2332 !important;
         }
       `}</style>
     </Box>

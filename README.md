@@ -1,4 +1,4 @@
-# Urban Skill Exchange: A Full-Stack Platform for Hyperlocal Talent Sharing
+# SkillNexus: A Full-Stack Platform for Hyperlocal Talent Sharing
 
 ## Project Overview
 
