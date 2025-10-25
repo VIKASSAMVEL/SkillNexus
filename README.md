@@ -64,10 +64,19 @@ Create a robust, scalable, and user-friendly full-stack web application that not
 ## Setup and Installation Instructions
 
 ### Prerequisites
-- Node.js (version X.X.X)
+- Node.js (version 16.x or higher)
 - npm or yarn
-- MongoDB or PostgreSQL
+- XAMPP with MySQL (or any MySQL server)
 - Git
+
+### Database Setup
+1. Start XAMPP and ensure MySQL is running
+2. Run the database setup commands:
+   ```bash
+   mysql -u root -e "DROP DATABASE IF EXISTS urban_skill_exchange; CREATE DATABASE urban_skill_exchange;"
+   mysql -u root urban_skill_exchange -e "source database/schema.sql"
+   mysql -u root urban_skill_exchange -e "source database/seed.sql"
+   ```
 
 ### Installation Steps
 1. Clone the repository:
@@ -76,29 +85,36 @@ Create a robust, scalable, and user-friendly full-stack web application that not
    cd urban-skill-exchange
    ```
 
-2. Install dependencies:
+2. Install backend dependencies:
    ```bash
+   cd backend
    npm install
-   # or
-   yarn install
    ```
 
-3. Set up environment variables:
-   - Create a `.env` file in the root directory
-   - Add necessary environment variables (e.g., database URL, API keys)
-
-4. Set up the database:
-   - Run database migrations if applicable
-   - Seed initial data if needed
-
-5. Start the development server:
+3. Install frontend dependencies:
    ```bash
-   npm run dev
-   # or
-   yarn dev
+   cd ../frontend
+   npm install
+   cd ..
    ```
 
-6. Open your browser and navigate to `http://localhost:3000`
+4. Set up environment variables:
+   - Copy `backend/.env.example` to `backend/.env`
+   - Update the values as needed (database credentials, JWT secret, etc.)
+
+5. Start the backend server:
+   ```bash
+   cd backend
+   npm start
+   ```
+
+6. In a new terminal, start the frontend:
+   ```bash
+   cd frontend
+   npm start
+   ```
+
+7. Open your browser and navigate to `http://localhost:3000`
 
 ## Usage
 
