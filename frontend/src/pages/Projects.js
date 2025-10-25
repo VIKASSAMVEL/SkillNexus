@@ -5,10 +5,8 @@ import {
   Box,
   Button,
   Grid,
-  Chip,
   Tabs,
   Tab,
-  TextField,
   MenuItem,
   FormControl,
   InputLabel,
@@ -21,19 +19,14 @@ import {
   Zoom,
   Grow,
   Collapse,
-  Avatar,
-  Divider
+  Avatar
 } from '@mui/material';
 import {
   Add,
   FilterList,
-  Search,
   GroupWork,
   TrendingUp,
-  Star,
-  LocationOn,
-  CalendarToday,
-  People
+  Star
 } from '@mui/icons-material';
 import ProjectCard from '../components/ProjectCard';
 import CreateProjectDialog from '../components/CreateProjectDialog';
@@ -56,7 +49,7 @@ const Projects = () => {
 
   useEffect(() => {
     fetchProjects();
-  }, [activeTab, filters]);
+  }, [activeTab, filters, fetchProjects]);
 
   const fetchProjects = async () => {
     try {
@@ -223,7 +216,7 @@ const Projects = () => {
 
             {/* Stats Cards */}
             <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
-              <Grid container spacing={3} sx={{ maxWidth: 800 }}>
+              <Grid container spacing={3} sx={{ maxWidth: 800, justifyContent: 'center' }}>
                 <Grid item xs={12} sm={4}>
                   <Zoom in={true} style={{ transitionDelay: '200ms' }}>
                     <Paper
@@ -688,15 +681,15 @@ const Projects = () => {
                 </Paper>
               </Grow>
             ) : (
-              <Grid container spacing={3}>
+              <Grid container spacing={3} sx={{ width: '100%', m: 0 }}>
                 {projects.map((project, index) => (
-                  <Grid item xs={12} md={6} lg={4} key={project.id}>
+                  <Grid item xs={12} sm={6} md={4} key={project.id} sx={{ display: 'flex' }}>
                     <Grow
                       in={tabTransition}
                       timeout={600 + index * 100}
-                      style={{ transformOrigin: '0 0 0' }}
+                      style={{ transformOrigin: '0 0 0', width: '100%' }}
                     >
-                      <Box>
+                      <Box sx={{ width: '100%' }}>
                         <ProjectCard project={project} onUpdate={fetchProjects} />
                       </Box>
                     </Grow>

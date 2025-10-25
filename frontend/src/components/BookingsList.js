@@ -30,6 +30,7 @@ import {
   Error
 } from '@mui/icons-material';
 import api from '../services/api';
+import ReviewForm from './ReviewForm';
 
 const BookingsList = () => {
   const [bookings, setBookings] = useState([]);
@@ -39,6 +40,7 @@ const BookingsList = () => {
   const [statusDialog, setStatusDialog] = useState({ open: false, booking: null });
   const [statusNotes, setStatusNotes] = useState('');
   const [updating, setUpdating] = useState(false);
+  const [reviewDialog, setReviewDialog] = useState({ open: false, booking: null });
 
   const fetchBookings = useCallback(async () => {
     try {
@@ -76,6 +78,20 @@ const BookingsList = () => {
       console.error('Error updating booking:', error);
     } finally {
       setUpdating(false);
+    }
+  };
+
+  const handleReviewSubmit = async (reviewData) => {
+    try {
+      await api.post('/reviews', {
+        ...reviewData,
+        booking_id: reviewDialog.booking.id
+      });
+      setReviewDialog({ open: false, booking: null });
+      fetchBookings(); // Refresh to update review status
+    } catch (error) {
+      setError('Failed to submit review');
+      console.error('Error submitting review:', error);
     }
   };
 
@@ -335,6 +351,24 @@ const BookingsList = () => {
                           </Button>
                         </>
                       )}
+                      {booking.status === 'completed' && !booking.has_review && booking.student_id === parseInt(localStorage.getItem('userId')) && (
+                        <Button
+                          size="small"
+                          variant="contained"
+                          sx={{
+                            bgcolor: '#F59E0B',
+                            color: '#0F172A',
+                            fontWeight: 600,
+                            '&:hover': {
+                              bgcolor: '#D97706'
+                            },
+                            flex: 1
+                          }}
+                          onClick={() => setReviewDialog({ open: true, booking })}
+                        >
+                          Leave Review
+                        </Button>
+                      )}
                     </Box>
                   </CardContent>
                 </Paper>
@@ -417,6 +451,35 @@ const BookingsList = () => {
             {updating ? <CircularProgress size={20} sx={{ color: '#14B8A6' }} /> : 'Cancel Booking'}
           </Button>
         </DialogActions>
+      </Dialog>
+
+      {/* Review Dialog */}
+      <Dialog
+        open={reviewDialog.open}
+        onClose={() => setReviewDialog({ open: false, booking: null })}
+        maxWidth="md"
+        fullWidth
+        sx={{
+          '& .MuiDialog-paper': {
+            bgcolor: '#1A2332',
+            border: '1px solid #1E293B',
+            backgroundImage: 'none',
+            maxHeight: '90vh'
+          }
+        }}
+      >
+        <DialogTitle sx={{ color: '#E2E8F0', fontWeight: 600, borderBottom: '1px solid #1E293B' }}>
+          Leave a Review
+        </DialogTitle>
+        <DialogContent sx={{ mt: 2 }}>
+          {reviewDialog.booking && (
+            <ReviewForm
+              bookingId={reviewDialog.booking.id}
+              onSubmit={handleReviewSubmit}
+              onCancel={() => setReviewDialog({ open: false, booking: null })}
+            />
+          )}
+        </DialogContent>
       </Dialog>
     </Box>
   );

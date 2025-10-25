@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Typography, Paper, Box, TextField, Button, Alert, Avatar } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import api from '../services/api';
+import api, { reviewsAPI } from '../services/api';
 import Footer from '../components/Footer';
+import UserReputation from '../components/UserReputation';
+import ReviewCard from '../components/ReviewCard';
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -16,6 +18,10 @@ const Profile = () => {
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [reputationData, setReputationData] = useState(null);
+  const [endorsements, setEndorsements] = useState([]);
+  const [badges, setBadges] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const navigate = useNavigate();
 
   const fetchProfile = useCallback(async () => {
@@ -39,9 +45,31 @@ const Profile = () => {
     }
   }, [navigate]);
 
+  const fetchReputationData = useCallback(async (userId) => {
+    try {
+      const [reputationRes, endorsementsRes, reviewsRes] = await Promise.all([
+        reviewsAPI.getUserReputation(userId),
+        reviewsAPI.getUserEndorsements(userId),
+        reviewsAPI.getUserReviews(userId)
+      ]);
+
+      setReputationData(reputationRes.data);
+      setEndorsements(endorsementsRes.data.endorsements || []);
+      setReviews(reviewsRes.data.reviews || []);
+    } catch (err) {
+      console.error('Failed to load reputation data:', err);
+    }
+  }, []);
+
   useEffect(() => {
     fetchProfile();
   }, [fetchProfile]);
+
+  useEffect(() => {
+    if (user?.id) {
+      fetchReputationData(user.id);
+    }
+  }, [user, fetchReputationData]);
 
   const handleChange = (e) => {
     setFormData({
@@ -323,6 +351,50 @@ const Profile = () => {
                 <Typography variant="body2" sx={{ mb: 3, color: '#94A3B8' }}>
                   Member since: {new Date(user.created_at).toLocaleDateString()}
                 </Typography>
+
+                {reputationData && (
+                  <Box sx={{ mb: 4 }}>
+                    <UserReputation
+                      reputationData={reputationData}
+                      endorsements={endorsements}
+                      badges={badges}
+                    />
+                  </Box>
+                )}
+
+                {reviews.length > 0 && (
+                  <Box sx={{ mb: 4 }}>
+                    <Typography variant="h6" sx={{ color: '#E2E8F0', mb: 2 }}>
+                      Recent Reviews ({reviews.length})
+                    </Typography>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                      {reviews.slice(0, 3).map((review) => (
+                        <ReviewCard
+                          key={review.id}
+                          review={review}
+                          currentUserId={user.id}
+                          onVote={async (reviewId, helpful) => {
+                            await reviewsAPI.voteOnReview(reviewId, helpful ? 'helpful' : 'not_helpful');
+                            fetchReputationData(user.id); // Refresh data
+                          }}
+                          onReport={async (reviewId, reason, details) => {
+                            await reviewsAPI.reportReview(reviewId, { reason, details });
+                          }}
+                          onRespond={async (reviewId, responseText) => {
+                            await reviewsAPI.respondToReview(reviewId, { response_text: responseText });
+                            fetchReputationData(user.id); // Refresh data
+                          }}
+                        />
+                      ))}
+                    </Box>
+                    {reviews.length > 3 && (
+                      <Typography variant="body2" sx={{ color: '#94A3B8', mt: 2, textAlign: 'center' }}>
+                        And {reviews.length - 3} more reviews...
+                      </Typography>
+                    )}
+                  </Box>
+                )}
+
                 <Button 
                   onClick={() => setEditing(true)} 
                   variant="contained"

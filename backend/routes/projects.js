@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Joi = require('joi');
-const { authenticateToken } = require('./auth');
+const { authenticateToken } = require('../middleware/auth');
 const { getPool } = require('../config/database');
 
 // Validation schemas

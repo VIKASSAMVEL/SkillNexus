@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Joi = require('joi');
 const { getPool } = require('../config/database');
-const { authenticateToken } = require('./auth');
+const { authenticateToken } = require('../middleware/auth');
+const moment = require('moment-timezone');
 
 // Validation schemas
 const bookingSchema = Joi.object({
@@ -34,7 +35,7 @@ router.post('/', authenticateToken, async (req, res) => {
     }
 
     const student_id = req.user.userId;
-    const { teacher_id, skill_id, booking_date, start_time, end_time, duration_hours, notes } = value;
+    const { teacher_id, skill_id, booking_date, start_time, end_time, duration_hours, notes, timezone, is_recurring, recurrence_pattern, recurrence_end_date } = value;
 
     const pool = getPool();
 
@@ -61,13 +62,18 @@ router.post('/', authenticateToken, async (req, res) => {
     const daysOfWeek = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     const dayOfWeek = daysOfWeek[dayIndex];
     
-    // Pad times with seconds if needed
-    const startTimePadded = start_time.length === 5 ? start_time + ':00' : start_time;
-    const endTimePadded = end_time.length === 5 ? end_time + ':00' : end_time;
+    // Handle timezone conversion - convert times to UTC for storage
+    const userTimezone = timezone || 'America/New_York';
+    const localStartTime = moment.tz(`${booking_date} ${start_time}`, 'YYYY-MM-DD HH:mm', userTimezone);
+    const localEndTime = moment.tz(`${booking_date} ${end_time}`, 'YYYY-MM-DD HH:mm', userTimezone);
+    
+    // Convert to UTC for database storage
+    const utcStartTime = localStartTime.utc().format('HH:mm:ss');
+    const utcEndTime = localEndTime.utc().format('HH:mm:ss');
     
     const [availability] = await pool.execute(
       'SELECT id FROM availability WHERE user_id = ? AND day_of_week = ? AND start_time <= ? AND end_time >= ? AND is_available = TRUE',
-      [teacher_id, dayOfWeek, startTimePadded, endTimePadded]
+      [teacher_id, dayOfWeek, utcStartTime, utcEndTime]
     );
 
     if (availability.length === 0) {
@@ -77,7 +83,7 @@ router.post('/', authenticateToken, async (req, res) => {
     // Check for conflicting bookings
     const [conflicts] = await pool.execute(
       'SELECT id FROM bookings WHERE teacher_id = ? AND booking_date = ? AND ((start_time <= ? AND end_time > ?) OR (start_time < ? AND end_time >= ?)) AND status IN ("pending", "confirmed")',
-      [teacher_id, booking_date, startTimePadded, startTimePadded, endTimePadded, endTimePadded]
+      [teacher_id, booking_date, utcStartTime, utcStartTime, utcEndTime, utcEndTime]
     );
 
     if (conflicts.length > 0) {
@@ -85,8 +91,8 @@ router.post('/', authenticateToken, async (req, res) => {
     }
 
     // Calculate duration and price
-    const start = new Date(`1970-01-01T${startTimePadded}`);
-    const end = new Date(`1970-01-01T${endTimePadded}`);
+    const start = new Date(`1970-01-01T${utcStartTime}`);
+    const end = new Date(`1970-01-01T${utcEndTime}`);
     const calculatedDuration = (end - start) / (1000 * 60 * 60); // hours
     const finalDuration = duration_hours || calculatedDuration;
     const totalPrice = skill.price_per_hour ? skill.price_per_hour * finalDuration : skill.price_per_session || 0;
@@ -103,9 +109,9 @@ router.post('/', authenticateToken, async (req, res) => {
 
     // Create booking
     const [result] = await pool.execute(
-      `INSERT INTO bookings (student_id, teacher_id, skill_id, booking_date, start_time, end_time, duration_hours, total_price, notes)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [student_id, teacher_id, skill_id, booking_date, startTimePadded, endTimePadded, finalDuration, totalPrice, notes || null]
+      `INSERT INTO bookings (student_id, teacher_id, skill_id, booking_date, start_time, end_time, duration_hours, total_price, notes, timezone, is_recurring, recurrence_pattern, recurrence_end_date)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [student_id, teacher_id, skill_id, booking_date, utcStartTime, utcEndTime, finalDuration, totalPrice, notes || null, userTimezone, is_recurring || false, recurrence_pattern || null, recurrence_end_date || null]
     );
 
     // Deduct credits from student
@@ -144,31 +150,175 @@ router.post('/', authenticateToken, async (req, res) => {
   }
 });
 
+// Create recurring bookings
+router.post('/recurring', authenticateToken, async (req, res) => {
+  try {
+    const { bookings } = req.body;
+    
+    if (!Array.isArray(bookings) || bookings.length === 0) {
+      return res.status(400).json({ message: 'Bookings array is required' });
+    }
+
+    const student_id = req.user.userId;
+    const pool = getPool();
+    const createdBookings = [];
+    let totalCost = 0;
+
+    // Process each booking in the recurring series
+    for (const bookingData of bookings) {
+      const { teacher_id, skill_id, booking_date, start_time, end_time, duration_hours, notes, timezone, is_recurring, recurrence_pattern, recurrence_end_date } = bookingData;
+
+      // Check if skill belongs to teacher
+      const [skills] = await pool.execute(
+        'SELECT id, price_per_hour, price_per_session FROM skills WHERE id = ? AND user_id = ? AND is_available = TRUE',
+        [skill_id, teacher_id]
+      );
+
+      if (skills.length === 0) {
+        return res.status(400).json({ message: `Skill not found or not available for booking on ${booking_date}` });
+      }
+
+      const skill = skills[0];
+
+      // Check if teacher has availability for this time slot
+      const bookingDate = new Date(booking_date + 'T00:00:00');
+      if (isNaN(bookingDate.getTime())) {
+        return res.status(400).json({ message: `Invalid booking date format for ${booking_date}` });
+      }
+      
+      // Get day of week (0 = Sunday, 1 = Monday, etc.)
+      const dayIndex = bookingDate.getDay();
+      const daysOfWeek = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+      const dayOfWeek = daysOfWeek[dayIndex];
+      
+      // Handle timezone conversion - convert times to UTC for storage
+      const userTimezone = timezone || 'America/New_York';
+      const localStartTime = moment.tz(`${booking_date} ${start_time}`, 'YYYY-MM-DD HH:mm', userTimezone);
+      const localEndTime = moment.tz(`${booking_date} ${end_time}`, 'YYYY-MM-DD HH:mm', userTimezone);
+      
+      // Convert to UTC for database storage
+      const utcStartTime = localStartTime.utc().format('HH:mm:ss');
+      const utcEndTime = localEndTime.utc().format('HH:mm:ss');
+      
+      const [availability] = await pool.execute(
+        'SELECT id FROM availability WHERE user_id = ? AND day_of_week = ? AND start_time <= ? AND end_time >= ? AND is_available = TRUE',
+        [teacher_id, dayOfWeek, utcStartTime, utcEndTime]
+      );
+
+      if (availability.length === 0) {
+        return res.status(400).json({ message: `Teacher is not available at this time on ${booking_date}` });
+      }
+
+      // Check for conflicting bookings
+      const [conflicts] = await pool.execute(
+        'SELECT id FROM bookings WHERE teacher_id = ? AND booking_date = ? AND ((start_time <= ? AND end_time > ?) OR (start_time < ? AND end_time >= ?)) AND status IN ("pending", "confirmed")',
+        [teacher_id, booking_date, utcStartTime, utcStartTime, utcEndTime, utcEndTime]
+      );
+
+      if (conflicts.length > 0) {
+        return res.status(400).json({ message: `Time slot is already booked on ${booking_date}` });
+      }
+
+      // Calculate duration and price
+      const start = new Date(`1970-01-01T${utcStartTime}`);
+      const end = new Date(`1970-01-01T${utcEndTime}`);
+      const calculatedDuration = (end - start) / (1000 * 60 * 60); // hours
+      const finalDuration = duration_hours || calculatedDuration;
+      const bookingPrice = skill.price_per_hour ? skill.price_per_hour * finalDuration : skill.price_per_session || 0;
+      totalCost += bookingPrice;
+
+      // Create booking
+      const [result] = await pool.execute(
+        `INSERT INTO bookings (student_id, teacher_id, skill_id, booking_date, start_time, end_time, duration_hours, total_price, notes, timezone, is_recurring, recurrence_pattern, recurrence_end_date)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [student_id, teacher_id, skill_id, booking_date, utcStartTime, utcEndTime, finalDuration, bookingPrice, notes || null, userTimezone, is_recurring || false, recurrence_pattern || null, recurrence_end_date || null]
+      );
+
+      createdBookings.push({
+        id: result.insertId,
+        booking_date,
+        price: bookingPrice
+      });
+    }
+
+    // Check total student credits
+    const [studentCredits] = await pool.execute(
+      'SELECT balance FROM user_credits WHERE user_id = ?',
+      [student_id]
+    );
+
+    if (studentCredits.length === 0 || studentCredits[0].balance < totalCost) {
+      return res.status(400).json({ message: 'Insufficient credits for recurring bookings' });
+    }
+
+    // Deduct total credits from student
+    await pool.execute(
+      'UPDATE user_credits SET balance = balance - ?, total_spent = total_spent + ?, updated_at = CURRENT_TIMESTAMP WHERE user_id = ?',
+      [totalCost, totalCost, student_id]
+    );
+
+    // Add credits to teacher (hold until completion)
+    await pool.execute(
+      'UPDATE user_credits SET balance = balance + ?, updated_at = CURRENT_TIMESTAMP WHERE user_id = ?',
+      [totalCost, bookings[0].teacher_id]
+    );
+
+    // Record transactions
+    for (const booking of createdBookings) {
+      await pool.execute(
+        `INSERT INTO credit_transactions (user_id, amount, transaction_type, description, reference_id, reference_type)
+         VALUES (?, ?, 'spent', 'Recurring booking payment', ?, 'booking')`,
+        [student_id, booking.price, booking.id]
+      );
+
+      await pool.execute(
+        `INSERT INTO credit_transactions (user_id, amount, transaction_type, description, reference_id, reference_type)
+         VALUES (?, ?, 'earned', 'Recurring booking earnings', ?, 'booking')`,
+        [bookings[0].teacher_id, booking.price, booking.id]
+      );
+    }
+
+    res.status(201).json({
+      message: 'Recurring bookings created successfully',
+      bookings: createdBookings,
+      totalCost,
+      bookingCount: createdBookings.length
+    });
+  } catch (error) {
+    console.error('Create recurring bookings error:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 // Get user's bookings (as student or teacher)
 router.get('/my-bookings', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.userId;
-    const { status, role = 'both' } = req.query; // role: 'student', 'teacher', 'both'
+    const { status, role = 'both', timezone = 'America/New_York' } = req.query; // role: 'student', 'teacher', 'both'
 
     const pool = getPool();
     let query = `
       SELECT b.*, s.name as skill_name, s.category as skill_category,
              student.name as student_name, teacher.name as teacher_name,
-             teacher.email as teacher_email, student.email as student_email
+             teacher.email as teacher_email, student.email as student_email,
+             CASE WHEN r.id IS NOT NULL THEN TRUE ELSE FALSE END as has_review
       FROM bookings b
       JOIN skills s ON b.skill_id = s.id
       JOIN users student ON b.student_id = student.id
       JOIN users teacher ON b.teacher_id = teacher.id
+      LEFT JOIN reviews r ON r.booking_id = b.id AND r.reviewer_id = ?
       WHERE (b.student_id = ? OR b.teacher_id = ?)
     `;
-    const params = [userId, userId];
+    const params = [userId, userId, userId, userId];
 
     if (role === 'student') {
       query = query.replace('WHERE (b.student_id = ? OR b.teacher_id = ?)', 'WHERE b.student_id = ?');
-      params.splice(1, 1);
+      params.splice(1, 2); // Remove the extra userId parameters
+      params.push(userId); // Add back for the LEFT JOIN
     } else if (role === 'teacher') {
       query = query.replace('WHERE (b.student_id = ? OR b.teacher_id = ?)', 'WHERE b.teacher_id = ?');
-      params.splice(0, 1);
+      params.splice(0, 2); // Remove the extra userId parameters
+      params.push(userId); // Add back for the LEFT JOIN
     }
 
     if (status) {
@@ -180,7 +330,23 @@ router.get('/my-bookings', authenticateToken, async (req, res) => {
 
     const [bookings] = await pool.execute(query, params);
 
-    res.json({ bookings });
+    // Convert booking times back to user's timezone for display
+    const convertedBookings = bookings.map(booking => {
+      const utcStart = moment.utc(`${booking.booking_date} ${booking.start_time}`, 'YYYY-MM-DD HH:mm:ss');
+      const utcEnd = moment.utc(`${booking.booking_date} ${booking.end_time}`, 'YYYY-MM-DD HH:mm:ss');
+      
+      const localStart = utcStart.tz(timezone).format('HH:mm:ss');
+      const localEnd = utcEnd.tz(timezone).format('HH:mm:ss');
+      
+      return {
+        ...booking,
+        start_time: localStart,
+        end_time: localEnd,
+        display_timezone: timezone
+      };
+    });
+
+    res.json({ bookings: convertedBookings });
   } catch (error) {
     console.error('Get user bookings error:', error);
     res.status(500).json({ message: 'Internal server error' });
@@ -192,6 +358,7 @@ router.get('/:id', authenticateToken, async (req, res) => {
   try {
     const bookingId = req.params.id;
     const userId = req.user.userId;
+    const { timezone = 'America/New_York' } = req.query;
 
     const pool = getPool();
     const [bookings] = await pool.execute(
@@ -210,7 +377,23 @@ router.get('/:id', authenticateToken, async (req, res) => {
       return res.status(404).json({ message: 'Booking not found' });
     }
 
-    res.json({ booking: bookings[0] });
+    const booking = bookings[0];
+
+    // Convert booking times back to user's timezone for display
+    const utcStart = moment.utc(`${booking.booking_date} ${booking.start_time}`, 'YYYY-MM-DD HH:mm:ss');
+    const utcEnd = moment.utc(`${booking.booking_date} ${booking.end_time}`, 'YYYY-MM-DD HH:mm:ss');
+    
+    const localStart = utcStart.tz(timezone).format('HH:mm:ss');
+    const localEnd = utcEnd.tz(timezone).format('HH:mm:ss');
+
+    const convertedBooking = {
+      ...booking,
+      start_time: localStart,
+      end_time: localEnd,
+      display_timezone: timezone
+    };
+
+    res.json({ booking: convertedBooking });
   } catch (error) {
     console.error('Get booking error:', error);
     res.status(500).json({ message: 'Internal server error' });
@@ -434,7 +617,7 @@ router.delete('/availability/:id', authenticateToken, async (req, res) => {
 router.get('/availability/:teacherId', async (req, res) => {
   try {
     const teacherId = req.params.teacherId;
-    const { date } = req.query;
+    const { date, timezone = 'America/New_York' } = req.query;
 
     const pool = getPool();
 
@@ -457,11 +640,25 @@ router.get('/availability/:teacherId', async (req, res) => {
 
       // Get existing bookings for this date
       const [bookings] = await pool.execute(
-        'SELECT start_time, end_time FROM bookings WHERE teacher_id = ? AND booking_date = ? AND status IN ("pending", "confirmed")',
+        'SELECT start_time, end_time, timezone FROM bookings WHERE teacher_id = ? AND booking_date = ? AND status IN ("pending", "confirmed")',
         [teacherId, date]
       );
 
-      res.json({ availability, bookings });
+      // Convert booking times back to user's timezone for display
+      const convertedBookings = bookings.map(booking => {
+        const utcStart = moment.utc(`${date} ${booking.start_time}`, 'YYYY-MM-DD HH:mm:ss');
+        const utcEnd = moment.utc(`${date} ${booking.end_time}`, 'YYYY-MM-DD HH:mm:ss');
+        
+        const localStart = utcStart.tz(timezone).format('HH:mm:ss');
+        const localEnd = utcEnd.tz(timezone).format('HH:mm:ss');
+        
+        return {
+          start_time: localStart,
+          end_time: localEnd
+        };
+      });
+
+      res.json({ availability, bookings: convertedBookings });
     } else {
       // Get all availability
       const [availability] = await pool.execute(

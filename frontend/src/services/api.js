@@ -29,4 +29,56 @@ api.interceptors.response.use(
   }
 );
 
+// Reputation System API calls
+
+// Reviews
+export const reviewsAPI = {
+  // Submit a review
+  submitReview: (reviewData) => api.post('/reviews', reviewData),
+
+  // Get reviews for a user
+  getUserReviews: (userId, params = {}) =>
+    api.get(`/reviews/user/${userId}`, { params }),
+
+  // Update review response
+  respondToReview: (reviewId, responseData) =>
+    api.put(`/reviews/${reviewId}/response`, responseData),
+
+  // Vote on review helpfulness
+  voteOnReview: (reviewId, voteType) =>
+    api.post(`/reviews/${reviewId}/vote`, { vote_type: voteType }),
+
+  // Report a review
+  reportReview: (reviewId, reportData) =>
+    api.post(`/reviews/${reviewId}/report`, reportData),
+
+  // Get user's trust score and reputation
+  getUserReputation: (userId) =>
+    api.get(`/reviews/trust-score/${userId}`),
+
+  // Create skill endorsement
+  endorseSkill: (userId, endorsementData) =>
+    api.post(`/reviews/endorse/${userId}`, endorsementData),
+
+  // Get skill endorsements for a user
+  getUserEndorsements: (userId) =>
+    api.get(`/reviews/endorsements/${userId}`),
+
+  // Moderate a review (admin only)
+  moderateReview: (reviewId, moderationData) =>
+    api.put(`/reviews/${reviewId}/moderate`, moderationData),
+
+  // Get reported reviews (moderator only)
+  getReportedReviews: (params = {}) =>
+    api.get('/reviews/moderation/reports', { params }),
+
+  // Handle review report (moderator only)
+  updateReport: (reportId, updateData) =>
+    api.put(`/reviews/reports/${reportId}`, updateData),
+
+  // Get user's review analytics
+  getReviewAnalytics: (userId) =>
+    api.get(`/reviews/analytics/${userId}`)
+};
+
 export default api;

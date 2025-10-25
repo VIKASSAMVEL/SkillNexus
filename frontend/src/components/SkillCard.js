@@ -10,6 +10,7 @@ import {
   Box
 } from '@mui/material';
 import { LocationOn, AccessTime, MonetizationOn } from '@mui/icons-material';
+import StarRating from './StarRating';
 
 const SkillCard = ({ skill, onBook, onViewDetails }) => {
   const getProficiencyColor = (level) => {
@@ -112,6 +113,21 @@ const SkillCard = ({ skill, onBook, onViewDetails }) => {
             {skill.is_available ? '✓ Available' : '✗ Unavailable'}
           </Typography>
         </Box>
+
+        {/* Reputation Section */}
+        {skill.trust_score > 0 && (
+          <Box mt={1.5} p={1.5} sx={{ bgcolor: 'rgba(20, 184, 166, 0.05)', borderRadius: 1, border: '1px solid rgba(20, 184, 166, 0.2)' }}>
+            <Box display="flex" alignItems="center" justifyContent="space-between" mb={0.5}>
+              <StarRating rating={skill.average_rating} size="small" showValue={false} />
+              <Typography variant="body2" sx={{ color: '#14B8A6', fontWeight: 600 }}>
+                {Number(skill.average_rating)?.toFixed(1) || '0.0'}
+              </Typography>
+            </Box>
+            <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block' }}>
+              {skill.rating_count || 0} reviews • Trust Score: {Number(skill.trust_score)?.toFixed(1) || '0.0'}/5.0
+            </Typography>
+          </Box>
+        )}
       </CardContent>
 
       <CardActions sx={{ pt: 0, pb: 1.5, gap: 1 }}>

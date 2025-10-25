@@ -20,12 +20,17 @@ import {
   Person,
   Email
 } from '@mui/icons-material';
-import api from '../services/api';
+import api, { reviewsAPI } from '../services/api';
+import ReviewCard from './ReviewCard';
+import UserReputation from './UserReputation';
 
 const SkillDetails = ({ open, onClose, skillId, onBookSkill }) => {
   const [skill, setSkill] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [reputationData, setReputationData] = useState(null);
+  const [endorsements, setEndorsements] = useState([]);
 
   const fetchSkillDetails = useCallback(async () => {
     if (!skillId) return;
@@ -35,6 +40,20 @@ const SkillDetails = ({ open, onClose, skillId, onBookSkill }) => {
       const response = await api.get(`/skills/${skillId}`);
       setSkill(response.data.skill);
       setError(null);
+
+      // Fetch reviews and reputation for the skill provider
+      if (response.data.skill?.user_id) {
+        const userId = response.data.skill.user_id;
+        const [reviewsRes, reputationRes, endorsementsRes] = await Promise.all([
+          reviewsAPI.getUserReviews(userId),
+          reviewsAPI.getUserReputation(userId),
+          reviewsAPI.getUserEndorsements(userId)
+        ]);
+
+        setReviews(reviewsRes.data.reviews || []);
+        setReputationData(reputationRes.data);
+        setEndorsements(endorsementsRes.data.endorsements || []);
+      }
     } catch (error) {
       console.error('Error fetching skill details:', error);
       setError('Failed to load skill details. Please try again.');
@@ -194,6 +213,57 @@ const SkillDetails = ({ open, onClose, skillId, onBookSkill }) => {
                 <Typography variant="body2" color="text.secondary">
                   {skill.user_bio}
                 </Typography>
+              </Box>
+            )}
+
+            <Divider sx={{ my: 3 }} />
+
+            {/* Reputation Section */}
+            {reputationData && (
+              <Box mb={3}>
+                <Typography variant="h6" gutterBottom>
+                  Provider Reputation
+                </Typography>
+                <UserReputation
+                  reputationData={reputationData}
+                  endorsements={endorsements}
+                  badges={[]} // We'll fetch badges separately if needed
+                />
+              </Box>
+            )}
+
+            {/* Reviews Section */}
+            {reviews.length > 0 && (
+              <Box>
+                <Typography variant="h6" gutterBottom>
+                  Recent Reviews ({reviews.length})
+                </Typography>
+                <Box sx={{ maxHeight: '400px', overflowY: 'auto' }}>
+                  {reviews.slice(0, 5).map((review) => (
+                    <Box key={review.id} mb={2}>
+                      <ReviewCard
+                        review={review}
+                        currentUserId={parseInt(localStorage.getItem('userId'))}
+                        onVote={async (reviewId, helpful) => {
+                          await reviewsAPI.voteOnReview(reviewId, helpful ? 'helpful' : 'not_helpful');
+                          fetchSkillDetails(); // Refresh data
+                        }}
+                        onReport={async (reviewId, reason, details) => {
+                          await reviewsAPI.reportReview(reviewId, { reason, details });
+                        }}
+                        onRespond={async (reviewId, responseText) => {
+                          await reviewsAPI.respondToReview(reviewId, { response_text: responseText });
+                          fetchSkillDetails(); // Refresh data
+                        }}
+                      />
+                    </Box>
+                  ))}
+                </Box>
+                {reviews.length > 5 && (
+                  <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                    And {reviews.length - 5} more reviews...
+                  </Typography>
+                )}
               </Box>
             )}
           </Box>

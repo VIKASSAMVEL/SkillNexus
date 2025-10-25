@@ -113,9 +113,9 @@ const Home = () => {
                     component={Link}
                     to="/skills"
                     sx={{
-                      bgcolor: '#1E40AF',
+                      bgcolor: '#14B8A6',
                       '&:hover': {
-                        bgcolor: '#3B82F6',
+                        bgcolor: '#0F766E',
                         transform: 'translateY(-2px)'
                       },
                       transition: 'all 0.3s ease',
@@ -134,8 +134,8 @@ const Home = () => {
                       color: 'white',
                       borderColor: 'rgba(255,255,255,0.5)',
                       '&:hover': {
-                        borderColor: '#1DB584',
-                        bgcolor: 'rgba(29, 181, 132, 0.1)',
+                        borderColor: '#14B8A6',
+                        bgcolor: 'rgba(20, 184, 166, 0.2)',
                         transform: 'translateY(-2px)'
                       },
                       transition: 'all 0.3s ease',
@@ -154,9 +154,9 @@ const Home = () => {
                     component={Link}
                     to="/register"
                     sx={{
-                      bgcolor: '#1E40AF',
+                      bgcolor: '#14B8A6',
                       '&:hover': {
-                        bgcolor: '#3B82F6',
+                        bgcolor: '#0F766E',
                         transform: 'translateY(-2px)'
                       },
                       transition: 'all 0.3s ease',

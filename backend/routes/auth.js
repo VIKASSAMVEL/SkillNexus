@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Joi = require('joi');
 const { getPool } = require('../config/database');
+const { authenticateToken } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -128,24 +129,6 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
-
-// Middleware to verify JWT token
-const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
-
-  if (!token) {
-    return res.status(401).json({ message: 'Access token required' });
-  }
-
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) {
-      return res.status(403).json({ message: 'Invalid or expired token' });
-    }
-    req.user = user;
-    next();
-  });
-};
 
 // Get current user profile
 router.get('/profile', authenticateToken, async (req, res) => {
@@ -292,7 +275,4 @@ router.put('/profile', authenticateToken, async (req, res) => {
   }
 });
 
-module.exports = {
-  router,
-  authenticateToken
-};
+module.exports = router;

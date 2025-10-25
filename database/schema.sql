@@ -68,6 +68,10 @@ CREATE TABLE bookings (
     total_price DECIMAL(10, 2),
     status ENUM('pending', 'confirmed', 'completed', 'cancelled', 'rejected') DEFAULT 'pending',
     notes TEXT,
+    timezone VARCHAR(50), -- Timezone for the booking
+    is_recurring BOOLEAN DEFAULT FALSE, -- Whether this is part of a recurring series
+    recurrence_pattern ENUM('daily', 'weekly', 'monthly'), -- Pattern for recurring bookings
+    recurrence_end_date DATE, -- End date for recurring series
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (student_id) REFERENCES users(id),

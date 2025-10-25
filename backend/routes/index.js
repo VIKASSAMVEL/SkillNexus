@@ -2,20 +2,20 @@ const express = require('express');
 const router = express.Router();
 
 // Import route modules
-const { router: authRoutes } = require('./auth');
+const authRoutes = require('./auth');
 const skillsRoutes = require('./skills');
 const bookingsRoutes = require('./bookings');
 const projectsRoutes = require('./projects');
-// const userRoutes = require('./users');
-// const skillRoutes = require('./skills');
+const usersRoutes = require('./users');
+const reviewsRoutes = require('./reviews');
 
 // Mount routes
 router.use('/auth', authRoutes);
 router.use('/skills', skillsRoutes);
 router.use('/bookings', bookingsRoutes);
 router.use('/projects', projectsRoutes);
-// router.use('/users', userRoutes);
-// router.use('/skills', skillRoutes);
+router.use('/users', usersRoutes);
+router.use('/reviews', reviewsRoutes);
 
 // Placeholder route
 router.get('/test', (req, res) => {

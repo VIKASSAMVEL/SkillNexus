@@ -71,7 +71,7 @@ const SkillsMap = ({ skills, onSkillSelect }) => {
         window.google.maps.event.removeListener(listener);
       });
     }
-  }, [map, skills, onSkillSelect]);
+  }, [map, skills, onSkillSelect, markers]);
 
   useEffect(() => {
     if (map && skills.length > 0) {

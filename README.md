@@ -2,7 +2,6 @@
 
 ## Project Overview
 
-**Automatic Zoom WEB HACKATHON**
 
 This project is developed as part of the WEB HACKATHON challenge to address the need for a streamlined, trustworthy platform for hyperlocal talent sharing in urban environments. The platform enables users to create profiles, list their skills or learning needs, and connect with others in their locality for skill exchange, micro-consulting, or collaborative projects.
 

@@ -1,7 +1,7 @@
 const express = require('express');
 const Joi = require('joi');
 const { getPool } = require('../config/database');
-const { authenticateToken } = require('./auth');
+const { authenticateToken } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -44,9 +44,13 @@ router.get('/', async (req, res) => {
 
     let query = `
       SELECT s.*, u.name as user_name, u.location as user_location,
-             u.latitude, u.longitude
+             u.latitude, u.longitude,
+             COALESCE(uts.overall_score, 0) as trust_score,
+             COALESCE(uts.average_rating, 0) as average_rating,
+             COALESCE(uts.rating_count, 0) as rating_count
       FROM skills s
       JOIN users u ON s.user_id = u.id
+      LEFT JOIN user_trust_scores uts ON uts.user_id = u.id
       WHERE 1=1
     `;
     const params = [];
@@ -90,7 +94,7 @@ router.get('/', async (req, res) => {
     const [skills] = await pool.execute(query, params);
 
     // Get total count for pagination
-    let countQuery = 'SELECT COUNT(*) as total FROM skills s JOIN users u ON s.user_id = u.id WHERE 1=1';
+    let countQuery = 'SELECT COUNT(*) as total FROM skills s JOIN users u ON s.user_id = u.id LEFT JOIN user_trust_scores uts ON uts.user_id = u.id WHERE 1=1';
     const countParams = [];
 
     if (category) {
@@ -166,7 +170,7 @@ router.get('/:id', async (req, res) => {
 
     const [skills] = await pool.execute(
       `SELECT s.*, u.name as user_name, u.email as user_email, u.location as user_location,
-              u.bio as user_bio, u.profile_image as user_profile_image
+              u.bio as user_bio, u.profile_image as user_profile_image, u.id as user_id
        FROM skills s
        JOIN users u ON s.user_id = u.id
        WHERE s.id = ?`,
