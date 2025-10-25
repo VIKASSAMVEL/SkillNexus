@@ -27,7 +27,7 @@ import {
   Person,
   CheckCircle,
   Schedule,
-  AlertCircle
+  Error
 } from '@mui/icons-material';
 import api from '../services/api';
 
@@ -177,7 +177,7 @@ const BookingsList = () => {
       ) : (
         <Grid container spacing={3}>
           {bookings.map((booking, index) => (
-            <Grid item xs={12} md={6} lg={4} key={booking.id}>
+            <Grid item xs={12} md={6} lg={6} key={booking.id}>
               <Fade in={true} style={{ transitionDelay: `${index * 100}ms` }}>
                 <Paper
                   elevation={0}
@@ -194,14 +194,14 @@ const BookingsList = () => {
                     }
                   }}
                 >
-                  <Box sx={{ bgcolor: 'rgba(20, 184, 166, 0.1)', p: 2, borderBottom: '1px solid #1E293B' }}>
+                  <Box sx={{ bgcolor: 'rgba(20, 184, 166, 0.1)', p: 3, borderBottom: '1px solid #1E293B' }}>
                     <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={2}>
-                      <Typography variant="h6" component="h2" sx={{ color: '#E2E8F0', fontWeight: 600, flex: 1 }}>
+                      <Typography variant="h5" component="h2" sx={{ color: '#E2E8F0', fontWeight: 700, flex: 1, fontSize: '1.5rem' }}>
                         {booking.skill_name}
                       </Typography>
                       <Chip
                         label={booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
-                        icon={booking.status === 'confirmed' ? <CheckCircle /> : booking.status === 'pending' ? <Schedule /> : <AlertCircle />}
+                        icon={booking.status === 'confirmed' ? <CheckCircle /> : booking.status === 'pending' ? <Schedule /> : <Error />}
                         size="small"
                         sx={{
                           bgcolor: booking.status === 'pending' ? 'rgba(251, 146, 60, 0.2)' :
@@ -225,73 +225,76 @@ const BookingsList = () => {
                     </Box>
                   </Box>
 
-                  <CardContent sx={{ '&:last-child': { pb: 2 } }}>
-                    <Box display="flex" alignItems="center" mb={2} sx={{ color: '#CBD5E1' }}>
-                      <Person sx={{ mr: 1.5, fontSize: 20, color: '#14B8A6' }} />
-                      <Typography variant="body2">
+                  <CardContent sx={{ '&:last-child': { pb: 3 }, p: 3 }}>
+                    <Box display="flex" alignItems="center" mb={3} sx={{ color: '#CBD5E1' }}>
+                      <Person sx={{ mr: 2, fontSize: 24, color: '#14B8A6' }} />
+                      <Typography variant="body1" sx={{ fontSize: '1rem' }}>
                         {booking.student_id === parseInt(localStorage.getItem('userId'))
                           ? `Teacher: ${booking.teacher_name}`
                           : `Student: ${booking.student_name}`}
                       </Typography>
                     </Box>
 
-                    <Box display="flex" alignItems="center" mb={2} sx={{ color: '#CBD5E1' }}>
-                      <AccessTime sx={{ mr: 1.5, fontSize: 20, color: '#14B8A6' }} />
+                    <Box display="flex" alignItems="center" mb={3} sx={{ color: '#CBD5E1' }}>
+                      <AccessTime sx={{ mr: 2, fontSize: 24, color: '#14B8A6' }} />
                       <Box>
-                        <Typography variant="body2">
+                        <Typography variant="body1" sx={{ fontSize: '1rem' }}>
                           {new Date(booking.booking_date).toLocaleDateString('en-US', { 
                             month: 'short', 
                             day: 'numeric', 
                             year: 'numeric' 
                           })}
                         </Typography>
-                        <Typography variant="caption" sx={{ color: '#94A3B8' }}>
+                        <Typography variant="body2" sx={{ color: '#94A3B8', fontSize: '0.95rem' }}>
                           {booking.start_time} - {booking.end_time}
                         </Typography>
                       </Box>
                     </Box>
 
                     <Box sx={{ 
-                      p: 2, 
+                      p: 2.5, 
                       bgcolor: 'rgba(20, 184, 166, 0.05)', 
                       borderRadius: 1.5,
                       border: '1px solid rgba(20, 184, 166, 0.2)',
-                      mb: 2
+                      mb: 3
                     }}>
-                      <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block' }}>
+                      <Typography variant="body2" sx={{ color: '#94A3B8', display: 'block', fontSize: '0.9rem', mb: 0.5 }}>
                         Duration
                       </Typography>
-                      <Typography variant="body2" sx={{ color: '#14B8A6', fontWeight: 600 }}>
+                      <Typography variant="h6" sx={{ color: '#14B8A6', fontWeight: 700, fontSize: '1.2rem' }}>
                         {booking.duration_hours}h • ${booking.total_price}
                       </Typography>
                     </Box>
 
                     {booking.notes && (
-                      <Box mb={2}>
-                        <Typography variant="caption" sx={{ color: '#94A3B8' }}>
+                      <Box mb={3}>
+                        <Typography variant="body2" sx={{ color: '#94A3B8', fontSize: '0.9rem' }}>
                           Notes:
                         </Typography>
-                        <Typography variant="body2" sx={{ color: '#CBD5E1', fontStyle: 'italic', mt: 0.5 }}>
+                        <Typography variant="body2" sx={{ color: '#CBD5E1', fontStyle: 'italic', mt: 1, fontSize: '1rem' }}>
                           "{booking.notes}"
                         </Typography>
                       </Box>
                     )}
 
-                    <Box display="flex" gap={1} flexWrap="wrap">
+                    <Box display="flex" gap={1.5} flexWrap="wrap" sx={{ mt: 2 }}>
                       {(booking.status === 'pending' || booking.status === 'confirmed') && (
                         <>
                           {booking.teacher_id === parseInt(localStorage.getItem('userId')) && booking.status === 'pending' && (
                             <Button
-                              size="small"
                               variant="contained"
                               sx={{
                                 bgcolor: '#22C55E',
                                 color: '#0F172A',
-                                fontWeight: 600,
+                                fontWeight: 700,
+                                fontSize: '0.95rem',
+                                py: 1.2,
+                                px: 2.5,
                                 '&:hover': {
                                   bgcolor: '#16A34A'
                                 },
-                                flex: 1
+                                flex: 1,
+                                borderRadius: 1.5
                               }}
                               onClick={() => handleStatusUpdate(booking.id, 'confirmed')}
                             >
@@ -300,16 +303,19 @@ const BookingsList = () => {
                           )}
                           {booking.teacher_id === parseInt(localStorage.getItem('userId')) && (booking.status === 'confirmed' || booking.status === 'pending') && (
                             <Button
-                              size="small"
                               variant="contained"
                               sx={{
                                 bgcolor: '#14B8A6',
                                 color: '#0F172A',
-                                fontWeight: 600,
+                                fontWeight: 700,
+                                fontSize: '0.95rem',
+                                py: 1.2,
+                                px: 2.5,
                                 '&:hover': {
                                   bgcolor: '#0D9488'
                                 },
-                                flex: 1
+                                flex: 1,
+                                borderRadius: 1.5
                               }}
                               onClick={() => handleStatusUpdate(booking.id, 'completed')}
                             >
@@ -317,16 +323,20 @@ const BookingsList = () => {
                             </Button>
                           )}
                           <Button
-                            size="small"
                             variant="outlined"
                             sx={{
                               color: '#EF4444',
                               borderColor: '#EF4444',
+                              fontWeight: 700,
+                              fontSize: '0.95rem',
+                              py: 1.2,
+                              px: 2.5,
                               '&:hover': {
                                 borderColor: '#DC2626',
                                 bgcolor: 'rgba(239, 68, 68, 0.1)'
                               },
-                              flex: 1
+                              flex: 1,
+                              borderRadius: 1.5
                             }}
                             onClick={() => setStatusDialog({ open: true, booking })}
                           >
