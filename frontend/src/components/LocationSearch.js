@@ -21,6 +21,9 @@ const LocationSearch = ({ onLocationSearch, onLocationChange }) => {
   const [error, setError] = useState(null);
   const [currentLocation, setCurrentLocation] = useState(null);
 
+  // Google Geocoding API Key
+  const geocodingApiKey = process.env.REACT_APP_GOOGLE_GEOCODING_API_KEY;
+
   const handleGetCurrentLocation = () => {
     setLoading(true);
     setError(null);
@@ -39,7 +42,7 @@ const LocationSearch = ({ onLocationSearch, onLocationChange }) => {
         try {
           // Reverse geocode to get address
           const response = await fetch(
-            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`
+            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${geocodingApiKey}`
           );
           const data = await response.json();
 
@@ -87,7 +90,7 @@ const LocationSearch = ({ onLocationSearch, onLocationChange }) => {
 
     try {
       // Try multiple geocoding approaches for better results
-      let geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location)}&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
+      let geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location)}&key=${geocodingApiKey}`;
 
       // For city names, try adding "India" if it's a common Indian city
       const indianCities = ['chennai', 'mumbai', 'delhi', 'bangalore', 'hyderabad', 'pune', 'kolkata', 'ahmedabad'];
@@ -116,7 +119,7 @@ const LocationSearch = ({ onLocationSearch, onLocationChange }) => {
         }
       } else if (data.status === 'ZERO_RESULTS') {
         // Try a more specific search
-        const fallbackUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location + ', India')}&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
+        const fallbackUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location + ', India')}&key=${geocodingApiKey}`;
         console.log('Trying fallback geocoding:', fallbackUrl);
 
         const fallbackResponse = await fetch(fallbackUrl);
@@ -182,6 +185,14 @@ const LocationSearch = ({ onLocationSearch, onLocationChange }) => {
           '& .MuiAlert-icon': { color: '#FCA5A5' }
         }}>
           {error}
+          {error.includes('API') && (
+            <Box sx={{ mt: 1, fontSize: '0.875rem' }}>
+              <strong>API Setup Check:</strong>
+              <br />• Enable <strong>Geocoding API</strong> in Google Cloud Console
+              <br />• Ensure your API key allows <strong>Geocoding API</strong> requests
+              <br />• Check that <strong>localhost:3000</strong> is in HTTP referrers (if restricted)
+            </Box>
+          )}
         </Alert>
       )}
 

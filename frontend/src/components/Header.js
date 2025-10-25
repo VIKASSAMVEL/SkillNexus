@@ -147,6 +147,31 @@ const Header = () => {
               >
                 AI Recommendations
               </Button>
+              <Button 
+                color="inherit" 
+                component={Link} 
+                to="/forum"
+                sx={{
+                  color: '#E2E8F0',
+                  border: '1px solid rgba(226, 232, 240, 0.2)',
+                  borderRadius: '8px',
+                  px: 2,
+                  py: 1,
+                  mx: 0.5,
+                  fontWeight: 500,
+                  textTransform: 'none',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    bgcolor: 'rgba(20, 184, 166, 0.15)',
+                    color: '#14B8A6',
+                    borderColor: 'rgba(20, 184, 166, 0.5)',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 4px 12px rgba(20, 184, 166, 0.2)'
+                  }
+                }}
+              >
+                Forum
+              </Button>
             </>
           )}
           {isLoggedIn() ? (

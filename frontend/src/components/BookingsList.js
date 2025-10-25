@@ -42,6 +42,12 @@ const BookingsList = () => {
   const [updating, setUpdating] = useState(false);
   const [reviewDialog, setReviewDialog] = useState({ open: false, booking: null });
 
+  // Helper function to get current user ID
+  const getCurrentUserId = () => {
+    const userData = localStorage.getItem('user');
+    return userData ? JSON.parse(userData).id : null;
+  };
+
   const fetchBookings = useCallback(async () => {
     try {
       setLoading(true);
@@ -245,7 +251,7 @@ const BookingsList = () => {
                     <Box display="flex" alignItems="center" mb={2} sx={{ color: '#CBD5E1' }}>
                       <Person sx={{ mr: 4, fontSize: 28, color: '#14B8A6' }} />
                       <Typography variant="h6" sx={{ flex: 1, fontWeight: 600 }}>
-                        {booking.student_id === parseInt(localStorage.getItem('userId'))
+                        {booking.student_id === getCurrentUserId()
                           ? `Teacher: ${booking.teacher_name}`
                           : `Student: ${booking.student_name}`}
                       </Typography>
@@ -297,7 +303,7 @@ const BookingsList = () => {
                     <Box display="flex" gap={1} flexWrap="wrap">
                       {(booking.status === 'pending' || booking.status === 'confirmed') && (
                         <>
-                          {booking.teacher_id === parseInt(localStorage.getItem('userId')) && booking.status === 'pending' && (
+                          {booking.teacher_id === getCurrentUserId() && booking.status === 'pending' && (
                             <Button
                               size="small"
                               variant="contained"
@@ -315,7 +321,7 @@ const BookingsList = () => {
                               Confirm
                             </Button>
                           )}
-                          {booking.teacher_id === parseInt(localStorage.getItem('userId')) && (booking.status === 'confirmed' || booking.status === 'pending') && (
+                          {booking.teacher_id === getCurrentUserId() && (booking.status === 'confirmed' || booking.status === 'pending') && (
                             <Button
                               size="small"
                               variant="contained"
@@ -351,7 +357,7 @@ const BookingsList = () => {
                           </Button>
                         </>
                       )}
-                      {booking.status === 'completed' && !booking.has_review && booking.student_id === parseInt(localStorage.getItem('userId')) && (
+                      {booking.status === 'completed' && !booking.has_review && booking.student_id === getCurrentUserId() && (
                         <Button
                           size="small"
                           variant="contained"

@@ -150,6 +150,36 @@ router.get('/profile', authenticateToken, async (req, res) => {
   }
 });
 
+// Get current user (alias for /profile)
+router.get('/me', authenticateToken, async (req, res) => {
+  try {
+    const pool = getPool();
+    const [users] = await pool.execute(
+      'SELECT id, name, email, phone, location, bio, profile_image, is_verified, created_at FROM users WHERE id = ?',
+      [req.user.userId]
+    );
+
+    if (users.length === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({
+      id: users[0].id,
+      name: users[0].name,
+      email: users[0].email,
+      phone: users[0].phone,
+      location: users[0].location,
+      bio: users[0].bio,
+      profile_image: users[0].profile_image,
+      is_verified: users[0].is_verified,
+      created_at: users[0].created_at
+    });
+  } catch (error) {
+    console.error('Profile fetch error:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 // Get user credits
 router.get('/credits', authenticateToken, async (req, res) => {
   try {

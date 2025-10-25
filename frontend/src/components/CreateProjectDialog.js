@@ -17,6 +17,28 @@ import {
 } from '@mui/material';
 import api from '../services/api';
 
+// Inject dark theme animations
+if (typeof document !== 'undefined' && !document.querySelector('style[data-dialog-animations]')) {
+  const style = document.createElement('style');
+  style.setAttribute('data-dialog-animations', 'true');
+  style.innerHTML = `
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .MuiDialog-paper {
+      animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  `;
+  document.head.appendChild(style);
+}
+
 const CreateProjectDialog = ({ open, onClose, onProjectCreated }) => {
   const [formData, setFormData] = useState({
     title: '',
@@ -115,19 +137,94 @@ const CreateProjectDialog = ({ open, onClose, onProjectCreated }) => {
     }
   };
 
+  const textFieldSx = {
+    '& .MuiOutlinedInput-root': {
+      color: '#E2E8F0',
+      backgroundColor: '#1A2332',
+      borderRadius: 2,
+      '& fieldset': { borderColor: '#1E293B' },
+      '&:hover fieldset': { borderColor: '#14B8A6' },
+      '&.Mui-focused fieldset': { borderColor: '#14B8A6' }
+    },
+    '& .MuiOutlinedInput-input::placeholder': { color: '#64748B', opacity: 1 },
+    '& .MuiInputBase-input': { color: '#E2E8F0' },
+    '& .MuiInputLabel-root': {
+      color: '#94A3B8',
+      '&.Mui-focused': { color: '#14B8A6' }
+    }
+  };
+
+  const selectSx = {
+    borderRadius: 2,
+    color: '#E2E8F0',
+    backgroundColor: '#1A2332',
+    '& .MuiOutlinedInput-notchedOutline': {
+      borderRadius: 2,
+      borderColor: '#1E293B'
+    },
+    '&:hover .MuiOutlinedInput-notchedOutline': {
+      borderColor: '#14B8A6'
+    },
+    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+      borderColor: '#14B8A6'
+    },
+    '& .MuiSvgIcon-root': { color: '#14B8A6' }
+  };
+
+  const menuItemSx = {
+    color: '#E2E8F0',
+    backgroundColor: '#1A2332',
+    '&:hover': { backgroundColor: '#0F766E' },
+    '&.Mui-selected': { backgroundColor: '#0F766E', color: '#14B8A6' }
+  };
+
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-      <DialogTitle>Create New Community Project</DialogTitle>
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      maxWidth="md"
+      fullWidth
+      PaperProps={{
+        sx: {
+          borderRadius: 3,
+          bgcolor: '#1A2332',
+          border: '1px solid #1E293B',
+          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)'
+        }
+      }}
+    >
+      <DialogTitle
+        sx={{
+          fontSize: '1.5rem',
+          fontWeight: 700,
+          color: '#E2E8F0',
+          borderBottom: '1px solid #1E293B',
+          background: 'linear-gradient(135deg, rgba(15, 118, 110, 0.1) 0%, rgba(20, 184, 166, 0.05) 100%)',
+          py: 2.5,
+          px: 3
+        }}
+      >
+        Create New Community Project
+      </DialogTitle>
 
       <form onSubmit={handleSubmit}>
-        <DialogContent>
+        <DialogContent sx={{ bgcolor: '#0F172A', p: 3 }}>
           {error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
+            <Alert
+              severity="error"
+              sx={{
+                mb: 2,
+                borderRadius: 2,
+                bgcolor: '#dc2626',
+                color: '#E2E8F0',
+                '& .MuiAlert-icon': { color: '#E2E8F0' }
+              }}
+            >
               {error}
             </Alert>
           )}
 
-          <Typography variant="body2" color="text.secondary" mb={3}>
+          <Typography variant="body2" sx={{ color: '#94A3B8', mb: 3, lineHeight: 1.6 }}>
             Create a collaborative project for your community. Bring people together to share skills,
             work on community initiatives, or pursue creative endeavors.
           </Typography>
@@ -140,6 +237,7 @@ const CreateProjectDialog = ({ open, onClose, onProjectCreated }) => {
               required
               fullWidth
               placeholder="e.g., Community Garden Planning, Coding Workshop"
+              sx={textFieldSx}
             />
 
             <TextField
@@ -151,18 +249,22 @@ const CreateProjectDialog = ({ open, onClose, onProjectCreated }) => {
               multiline
               rows={4}
               placeholder="Describe your project goals, what participants will do, and what they'll learn..."
+              sx={textFieldSx}
             />
 
             <Box display="flex" gap={2}>
               <FormControl fullWidth required>
-                <InputLabel>Category</InputLabel>
+                <InputLabel sx={{ color: '#94A3B8', '&.Mui-focused': { color: '#14B8A6' } }}>
+                  Category
+                </InputLabel>
                 <Select
                   value={formData.category}
                   label="Category"
                   onChange={(e) => handleInputChange('category', e.target.value)}
+                  sx={selectSx}
                 >
                   {categories.map((category) => (
-                    <MenuItem key={category} value={category}>
+                    <MenuItem key={category} value={category} sx={menuItemSx}>
                       {category}
                     </MenuItem>
                   ))}
@@ -170,14 +272,17 @@ const CreateProjectDialog = ({ open, onClose, onProjectCreated }) => {
               </FormControl>
 
               <FormControl fullWidth>
-                <InputLabel>Project Type</InputLabel>
+                <InputLabel sx={{ color: '#94A3B8', '&.Mui-focused': { color: '#14B8A6' } }}>
+                  Project Type
+                </InputLabel>
                 <Select
                   value={formData.project_type}
                   label="Project Type"
                   onChange={(e) => handleInputChange('project_type', e.target.value)}
+                  sx={selectSx}
                 >
                   {projectTypes.map((type) => (
-                    <MenuItem key={type.value} value={type.value}>
+                    <MenuItem key={type.value} value={type.value} sx={menuItemSx}>
                       {type.label}
                     </MenuItem>
                   ))}
@@ -191,6 +296,7 @@ const CreateProjectDialog = ({ open, onClose, onProjectCreated }) => {
               onChange={(e) => handleInputChange('location', e.target.value)}
               fullWidth
               placeholder="Where will this project take place?"
+              sx={textFieldSx}
             />
 
             <Box display="flex" gap={2}>
@@ -202,6 +308,7 @@ const CreateProjectDialog = ({ open, onClose, onProjectCreated }) => {
                 fullWidth
                 inputProps={{ min: 1, max: 100 }}
                 placeholder="Leave empty for unlimited"
+                sx={textFieldSx}
               />
 
               <TextField
@@ -212,6 +319,7 @@ const CreateProjectDialog = ({ open, onClose, onProjectCreated }) => {
                 fullWidth
                 InputLabelProps={{ shrink: true }}
                 inputProps={{ min: new Date().toISOString().split('T')[0] }}
+                sx={textFieldSx}
               />
 
               <TextField
@@ -224,21 +332,63 @@ const CreateProjectDialog = ({ open, onClose, onProjectCreated }) => {
                 inputProps={{
                   min: formData.start_date || new Date().toISOString().split('T')[0]
                 }}
+                sx={textFieldSx}
               />
             </Box>
           </Box>
         </DialogContent>
 
-        <DialogActions>
-          <Button onClick={handleClose} disabled={loading}>
+        <DialogActions
+          sx={{
+            bgcolor: '#0F172A',
+            borderTop: '1px solid #1E293B',
+            p: 2,
+            gap: 2
+          }}
+        >
+          <Button
+            onClick={handleClose}
+            disabled={loading}
+            sx={{
+              color: '#94A3B8',
+              borderRadius: 2,
+              px: 3,
+              '&:hover': {
+                backgroundColor: '#1A2332',
+                color: '#E2E8F0'
+              },
+              '&.Mui-disabled': {
+                color: '#475569'
+              }
+            }}
+          >
             Cancel
           </Button>
           <Button
             type="submit"
             variant="contained"
             disabled={loading || !formData.title.trim() || !formData.description.trim() || !formData.category}
+            sx={{
+              bgcolor: '#14B8A6',
+              color: '#0F172A',
+              borderRadius: 2,
+              px: 4,
+              fontWeight: 600,
+              boxShadow: '0 4px 12px rgba(20, 184, 166, 0.3)',
+              '&:hover': {
+                bgcolor: '#0F766E',
+                color: '#E2E8F0',
+                boxShadow: '0 6px 16px rgba(20, 184, 166, 0.4)',
+                transform: 'translateY(-1px)'
+              },
+              '&.Mui-disabled': {
+                bgcolor: '#475569',
+                color: '#94A3B8'
+              },
+              transition: 'all 0.3s ease'
+            }}
           >
-            {loading ? <CircularProgress size={20} /> : 'Create Project'}
+            {loading ? <CircularProgress size={20} sx={{ color: '#14B8A6' }} /> : 'Create Project'}
           </Button>
         </DialogActions>
       </form>

@@ -167,6 +167,49 @@ router.get('/', authenticateToken, async (req, res) => {
   }
 });
 
+// Get a single session by ID
+router.get('/:id', async (req, res) => {
+  try {
+    const pool = getPool();
+    const sessionId = req.params.id;
+
+    const [sessions] = await pool.execute(`
+      SELECT
+        s.*,
+        u1.name as learner_name,
+        u1.email as learner_email,
+        u2.name as provider_name,
+        u2.email as provider_email,
+        sk.name as skill_name,
+        sk.category,
+        sk.description as skill_description
+      FROM sessions s
+      LEFT JOIN users u1 ON s.learner_id = u1.id
+      LEFT JOIN users u2 ON s.provider_id = u2.id
+      LEFT JOIN skills sk ON s.skill_id = sk.id
+      WHERE s.id = ?
+    `, [sessionId]);
+
+    if (sessions.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Session not found'
+      });
+    }
+
+    res.json({
+      success: true,
+      session: sessions[0]
+    });
+  } catch (error) {
+    console.error('Error fetching session:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch session'
+    });
+  }
+});
+
 // Create a new session
 router.post('/', authenticateToken, async (req, res) => {
   try {
@@ -182,31 +225,34 @@ router.post('/', authenticateToken, async (req, res) => {
 
     const learner_id = req.user.userId;
 
-    // Check for scheduling conflicts
-    const conflicts = await notificationService.checkSchedulingConflicts(
-      learner_id,
-      scheduled_at,
-      duration_minutes
-    );
-
-    if (conflicts.length > 0) {
-      // Create conflict alert
-      await notificationService.createConflictAlert(
+    // For booking, scheduled_at can be null, and status is 'booked'
+    // Only check conflicts if scheduled_at is provided
+    if (scheduled_at) {
+      const conflicts = await notificationService.checkSchedulingConflicts(
         learner_id,
-        null, // No session ID yet
-        conflicts[0].id,
-        'overlap',
-        {
-          new_session: { skill_id, scheduled_at, duration_minutes },
-          conflicting_session: conflicts[0]
-        }
+        scheduled_at,
+        duration_minutes
       );
 
-      return res.status(409).json({
-        success: false,
-        message: 'Scheduling conflict detected',
-        conflicts: conflicts
-      });
+      if (conflicts.length > 0) {
+        // Create conflict alert
+        await notificationService.createConflictAlert(
+          learner_id,
+          null, // No session ID yet
+          conflicts[0].id,
+          'overlap',
+          {
+            new_session: { skill_id, scheduled_at, duration_minutes },
+            conflicting_session: conflicts[0]
+          }
+        );
+
+        return res.status(409).json({
+          success: false,
+          message: 'Scheduling conflict detected',
+          conflicts: conflicts
+        });
+      }
     }
 
     // Validate that the skill and provider exist
@@ -222,7 +268,7 @@ router.post('/', authenticateToken, async (req, res) => {
       });
     }
 
-    // Create the session
+    // Create the session as "booked" (pending provider scheduling)
     const [result] = await pool.execute(`
       INSERT INTO sessions (
         learner_id,
@@ -234,12 +280,12 @@ router.post('/', authenticateToken, async (req, res) => {
         status,
         notes,
         created_at
-      ) VALUES (?, ?, ?, ?, ?, ?, 'scheduled', ?, NOW())
+      ) VALUES (?, ?, ?, ?, ?, ?, 'booked', ?, NOW())
     `, [
       learner_id,
       provider_id,
       skill_id,
-      scheduled_at,
+      scheduled_at || null,  // Allow NULL for booked state
       duration_minutes,
       session_type,
       notes || ''
@@ -247,17 +293,12 @@ router.post('/', authenticateToken, async (req, res) => {
 
     const sessionId = result.insertId;
 
-    // Schedule reminders for the new session
-    try {
-      await notificationService.scheduleSessionReminders(sessionId);
-    } catch (error) {
-      console.error('Error scheduling reminders:', error);
-      // Don't fail the session creation if reminders fail
-    }
+    // Notify provider about the booking (optional: integrate with notificationService)
+    // await notificationService.notifyProviderOfBooking(sessionId);
 
     res.status(201).json({
       success: true,
-      message: 'Session created successfully',
+      message: scheduled_at ? 'Session scheduled successfully' : 'Session booked successfully. The provider will schedule it soon.',
       sessionId: sessionId
     });
   } catch (error) {
@@ -265,6 +306,65 @@ router.post('/', authenticateToken, async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Failed to create session'
+    });
+  }
+});
+
+// Schedule a booked session (for providers)
+router.put('/:id/schedule', authenticateToken, async (req, res) => {
+  try {
+    const pool = getPool();
+    const sessionId = req.params.id;
+    const userId = req.user.userId;
+    const { scheduled_at, duration_minutes, notes } = req.body;
+
+    // Verify user is the provider and session is booked
+    const [sessions] = await pool.execute(
+      'SELECT * FROM sessions WHERE id = ? AND provider_id = ? AND status = "booked"',
+      [sessionId, userId]
+    );
+
+    if (sessions.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Booked session not found or access denied'
+      });
+    }
+
+    // Check for conflicts before scheduling
+    const conflicts = await notificationService.checkSchedulingConflicts(
+      userId,
+      scheduled_at,
+      duration_minutes
+    );
+
+    if (conflicts.length > 0) {
+      return res.status(409).json({
+        success: false,
+        message: 'Scheduling conflict detected',
+        conflicts: conflicts
+      });
+    }
+
+    // Update to scheduled
+    await pool.execute(`
+      UPDATE sessions
+      SET status = 'scheduled', scheduled_at = ?, duration_minutes = ?, notes = CONCAT(IFNULL(notes, ''), '\n', ?), updated_at = NOW()
+      WHERE id = ?
+    `, [scheduled_at, duration_minutes, notes || '', sessionId]);
+
+    // Schedule reminders
+    await notificationService.scheduleSessionReminders(sessionId);
+
+    res.json({
+      success: true,
+      message: 'Session scheduled successfully'
+    });
+  } catch (error) {
+    console.error('Error scheduling session:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to schedule session'
     });
   }
 });

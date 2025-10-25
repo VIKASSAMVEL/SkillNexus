@@ -82,16 +82,26 @@ const BookingForm = ({ open, onClose, skill, teacher }) => {
     setSuccess('');
 
     try {
-      const bookingData = {
-        teacher_id: teacher.id,
+      // Calculate scheduled_at from date and start_time
+      const scheduledAt = formData.booking_date && formData.start_time 
+        ? `${formData.booking_date}T${formData.start_time}` 
+        : null;
+
+      // Calculate duration
+      const start = formData.start_time ? new Date(`1970-01-01T${formData.start_time}`) : null;
+      const end = formData.end_time ? new Date(`1970-01-01T${formData.end_time}`) : null;
+      const durationMinutes = start && end ? (end - start) / (1000 * 60) : 60;
+
+      const sessionData = {
         skill_id: skill.id,
-        booking_date: formData.booking_date,
-        start_time: formData.start_time,
-        end_time: formData.end_time,
+        provider_id: teacher.id,
+        scheduled_at: scheduledAt,
+        duration_minutes: durationMinutes,
+        session_type: 'one-on-one',
         notes: formData.notes
       };
 
-      await api.post('/bookings', bookingData);
+      await api.post('/sessions', sessionData);
 
       setSuccess('Booking created successfully!');
       setTimeout(() => {

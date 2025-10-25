@@ -51,7 +51,9 @@ const ProjectCard = ({ project, onUpdate }) => {
   const [error, setError] = useState('');
   const [hovered, setHovered] = useState(false);
 
-  const currentUserId = parseInt(localStorage.getItem('userId'));
+  // Get user data from localStorage
+  const userData = localStorage.getItem('user');
+  const currentUserId = userData ? JSON.parse(userData).id : null;
   const isCreator = project.creator_id === currentUserId;
   const isParticipant = project.participants?.some(p => p.id === currentUserId);
   const canJoin = !isCreator && !isParticipant && project.status !== 'completed' && project.status !== 'cancelled';

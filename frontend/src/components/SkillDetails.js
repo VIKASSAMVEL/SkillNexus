@@ -243,7 +243,10 @@ const SkillDetails = ({ open, onClose, skillId, onBookSkill }) => {
                     <Box key={review.id} mb={2}>
                       <ReviewCard
                         review={review}
-                        currentUserId={parseInt(localStorage.getItem('userId'))}
+                        currentUserId={(() => {
+                          const userData = localStorage.getItem('user');
+                          return userData ? JSON.parse(userData).id : null;
+                        })()}
                         onVote={async (reviewId, helpful) => {
                           await reviewsAPI.voteOnReview(reviewId, helpful ? 'helpful' : 'not_helpful');
                           fetchSkillDetails(); // Refresh data

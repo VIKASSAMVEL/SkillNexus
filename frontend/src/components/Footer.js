@@ -172,7 +172,7 @@ community projects that make a difference              </Typography>
               <Typography
                 variant="h6"
                 sx={{
-                  color: '#E2E8F0',
+                  color: '#14B8A6',
                   mb: 1,
                   fontWeight: 600
                 }}
@@ -238,7 +238,7 @@ community projects that make a difference              </Typography>
               <Typography
                 variant="h6"
                 sx={{
-                  color: '#E2E8F0',
+                  color: '#14B8A6',
                   mb: 1,
                   fontWeight: 600
                 }}
@@ -295,6 +295,24 @@ community projects that make a difference              </Typography>
                 </Link>
                 <Link
                   component="button"
+                  onClick={() => handleLinkClick('/forum')}
+                  sx={{
+                    color: '#CBD5E1',
+                    textDecoration: 'none',
+                    background: 'none',
+                    border: 'none',
+                    padding: 0,
+                    fontSize: 'inherit',
+                    fontFamily: 'inherit',
+                    textAlign: 'left',
+                    cursor: 'pointer',
+                    '&:hover': { color: '#14B8A6' }
+                  }}
+                >
+                  Community Forum
+                </Link>
+                <Link
+                  component="button"
                   onClick={() => handleLinkClick('/profile')}
                   sx={{
                     color: '#CBD5E1',
@@ -319,7 +337,7 @@ community projects that make a difference              </Typography>
               <Typography
                 variant="h6"
                 sx={{
-                  color: '#E2E8F0',
+                  color: '#14B8A6',
                   mb: 1,
                   fontWeight: 600,
                   textAlign: 'center'

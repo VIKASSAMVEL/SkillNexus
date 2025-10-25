@@ -48,7 +48,9 @@ io.on('connection', (socket) => {
   socket.on('join-session', (sessionId) => {
     socket.join(`session-${sessionId}`);
     console.log(`User ${socket.id} joined session ${sessionId}`);
-    socket.to(`session-${sessionId}`).emit('user-joined', { userId: socket.id });
+    socket.to(`session-${sessionId}`).emit('user-joined', { 
+      userId: socket.id 
+    });
   });
 
   // Leave session room
@@ -70,16 +72,16 @@ io.on('connection', (socket) => {
   });
 
   // WebRTC signaling
-  socket.on('webrtc-offer', (data) => {
-    socket.to(`session-${data.sessionId}`).emit('webrtc-offer', data);
+  socket.on('offer', (data) => {
+    socket.to(`session-${data.sessionId}`).emit('offer', data);
   });
 
-  socket.on('webrtc-answer', (data) => {
-    socket.to(`session-${data.sessionId}`).emit('webrtc-answer', data);
+  socket.on('answer', (data) => {
+    socket.to(`session-${data.sessionId}`).emit('answer', data);
   });
 
-  socket.on('webrtc-ice-candidate', (data) => {
-    socket.to(`session-${data.sessionId}`).emit('webrtc-ice-candidate', data);
+  socket.on('ice-candidate', (data) => {
+    socket.to(`session-${data.sessionId}`).emit('ice-candidate', data);
   });
 
   // Whiteboard events

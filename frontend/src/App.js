@@ -27,18 +27,84 @@ import Credits from './components/Credits';
 import ScrollToTop from './components/ScrollToTop';
 import NotificationPreferences from './components/NotificationPreferences';
 import ConflictResolution from './components/ConflictResolution';
+import Forum from './pages/Forum';
+import TopicDetail from './pages/TopicDetail';
+import NewTopic from './pages/NewTopic';
 
 const theme = createTheme({
   palette: {
+    mode: 'light',
     primary: {
-      main: '#1976d2',
+      main: '#14B8A6', // Teal green
+      dark: '#0F766E',
+      light: '#5EEAD4',
     },
     secondary: {
-      main: '#dc004e',
+      main: '#0F172A', // Navy blue
+      dark: '#020617',
+      light: '#1E293B',
+    },
+    background: {
+      default: '#F8FAFC',
+      paper: '#FFFFFF',
+    },
+    text: {
+      primary: '#0F172A',
+      secondary: '#64748B',
     },
   },
   typography: {
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+    h1: {
+      fontWeight: 700,
+    },
+    h2: {
+      fontWeight: 600,
+    },
+    h3: {
+      fontWeight: 600,
+    },
+    h4: {
+      fontWeight: 600,
+    },
+    h5: {
+      fontWeight: 600,
+    },
+    h6: {
+      fontWeight: 600,
+    },
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: 8,
+          textTransform: 'none',
+          fontWeight: 500,
+        },
+        contained: {
+          boxShadow: '0 2px 8px rgba(20, 184, 166, 0.2)',
+          '&:hover': {
+            boxShadow: '0 4px 12px rgba(20, 184, 166, 0.3)',
+          },
+        },
+      },
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          borderRadius: 12,
+          boxShadow: '0 2px 12px rgba(0, 0, 0, 0.08)',
+        },
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          borderRadius: 6,
+        },
+      },
+    },
   },
 });
 
@@ -72,6 +138,9 @@ function App() {
               <Route path="/terms-of-service" element={<TermsOfService />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/credits" element={<Credits />} />
+              <Route path="/forum" element={<Forum />} />
+              <Route path="/forum/topic/:topicId" element={<TopicDetail />} />
+              <Route path="/forum/new-topic" element={<NewTopic />} />
             </Routes>
           </Box>
         </div>

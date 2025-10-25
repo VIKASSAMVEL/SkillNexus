@@ -60,10 +60,14 @@ const Projects = () => {
 
       const params = { ...filters };
 
-      if (activeTab === 'my-projects') {
-        params.participant_id = localStorage.getItem('userId');
-      } else if (activeTab === 'created') {
-        params.creator_id = localStorage.getItem('userId');
+      // Get user data from localStorage
+      const userData = localStorage.getItem('user');
+      const userId = userData ? JSON.parse(userData).id : null;
+
+      if (activeTab === 'my-projects' && userId) {
+        params.participant_id = userId;
+      } else if (activeTab === 'created' && userId) {
+        params.creator_id = userId;
       }
 
       const response = await api.get('/projects', { params });
@@ -112,16 +116,20 @@ const Projects = () => {
   };
 
   const getStatsData = () => {
+    // Get user data from localStorage
+    const userData = localStorage.getItem('user');
+    const userId = userData ? JSON.parse(userData).id : null;
+
     // Filter stats based on active tab
     let filteredProjects = projects;
     
-    if (activeTab === 'my-projects') {
+    if (activeTab === 'my-projects' && userId) {
       filteredProjects = projects.filter(p => 
-        p.participants?.some(part => part.id === parseInt(localStorage.getItem('userId')))
+        p.participants?.some(part => part.id === userId)
       );
-    } else if (activeTab === 'created') {
+    } else if (activeTab === 'created' && userId) {
       filteredProjects = projects.filter(p => 
-        p.creator_id === parseInt(localStorage.getItem('userId'))
+        p.creator_id === userId
       );
     }
     

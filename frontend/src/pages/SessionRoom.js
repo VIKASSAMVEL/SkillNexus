@@ -154,10 +154,12 @@ const SessionRoom = () => {
   const [localStream, setLocalStream] = useState(null);
   const [remoteStreams, setRemoteStreams] = useState(new Map());
   const [peerConnections, setPeerConnections] = useState(new Map());
+  const [pendingOffers, setPendingOffers] = useState([]);
 
   // Refs
   const localVideoRef = useRef(null);
   const remoteVideoRefs = useRef(new Map());
+  const socketRef = useRef(null);
 
   // WebRTC configuration
   const rtcConfiguration = {
@@ -174,6 +176,101 @@ const SessionRoom = () => {
     };
   }, [sessionId]);
 
+  const createPeerConnection = async (userId) => {
+    const pc = new RTCPeerConnection(rtcConfiguration);
+
+    // Add local stream tracks if available
+    if (localStream) {
+      localStream.getTracks().forEach(track => {
+        pc.addTrack(track, localStream);
+      });
+    }
+
+    // Handle remote stream
+    pc.ontrack = (event) => {
+      setRemoteStreams(prev => {
+        const newMap = new Map(prev);
+        newMap.set(userId, event.streams[0]);
+        return newMap;
+      });
+    };
+
+    // Handle ICE candidates
+    pc.onicecandidate = (event) => {
+      if (event.candidate) {
+        socketRef.current.emit('ice-candidate', {
+          sessionId,
+          from: socketRef.current.id,
+          to: userId,
+          candidate: event.candidate
+        });
+      }
+    };
+
+    setPeerConnections(prev => new Map(prev).set(userId, pc));
+
+    return pc;
+  };
+
+  const addLocalTracksToPeer = (pc, stream) => {
+    stream.getTracks().forEach(track => {
+      pc.addTrack(track, stream);
+    });
+  };
+
+  const addLocalStreamToPeers = () => {
+    if (localStream) {
+      peerConnections.forEach((pc, userId) => {
+        // Check if tracks are already added
+        const hasVideo = pc.getSenders().some(sender => sender.track?.kind === 'video');
+        const hasAudio = pc.getSenders().some(sender => sender.track?.kind === 'audio');
+        
+        if (!hasVideo || !hasAudio) {
+          addLocalTracksToPeer(pc, localStream);
+          
+          // If connection is established, renegotiate
+          if (pc.signalingState === 'stable' && pc.remoteDescription) {
+            renegotiate(pc, userId);
+          }
+        }
+      });
+    }
+  };
+
+  const sendPendingOffers = async () => {
+    for (const userId of pendingOffers) {
+      const pc = await createPeerConnection(userId);
+
+      // Create and send offer
+      const offer = await pc.createOffer();
+      await pc.setLocalDescription(offer);
+
+      socketRef.current.emit('offer', {
+        sessionId,
+        from: socketRef.current.id,
+        to: userId,
+        offer: offer
+      });
+    }
+    setPendingOffers([]);
+  };
+
+  const renegotiate = async (pc, userId) => {
+    try {
+      const offer = await pc.createOffer();
+      await pc.setLocalDescription(offer);
+
+      socketRef.current.emit('offer', {
+        sessionId,
+        from: socketRef.current.id,
+        to: userId,
+        offer: offer
+      });
+    } catch (error) {
+      console.error('Error renegotiating:', error);
+    }
+  };
+
   const initializeSession = async () => {
     try {
       setLoading(true);
@@ -189,6 +286,9 @@ const SessionRoom = () => {
         }
       });
 
+      socketRef.current = socketConnection;
+      setSocket(socketConnection);
+
       socketConnection.on('connect', () => {
         console.log('Connected to session room');
         socketConnection.emit('join-session', { sessionId });
@@ -201,8 +301,6 @@ const SessionRoom = () => {
       socketConnection.on('answer', handleAnswer);
       socketConnection.on('ice-candidate', handleIceCandidate);
       socketConnection.on('file-shared', handleFileShared);
-
-      setSocket(socketConnection);
 
       // Initialize media devices
       await initializeMedia();
@@ -217,30 +315,76 @@ const SessionRoom = () => {
 
   const initializeMedia = async () => {
     try {
+      // Try to get both video and audio
       const stream = await navigator.mediaDevices.getUserMedia({
         video: true,
         audio: true
       });
 
       setLocalStream(stream);
+      setIsVideoOn(true);
+      setIsMicOn(true);
       if (localVideoRef.current) {
         localVideoRef.current.srcObject = stream;
       }
+
+      // Add tracks to existing peer connections
+      addLocalStreamToPeers();
+
+      // Send offers to pending users
+      sendPendingOffers();
+
     } catch (error) {
-      console.error('Error accessing media devices:', error);
-      setError('Failed to access camera and microphone');
+      console.error('Error accessing video and audio devices:', error);
+      
+      // Try audio-only if video fails
+      try {
+        const audioStream = await navigator.mediaDevices.getUserMedia({
+          video: false,
+          audio: true
+        });
+        
+        setLocalStream(audioStream);
+        setIsVideoOn(false);
+        setIsMicOn(true);
+        console.warn('Video not available, using audio only');
+
+        // Add tracks to existing peer connections
+        addLocalStreamToPeers();
+
+        // Send offers to pending users
+        sendPendingOffers();
+
+      } catch (audioError) {
+        console.error('Error accessing audio devices:', audioError);
+        setError('Failed to access camera and microphone. Please check permissions and ensure no other application is using them.');
+      }
     }
   };
 
   const handleUserJoined = useCallback(async (data) => {
     console.log('User joined:', data);
-    setParticipants(prev => [...prev, data.user]);
+    setParticipants(prev => [...prev, { id: data.userId }]);
 
-    // Create peer connection for new user
-    if (data.user.id !== socket.id) {
-      await createPeerConnection(data.user.id);
+    if (localStream) {
+      // Create peer connection and send offer
+      const pc = await createPeerConnection(data.userId);
+
+      // Create and send offer
+      const offer = await pc.createOffer();
+      await pc.setLocalDescription(offer);
+
+      socketRef.current.emit('offer', {
+        sessionId,
+        from: socketRef.current.id,
+        to: data.userId,
+        offer: offer
+      });
+    } else {
+      // Add to pending offers
+      setPendingOffers(prev => [...prev, data.userId]);
     }
-  }, [socket]);
+  }, [sessionId, localStream]);
 
   const handleUserLeft = useCallback((data) => {
     console.log('User left:', data);
@@ -264,40 +408,6 @@ const SessionRoom = () => {
     });
   }, [peerConnections]);
 
-  const createPeerConnection = async (userId) => {
-    const pc = new RTCPeerConnection(rtcConfiguration);
-
-    // Add local stream tracks
-    if (localStream) {
-      localStream.getTracks().forEach(track => {
-        pc.addTrack(track, localStream);
-      });
-    }
-
-    // Handle remote stream
-    pc.ontrack = (event) => {
-      setRemoteStreams(prev => {
-        const newMap = new Map(prev);
-        newMap.set(userId, event.streams[0]);
-        return newMap;
-      });
-    };
-
-    // Handle ICE candidates
-    pc.onicecandidate = (event) => {
-      if (event.candidate) {
-        socket.emit('ice-candidate', {
-          target: userId,
-          candidate: event.candidate
-        });
-      }
-    };
-
-    setPeerConnections(prev => new Map(prev).set(userId, pc));
-
-    return pc;
-  };
-
   const handleOffer = useCallback(async (data) => {
     const pc = await createPeerConnection(data.from);
     await pc.setRemoteDescription(new RTCSessionDescription(data.offer));
@@ -305,11 +415,13 @@ const SessionRoom = () => {
     const answer = await pc.createAnswer();
     await pc.setLocalDescription(answer);
 
-    socket.emit('answer', {
-      target: data.from,
+    socketRef.current.emit('answer', {
+      sessionId,
+      from: socketRef.current.id,
+      to: data.from,
       answer: answer
     });
-  }, [socket, createPeerConnection]);
+  }, [sessionId]);
 
   const handleAnswer = useCallback(async (data) => {
     const pc = peerConnections.get(data.from);
@@ -382,9 +494,9 @@ const SessionRoom = () => {
   };
 
   const leaveSession = () => {
-    if (socket) {
-      socket.emit('leave-session', { sessionId });
-      socket.disconnect();
+    if (socketRef.current) {
+      socketRef.current.emit('leave-session', { sessionId });
+      socketRef.current.disconnect();
     }
     cleanup();
     navigate('/sessions');
@@ -400,8 +512,8 @@ const SessionRoom = () => {
     peerConnections.forEach(pc => pc.close());
 
     // Clean up socket
-    if (socket) {
-      socket.disconnect();
+    if (socketRef.current) {
+      socketRef.current.disconnect();
     }
   };
 
@@ -709,7 +821,7 @@ const SessionRoom = () => {
             socket={socket}
             sessionId={sessionId}
             participants={participants}
-            currentUser={{ id: socket?.id, name: 'You' }}
+            currentUser={{ id: socketRef.current?.id, name: 'You' }}
             isOpen={isChatOpen}
             onClose={() => setIsChatOpen(false)}
           />

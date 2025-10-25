@@ -24,6 +24,7 @@ import { AccountBalanceWallet, Add, History } from '@mui/icons-material';
 import PropTypes from 'prop-types';
 import api from '../services/api';
 import { formatCurrency } from '../utils/formatters';
+import Footer from './Footer';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   backgroundColor: '#1A2332 !important',
@@ -165,10 +166,16 @@ const Credits = () => {
       width: '100%',
       backgroundColor: '#0F172A !important', 
       minHeight: '100vh',
-      py: 4,
-      px: 2
+      display: 'flex',
+      flexDirection: 'column'
     }}>
-      <Box sx={{ maxWidth: 800, mx: 'auto' }}>
+      <Box sx={{ 
+        width: '100%',
+        py: 4,
+        px: 2,
+        flex: 1
+      }}>
+        <Box sx={{ maxWidth: 800, mx: 'auto' }}>
         <Typography variant="h4" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1, color: '#E2E8F0', mb: 3 }}>
           <AccountBalanceWallet sx={{ color: '#14B8A6' }} />
           Credit Management
@@ -335,7 +342,9 @@ const Credits = () => {
             </Button>
           </DialogActions>
         </StyledDialog>
+        </Box>
       </Box>
+      <Footer />
     </Box>
   );
 };

@@ -63,15 +63,20 @@ const Sessions = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState(0);
-  const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [joinDialogOpen, setJoinDialogOpen] = useState(false);
   const [selectedSession, setSelectedSession] = useState(null);
-  const [skills, setSkills] = useState([]);
+  const [scheduleDialogOpen, setScheduleDialogOpen] = useState(false);
+  const [scheduleForm, setScheduleForm] = useState({
+    scheduled_at: '',
+    duration_minutes: 60,
+    notes: ''
+  });
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchSessions();
-    fetchSkills();
+    fetchUser();
   }, []);
 
   const fetchSessions = async () => {
@@ -87,12 +92,12 @@ const Sessions = () => {
     }
   };
 
-  const fetchSkills = async () => {
+  const fetchUser = async () => {
     try {
-      const response = await api.get('/skills');
-      setSkills(response.data.skills || []);
+      const response = await api.get('/auth/me');
+      setUser(response.data);
     } catch (error) {
-      console.error('Error fetching skills:', error);
+      console.error('Error fetching user:', error);
     }
   };
 
@@ -100,11 +105,21 @@ const Sessions = () => {
     setActiveTab(newValue);
   };
 
-  const handleCreateSession = () => {
-    setCreateDialogOpen(true);
-  };
+  const handleJoinSession = async (session) => {
+    // If session is booked and user is provider, start it first
+    if (session.status === 'booked' && user && user.id === session.provider_id) {
+      try {
+        await api.post(`/sessions/${session.id}/start`);
+        // Refresh sessions to update status
+        await fetchSessions();
+        // Update the session object
+        session.status = 'in-progress';
+      } catch (error) {
+        console.error('Error starting session:', error);
+        return;
+      }
+    }
 
-  const handleJoinSession = (session) => {
     setSelectedSession(session);
     setJoinDialogOpen(true);
   };
@@ -127,6 +142,26 @@ const Sessions = () => {
     }
   };
 
+  const handleScheduleSession = (session) => {
+    setSelectedSession(session);
+    setScheduleForm({
+      scheduled_at: '',
+      duration_minutes: session.duration_minutes || 60,
+      notes: ''
+    });
+    setScheduleDialogOpen(true);
+  };
+
+  const handleScheduleSubmit = async () => {
+    try {
+      await api.put(`/sessions/${selectedSession.id}/schedule`, scheduleForm);
+      setScheduleDialogOpen(false);
+      fetchSessions(); // Refresh the list
+    } catch (error) {
+      console.error('Error scheduling session:', error);
+    }
+  };
+
   const getStatusColor = (status) => {
     switch (status) {
       case 'scheduled': return '#F59E0B';
@@ -134,6 +169,7 @@ const Sessions = () => {
       case 'completed': return '#3B82F6';
       case 'cancelled': return '#EF4444';
       case 'no-show': return '#6B7280';
+      case 'booked': return '#8B5CF6'; // Purple for booked
       default: return '#6B7280';
     }
   };
@@ -145,6 +181,7 @@ const Sessions = () => {
       case 'completed': return <CheckCircle />;
       case 'cancelled': return <Cancel />;
       case 'no-show': return <AccessTime />;
+      case 'booked': return <Schedule />; // Use Schedule for booked too
       default: return <Schedule />;
     }
   };
@@ -228,31 +265,6 @@ const Sessions = () => {
               Connect in real-time with skill providers through video calls, chat, and collaborative tools.
             </Typography>
 
-            <Button
-              variant="contained"
-              size="large"
-              startIcon={<Add />}
-              onClick={handleCreateSession}
-              sx={{
-                bgcolor: '#14B8A6',
-                color: '#0F172A',
-                px: 4,
-                py: 1.5,
-                fontSize: '1.1rem',
-                fontWeight: 600,
-                borderRadius: 3,
-                boxShadow: '0 8px 32px rgba(20, 184, 166, 0.3)',
-                '&:hover': {
-                  bgcolor: '#0F766E',
-                  color: '#E2E8F0',
-                  transform: 'translateY(-2px) scale(1.02)',
-                  boxShadow: '0 12px 40px rgba(20, 184, 166, 0.4)'
-                },
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-              }}
-            >
-              Schedule New Session
-            </Button>
           </Box>
         </Container>
       </Box>
@@ -323,6 +335,8 @@ const Sessions = () => {
               onJoinSession={handleJoinSession}
               onStartSession={handleStartSession}
               onEndSession={handleEndSession}
+              onScheduleSession={handleScheduleSession}
+              user={user}
             />
           </TabPanel>
 
@@ -332,6 +346,8 @@ const Sessions = () => {
               onJoinSession={handleJoinSession}
               onStartSession={handleStartSession}
               onEndSession={handleEndSession}
+              onScheduleSession={handleScheduleSession}
+              user={user}
             />
           </TabPanel>
 
@@ -341,6 +357,8 @@ const Sessions = () => {
               onJoinSession={handleJoinSession}
               onStartSession={handleStartSession}
               onEndSession={handleEndSession}
+              onScheduleSession={handleScheduleSession}
+              user={user}
             />
           </TabPanel>
 
@@ -350,23 +368,27 @@ const Sessions = () => {
               onJoinSession={handleJoinSession}
               onStartSession={handleStartSession}
               onEndSession={handleEndSession}
+              onScheduleSession={handleScheduleSession}
+              user={user}
             />
           </TabPanel>
         </Paper>
-
-        {/* Create Session Dialog */}
-        <CreateSessionDialog
-          open={createDialogOpen}
-          onClose={() => setCreateDialogOpen(false)}
-          skills={skills}
-          onSessionCreated={fetchSessions}
-        />
 
         {/* Join Session Dialog */}
         <JoinSessionDialog
           open={joinDialogOpen}
           onClose={() => setJoinDialogOpen(false)}
           session={selectedSession}
+        />
+
+        {/* Schedule Session Dialog */}
+        <ScheduleSessionDialog
+          open={scheduleDialogOpen}
+          onClose={() => setScheduleDialogOpen(false)}
+          session={selectedSession}
+          form={scheduleForm}
+          setForm={setScheduleForm}
+          onSubmit={handleScheduleSubmit}
         />
       </Container>
 
@@ -376,7 +398,7 @@ const Sessions = () => {
 };
 
 // Session List Component
-const SessionList = ({ sessions, onJoinSession, onStartSession, onEndSession }) => {
+const SessionList = ({ sessions, onJoinSession, onStartSession, onEndSession, onScheduleSession, user }) => {
   if (sessions.length === 0) {
     return (
       <Box textAlign="center" py={6}>
@@ -410,6 +432,8 @@ const SessionList = ({ sessions, onJoinSession, onStartSession, onEndSession }) 
             onJoinSession={onJoinSession}
             onStartSession={onStartSession}
             onEndSession={onEndSession}
+            onScheduleSession={onScheduleSession}
+            user={user}
           />
         </Grid>
       ))}
@@ -418,7 +442,7 @@ const SessionList = ({ sessions, onJoinSession, onStartSession, onEndSession }) 
 };
 
 // Session Card Component
-const SessionCard = ({ session, onJoinSession, onStartSession, onEndSession }) => {
+const SessionCard = ({ session, onJoinSession, onStartSession, onEndSession, onScheduleSession, user }) => {
   const getStatusColor = (status) => {
     switch (status) {
       case 'scheduled': return '#F59E0B';
@@ -426,6 +450,7 @@ const SessionCard = ({ session, onJoinSession, onStartSession, onEndSession }) =
       case 'completed': return '#3B82F6';
       case 'cancelled': return '#EF4444';
       case 'no-show': return '#6B7280';
+      case 'booked': return '#8B5CF6'; // Purple for booked
       default: return '#6B7280';
     }
   };
@@ -437,13 +462,29 @@ const SessionCard = ({ session, onJoinSession, onStartSession, onEndSession }) =
       case 'completed': return <CheckCircle />;
       case 'cancelled': return <Cancel />;
       case 'no-show': return <AccessTime />;
+      case 'booked': return <Schedule />; // Use Schedule for booked too
       default: return <Schedule />;
     }
   };
 
-  const canJoin = session.status === 'in-progress' || session.status === 'scheduled';
-  const canStart = session.status === 'scheduled';
+  const isSessionTime = (session) => {
+    if (!session.scheduled_at) return false;
+    const now = new Date();
+    const sessionStart = new Date(session.scheduled_at);
+    const sessionEnd = new Date(sessionStart.getTime() + (session.duration_minutes || 60) * 60000);
+    // Allow joining 15 minutes before to 15 minutes after
+    const earlyJoin = new Date(sessionStart.getTime() - 15 * 60000);
+    const lateJoin = new Date(sessionEnd.getTime() + 15 * 60000);
+    return now >= earlyJoin && now <= lateJoin;
+  };
+
+  const canJoin = session.status === 'in-progress' ||
+    (session.status === 'scheduled' && isSessionTime(session)) ||
+    (session.status === 'booked' && user && user.id === session.provider_id);
+  const canStart = (session.status === 'scheduled' && user && user.id === session.provider_id) ||
+    (session.status === 'booked' && user && user.id === session.provider_id);
   const canEnd = session.status === 'in-progress';
+  const canSchedule = session.status === 'booked' && user && user.id === session.provider_id;
 
   return (
     <Paper
@@ -483,11 +524,19 @@ const SessionCard = ({ session, onJoinSession, onStartSession, onEndSession }) =
       </Typography>
 
       <Typography variant="body2" sx={{ color: '#CBD5E1', mb: 2 }}>
-        {new Date(session.scheduled_at).toLocaleDateString()} at{' '}
-        {new Date(session.scheduled_at).toLocaleTimeString([], {
-          hour: '2-digit',
-          minute: '2-digit'
-        })}
+        {session.status === 'booked' ? (
+          user && user.id === session.provider_id ? 
+            'Ready to start - click Start Session to begin' : 
+            'Waiting for provider to start the session'
+        ) : (
+          <>
+            {new Date(session.scheduled_at).toLocaleDateString()} at{' '}
+            {new Date(session.scheduled_at).toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit'
+            })}
+          </>
+        )}
       </Typography>
 
       <Typography variant="body2" sx={{ color: '#94A3B8', mb: 3 }}>
@@ -495,6 +544,25 @@ const SessionCard = ({ session, onJoinSession, onStartSession, onEndSession }) =
       </Typography>
 
       <Box display="flex" gap={1} flexWrap="wrap">
+        {canSchedule && (
+          <Button
+            variant="outlined"
+            size="small"
+            startIcon={<Schedule />}
+            onClick={() => onScheduleSession(session)}
+            sx={{
+              borderColor: '#F59E0B',
+              color: '#F59E0B',
+              '&:hover': {
+                borderColor: '#D97706',
+                bgcolor: 'rgba(245, 158, 11, 0.1)'
+              }
+            }}
+          >
+            Schedule
+          </Button>
+        )}
+
         {canJoin && (
           <Button
             variant="contained"
@@ -506,7 +574,7 @@ const SessionCard = ({ session, onJoinSession, onStartSession, onEndSession }) =
               '&:hover': { bgcolor: '#14B8A6' }
             }}
           >
-            Join Session
+            {session.status === 'booked' && user && user.id === session.provider_id ? 'Start Session' : 'Join Session'}
           </Button>
         )}
 
@@ -552,271 +620,13 @@ const SessionCard = ({ session, onJoinSession, onStartSession, onEndSession }) =
   );
 };
 
-// Create Session Dialog Component
-const CreateSessionDialog = ({ open, onClose, skills, onSessionCreated }) => {
-  const [formData, setFormData] = useState({
-    skill_id: '',
-    provider_id: '',
-    scheduled_at: '',
-    duration_minutes: 60,
-    session_type: 'one-on-one',
-    notes: ''
-  });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-
-    try {
-      // Find the selected skill to get provider_id
-      const selectedSkill = skills.find(skill => skill.id === parseInt(formData.skill_id));
-      if (!selectedSkill) {
-        setError('Please select a valid skill');
-        return;
-      }
-
-      const sessionData = {
-        ...formData,
-        provider_id: selectedSkill.provider_id
-      };
-
-      // Check for scheduling conflicts before creating the session
-      const conflictCheckResponse = await api.post('/sessions/check-conflicts', {
-        scheduled_at: sessionData.scheduled_at,
-        duration_minutes: sessionData.duration_minutes,
-        provider_id: sessionData.provider_id
-      });
-
-      if (conflictCheckResponse.data.has_conflicts) {
-        setError(`Scheduling conflict detected: ${conflictCheckResponse.data.conflict_reason}. Please choose a different time or check your conflicts page.`);
-        return;
-      }
-
-      await api.post('/sessions', sessionData);
-      onSessionCreated();
-      onClose();
-      setFormData({
-        skill_id: '',
-        provider_id: '',
-        scheduled_at: '',
-        duration_minutes: 60,
-        session_type: 'one-on-one',
-        notes: ''
-      });
-    } catch (error) {
-      setError(error.response?.data?.message || 'Failed to create session');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      maxWidth="md"
-      fullWidth
-      PaperProps={{
-        sx: {
-          borderRadius: 3,
-          bgcolor: '#1A2332',
-          border: '1px solid #1E293B'
-        }
-      }}
-    >
-      <DialogTitle
-        sx={{
-          bgcolor: '#0F766E',
-          color: '#E2E8F0',
-          borderRadius: '12px 12px 0 0'
-        }}
-      >
-        Schedule New Session
-      </DialogTitle>
-      <DialogContent sx={{ bgcolor: '#1A2332', color: '#E2E8F0' }}>
-        {error && (
-          <Alert severity="error" sx={{ mb: 2, bgcolor: '#7F1D1D', color: '#FCA5A5' }}>
-            {error}
-          </Alert>
-        )}
-
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
-          <Grid container spacing={3}>
-            <Grid size={{ xs: 12 }}>
-              <TextField
-                select
-                fullWidth
-                label="Select Skill"
-                name="skill_id"
-                value={formData.skill_id}
-                onChange={handleChange}
-                required
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    color: '#E2E8F0',
-                    '& fieldset': { borderColor: '#1E293B' },
-                    '&:hover fieldset': { borderColor: '#14B8A6' },
-                    '&.Mui-focused fieldset': { borderColor: '#14B8A6' }
-                  },
-                  '& .MuiInputLabel-root': {
-                    color: '#94A3B8',
-                    '&.Mui-focused': { color: '#14B8A6' }
-                  },
-                  '& .MuiSelect-icon': { color: '#14B8A6' }
-                }}
-              >
-                {skills.map((skill) => (
-                  <MenuItem key={skill.id} value={skill.id}>
-                    {skill.skill_name} - by {skill.provider_name}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-
-            <Grid size={{ xs: 12, md: 6 }}>
-              <TextField
-                fullWidth
-                label="Date & Time"
-                name="scheduled_at"
-                type="datetime-local"
-                value={formData.scheduled_at}
-                onChange={handleChange}
-                required
-                InputLabelProps={{ shrink: true }}
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    color: '#E2E8F0',
-                    '& fieldset': { borderColor: '#1E293B' },
-                    '&:hover fieldset': { borderColor: '#14B8A6' },
-                    '&.Mui-focused fieldset': { borderColor: '#14B8A6' }
-                  },
-                  '& .MuiInputLabel-root': {
-                    color: '#94A3B8',
-                    '&.Mui-focused': { color: '#14B8A6' }
-                  }
-                }}
-              />
-            </Grid>
-
-            <Grid size={{ xs: 12, md: 6 }}>
-              <TextField
-                fullWidth
-                label="Duration (minutes)"
-                name="duration_minutes"
-                type="number"
-                value={formData.duration_minutes}
-                onChange={handleChange}
-                required
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    color: '#E2E8F0',
-                    '& fieldset': { borderColor: '#1E293B' },
-                    '&:hover fieldset': { borderColor: '#14B8A6' },
-                    '&.Mui-focused fieldset': { borderColor: '#14B8A6' }
-                  },
-                  '& .MuiInputLabel-root': {
-                    color: '#94A3B8',
-                    '&.Mui-focused': { color: '#14B8A6' }
-                  }
-                }}
-              />
-            </Grid>
-
-            <Grid size={{ xs: 12 }}>
-              <TextField
-                select
-                fullWidth
-                label="Session Type"
-                name="session_type"
-                value={formData.session_type}
-                onChange={handleChange}
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    color: '#E2E8F0',
-                    '& fieldset': { borderColor: '#1E293B' },
-                    '&:hover fieldset': { borderColor: '#14B8A6' },
-                    '&.Mui-focused fieldset': { borderColor: '#14B8A6' }
-                  },
-                  '& .MuiInputLabel-root': {
-                    color: '#94A3B8',
-                    '&.Mui-focused': { color: '#14B8A6' }
-                  },
-                  '& .MuiSelect-icon': { color: '#14B8A6' }
-                }}
-              >
-                <MenuItem value="one-on-one">One-on-One</MenuItem>
-                <MenuItem value="group">Group Session</MenuItem>
-                <MenuItem value="workshop">Workshop</MenuItem>
-              </TextField>
-            </Grid>
-
-            <Grid size={{ xs: 12 }}>
-              <TextField
-                fullWidth
-                multiline
-                rows={3}
-                label="Notes (optional)"
-                name="notes"
-                value={formData.notes}
-                onChange={handleChange}
-                placeholder="Any special requirements or topics you'd like to cover..."
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    color: '#E2E8F0',
-                    '& fieldset': { borderColor: '#1E293B' },
-                    '&:hover fieldset': { borderColor: '#14B8A6' },
-                    '&.Mui-focused fieldset': { borderColor: '#14B8A6' }
-                  },
-                  '& .MuiInputLabel-root': {
-                    color: '#94A3B8',
-                    '&.Mui-focused': { color: '#14B8A6' }
-                  }
-                }}
-              />
-            </Grid>
-          </Grid>
-        </Box>
-      </DialogContent>
-      <DialogActions sx={{ bgcolor: '#1A2332', borderTop: '1px solid #1E293B' }}>
-        <Button
-          onClick={onClose}
-          sx={{ color: '#94A3B8', '&:hover': { color: '#E2E8F0' } }}
-        >
-          Cancel
-        </Button>
-        <Button
-          onClick={handleSubmit}
-          variant="contained"
-          disabled={loading}
-          sx={{
-            bgcolor: '#0F766E',
-            '&:hover': { bgcolor: '#14B8A6' }
-          }}
-        >
-          {loading ? 'Creating...' : 'Create Session'}
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-};
-
 // Join Session Dialog Component
 const JoinSessionDialog = ({ open, onClose, session }) => {
   if (!session) return null;
 
   const handleJoin = () => {
-    // Navigate to the session room
-    window.open(`/session/${session.id}`, '_blank');
+    // Navigate to the session room in the same tab to preserve authentication
+    window.location.href = `/session/${session.id}`;
     onClose();
   };
 
@@ -888,6 +698,127 @@ const JoinSessionDialog = ({ open, onClose, session }) => {
           }}
         >
           Join Session
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
+// Schedule Session Dialog Component
+const ScheduleSessionDialog = ({ open, onClose, session, form, setForm, onSubmit }) => {
+  if (!session) return null;
+
+  const handleSubmit = () => {
+    if (!form.scheduled_at) {
+      alert('Please select a date and time');
+      return;
+    }
+    onSubmit();
+  };
+
+  return (
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="sm"
+      fullWidth
+      PaperProps={{
+        sx: {
+          borderRadius: 3,
+          bgcolor: '#1A2332',
+          border: '1px solid #1E293B'
+        }
+      }}
+    >
+      <DialogTitle
+        sx={{
+          bgcolor: '#0F766E',
+          color: '#E2E8F0',
+          borderRadius: '12px 12px 0 0'
+        }}
+      >
+        Schedule Session
+      </DialogTitle>
+      <DialogContent sx={{ bgcolor: '#1A2332', color: '#E2E8F0', pt: 3 }}>
+        <Typography variant="h6" gutterBottom sx={{ color: '#E2E8F0' }}>
+          {session.skill_name}
+        </Typography>
+        <Typography variant="body2" sx={{ color: '#94A3B8', mb: 3 }}>
+          with {session.learner_name}
+        </Typography>
+
+        <TextField
+          fullWidth
+          label="Date & Time"
+          type="datetime-local"
+          value={form.scheduled_at}
+          onChange={(e) => setForm({ ...form, scheduled_at: e.target.value })}
+          sx={{
+            mb: 2,
+            '& .MuiInputLabel-root': { color: '#94A3B8' },
+            '& .MuiOutlinedInput-root': {
+              color: '#E2E8F0',
+              '& fieldset': { borderColor: '#1E293B' },
+              '&:hover fieldset': { borderColor: '#14B8A6' },
+              '&.Mui-focused fieldset': { borderColor: '#14B8A6' }
+            }
+          }}
+          InputLabelProps={{ shrink: true }}
+        />
+
+        <TextField
+          fullWidth
+          label="Duration (minutes)"
+          type="number"
+          value={form.duration_minutes}
+          onChange={(e) => setForm({ ...form, duration_minutes: parseInt(e.target.value) })}
+          sx={{
+            mb: 2,
+            '& .MuiInputLabel-root': { color: '#94A3B8' },
+            '& .MuiOutlinedInput-root': {
+              color: '#E2E8F0',
+              '& fieldset': { borderColor: '#1E293B' },
+              '&:hover fieldset': { borderColor: '#14B8A6' },
+              '&.Mui-focused fieldset': { borderColor: '#14B8A6' }
+            }
+          }}
+        />
+
+        <TextField
+          fullWidth
+          label="Notes (optional)"
+          multiline
+          rows={3}
+          value={form.notes}
+          onChange={(e) => setForm({ ...form, notes: e.target.value })}
+          sx={{
+            '& .MuiInputLabel-root': { color: '#94A3B8' },
+            '& .MuiOutlinedInput-root': {
+              color: '#E2E8F0',
+              '& fieldset': { borderColor: '#1E293B' },
+              '&:hover fieldset': { borderColor: '#14B8A6' },
+              '&.Mui-focused fieldset': { borderColor: '#14B8A6' }
+            }
+          }}
+        />
+      </DialogContent>
+      <DialogActions sx={{ bgcolor: '#1A2332', borderTop: '1px solid #1E293B' }}>
+        <Button
+          onClick={onClose}
+          sx={{ color: '#94A3B8', '&:hover': { color: '#E2E8F0' } }}
+        >
+          Cancel
+        </Button>
+        <Button
+          onClick={handleSubmit}
+          variant="contained"
+          startIcon={<Schedule />}
+          sx={{
+            bgcolor: '#0F766E',
+            '&:hover': { bgcolor: '#14B8A6' }
+          }}
+        >
+          Schedule Session
         </Button>
       </DialogActions>
     </Dialog>

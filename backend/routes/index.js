@@ -11,6 +11,7 @@ const reviewsRoutes = require('./reviews');
 const recommendationsRoutes = require('./recommendations');
 const sessionsRoutes = require('./sessions');
 const notificationsRoutes = require('./notifications');
+const forumRoutes = require('./forum');
 
 // Mount routes
 router.use('/auth', authRoutes);
@@ -22,6 +23,7 @@ router.use('/reviews', reviewsRoutes);
 router.use('/recommendations', recommendationsRoutes);
 router.use('/sessions', sessionsRoutes);
 router.use('/notifications', notificationsRoutes);
+router.use('/forum', forumRoutes);
 
 // Placeholder route
 router.get('/test', (req, res) => {
