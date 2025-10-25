@@ -225,19 +225,19 @@ const BookingsList = () => {
                     </Box>
                   </Box>
 
-                  <CardContent sx={{ '&:last-child': { pb: 2 }, px: 3, py: 1.5 }}>
+                  <CardContent sx={{ '&:last-child': { pb: 2 }, px: 4, py: 1.5, width: '100%' }}>
                     <Box display="flex" alignItems="center" mb={1.5} sx={{ color: '#CBD5E1' }}>
-                      <Person sx={{ mr: 1.5, fontSize: 20, color: '#14B8A6' }} />
-                      <Typography variant="body2">
+                      <Person sx={{ mr: 2, fontSize: 20, color: '#14B8A6' }} />
+                      <Typography variant="body2" sx={{ flex: 1 }}>
                         {booking.student_id === parseInt(localStorage.getItem('userId'))
                           ? `Teacher: ${booking.teacher_name}`
                           : `Student: ${booking.student_name}`}
                       </Typography>
                     </Box>
 
-                    <Box display="flex" alignItems="center" mb={1.5} sx={{ color: '#CBD5E1' }}>
-                      <AccessTime sx={{ mr: 1.5, fontSize: 20, color: '#14B8A6' }} />
-                      <Box>
+                    <Box display="flex" alignItems="flex-start" mb={1.5} sx={{ color: '#CBD5E1' }}>
+                      <AccessTime sx={{ mr: 2, fontSize: 20, color: '#14B8A6', mt: 0.25, flexShrink: 0 }} />
+                      <Box sx={{ flex: 1 }}>
                         <Typography variant="body2">
                           {new Date(booking.booking_date).toLocaleDateString('en-US', { 
                             month: 'short', 
@@ -256,7 +256,8 @@ const BookingsList = () => {
                       bgcolor: 'rgba(20, 184, 166, 0.05)', 
                       borderRadius: 1.5,
                       border: '1px solid rgba(20, 184, 166, 0.2)',
-                      mb: 1.5
+                      mb: 1.5,
+                      width: '100%'
                     }}>
                       <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block' }}>
                         Duration
@@ -267,7 +268,7 @@ const BookingsList = () => {
                     </Box>
 
                     {booking.notes && (
-                      <Box mb={1.5}>
+                      <Box mb={1.5} sx={{ width: '100%' }}>
                         <Typography variant="caption" sx={{ color: '#94A3B8' }}>
                           Notes:
                         </Typography>
