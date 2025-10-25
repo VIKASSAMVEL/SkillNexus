@@ -225,7 +225,6 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
                 🏷️ Category
               </Typography>
               <FormControl fullWidth required disabled={loading}>
-                <InputLabel sx={{ color: '#CBD5E1', fontSize: '0.9rem', fontWeight: 600, '&.Mui-focused': { color: '#14B8A6', fontWeight: 700 } }}>Category</InputLabel>
                 <Select
                   value={formData.category}
                   label="Category"
@@ -295,7 +294,6 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
                 🎯 Proficiency Level
               </Typography>
               <FormControl fullWidth disabled={loading}>
-                <InputLabel sx={{ color: '#CBD5E1', fontSize: '0.9rem', fontWeight: 600, '&.Mui-focused': { color: '#14B8A6', fontWeight: 700 } }}>Proficiency Level</InputLabel>
                 <Select
                   value={formData.proficiency_level}
                   label="Proficiency Level"
