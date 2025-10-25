@@ -119,9 +119,22 @@ const Projects = () => {
   };
 
   const getStatsData = () => {
-    const total = projects.length;
-    const active = projects.filter(p => p.status === 'active').length;
-    const completed = projects.filter(p => p.status === 'completed').length;
+    // Filter stats based on active tab
+    let filteredProjects = projects;
+    
+    if (activeTab === 'my-projects') {
+      filteredProjects = projects.filter(p => 
+        p.participants?.some(part => part.id === parseInt(localStorage.getItem('userId')))
+      );
+    } else if (activeTab === 'created') {
+      filteredProjects = projects.filter(p => 
+        p.creator_id === parseInt(localStorage.getItem('userId'))
+      );
+    }
+    
+    const total = filteredProjects.length;
+    const active = filteredProjects.filter(p => p.status === 'active').length;
+    const completed = filteredProjects.filter(p => p.status === 'completed').length;
     return { total, active, completed };
   };
 
@@ -209,89 +222,91 @@ const Projects = () => {
             </Typography>
 
             {/* Stats Cards */}
-            <Grid container spacing={3} sx={{ mb: 4, maxWidth: 800, mx: 'auto' }}>
-              <Grid item xs={12} sm={4}>
-                <Zoom in={true} style={{ transitionDelay: '200ms' }}>
-                  <Paper
-                    elevation={0}
-                    sx={{
-                      p: 2,
-                      textAlign: 'center',
-                      bgcolor: 'rgba(20, 184, 166, 0.15)',
-                      backdropFilter: 'blur(10px)',
-                      border: '1px solid rgba(20, 184, 166, 0.3)',
-                      borderRadius: 3,
-                      transition: 'all 0.3s ease',
-                      '&:hover': {
-                        transform: 'translateY(-4px)',
-                        bgcolor: 'rgba(20, 184, 166, 0.25)'
-                      }
-                    }}
-                  >
-                    <Typography variant="h4" sx={{ fontWeight: 700, mb: 1, color: '#E2E8F0' }}>
-                      {stats.total}
-                    </Typography>
-                    <Typography variant="body2" sx={{ opacity: 0.9, color: '#CBD5E1' }}>
-                      Total Projects
-                    </Typography>
-                  </Paper>
-                </Zoom>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
+              <Grid container spacing={3} sx={{ maxWidth: 800 }}>
+                <Grid item xs={12} sm={4}>
+                  <Zoom in={true} style={{ transitionDelay: '200ms' }}>
+                    <Paper
+                      elevation={0}
+                      sx={{
+                        p: 2,
+                        textAlign: 'center',
+                        bgcolor: 'rgba(20, 184, 166, 0.15)',
+                        backdropFilter: 'blur(10px)',
+                        border: '1px solid rgba(20, 184, 166, 0.3)',
+                        borderRadius: 3,
+                        transition: 'all 0.3s ease',
+                        '&:hover': {
+                          transform: 'translateY(-4px)',
+                          bgcolor: 'rgba(20, 184, 166, 0.25)'
+                        }
+                      }}
+                    >
+                      <Typography variant="h4" sx={{ fontWeight: 700, mb: 1, color: '#E2E8F0' }}>
+                        {stats.total}
+                      </Typography>
+                      <Typography variant="body2" sx={{ opacity: 0.9, color: '#CBD5E1' }}>
+                        Total Projects
+                      </Typography>
+                    </Paper>
+                  </Zoom>
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <Zoom in={true} style={{ transitionDelay: '400ms' }}>
+                    <Paper
+                      elevation={0}
+                      sx={{
+                        p: 2,
+                        textAlign: 'center',
+                        bgcolor: 'rgba(20, 184, 166, 0.15)',
+                        backdropFilter: 'blur(10px)',
+                        border: '1px solid rgba(20, 184, 166, 0.3)',
+                        borderRadius: 3,
+                        transition: 'all 0.3s ease',
+                        '&:hover': {
+                          transform: 'translateY(-4px)',
+                          bgcolor: 'rgba(20, 184, 166, 0.25)'
+                        }
+                      }}
+                    >
+                      <Typography variant="h4" sx={{ fontWeight: 700, mb: 1, color: '#E2E8F0' }}>
+                        {stats.active}
+                      </Typography>
+                      <Typography variant="body2" sx={{ opacity: 0.9, color: '#CBD5E1' }}>
+                        Active Now
+                      </Typography>
+                    </Paper>
+                  </Zoom>
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <Zoom in={true} style={{ transitionDelay: '600ms' }}>
+                    <Paper
+                      elevation={0}
+                      sx={{
+                        p: 2,
+                        textAlign: 'center',
+                        bgcolor: 'rgba(20, 184, 166, 0.15)',
+                        backdropFilter: 'blur(10px)',
+                        border: '1px solid rgba(20, 184, 166, 0.3)',
+                        borderRadius: 3,
+                        transition: 'all 0.3s ease',
+                        '&:hover': {
+                          transform: 'translateY(-4px)',
+                          bgcolor: 'rgba(20, 184, 166, 0.25)'
+                        }
+                      }}
+                    >
+                      <Typography variant="h4" sx={{ fontWeight: 700, mb: 1, color: '#E2E8F0' }}>
+                        {stats.completed}
+                      </Typography>
+                      <Typography variant="body2" sx={{ opacity: 0.9, color: '#CBD5E1' }}>
+                        Completed
+                      </Typography>
+                    </Paper>
+                  </Zoom>
+                </Grid>
               </Grid>
-              <Grid item xs={12} sm={4}>
-                <Zoom in={true} style={{ transitionDelay: '400ms' }}>
-                  <Paper
-                    elevation={0}
-                    sx={{
-                      p: 2,
-                      textAlign: 'center',
-                      bgcolor: 'rgba(20, 184, 166, 0.15)',
-                      backdropFilter: 'blur(10px)',
-                      border: '1px solid rgba(20, 184, 166, 0.3)',
-                      borderRadius: 3,
-                      transition: 'all 0.3s ease',
-                      '&:hover': {
-                        transform: 'translateY(-4px)',
-                        bgcolor: 'rgba(20, 184, 166, 0.25)'
-                      }
-                    }}
-                  >
-                    <Typography variant="h4" sx={{ fontWeight: 700, mb: 1, color: '#E2E8F0' }}>
-                      {stats.active}
-                    </Typography>
-                    <Typography variant="body2" sx={{ opacity: 0.9, color: '#CBD5E1' }}>
-                      Active Now
-                    </Typography>
-                  </Paper>
-                </Zoom>
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <Zoom in={true} style={{ transitionDelay: '600ms' }}>
-                  <Paper
-                    elevation={0}
-                    sx={{
-                      p: 2,
-                      textAlign: 'center',
-                      bgcolor: 'rgba(20, 184, 166, 0.15)',
-                      backdropFilter: 'blur(10px)',
-                      border: '1px solid rgba(20, 184, 166, 0.3)',
-                      borderRadius: 3,
-                      transition: 'all 0.3s ease',
-                      '&:hover': {
-                        transform: 'translateY(-4px)',
-                        bgcolor: 'rgba(20, 184, 166, 0.25)'
-                      }
-                    }}
-                  >
-                    <Typography variant="h4" sx={{ fontWeight: 700, mb: 1, color: '#E2E8F0' }}>
-                      {stats.completed}
-                    </Typography>
-                    <Typography variant="body2" sx={{ opacity: 0.9, color: '#CBD5E1' }}>
-                      Completed
-                    </Typography>
-                  </Paper>
-                </Zoom>
-              </Grid>
-            </Grid>
+            </Box>
 
             <Slide direction="up" in={true} timeout={800}>
               <Button
