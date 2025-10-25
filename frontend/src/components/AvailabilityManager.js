@@ -20,9 +20,11 @@ import {
   Alert,
   CircularProgress,
   Grid,
-  Chip
+  Chip,
+  Paper,
+  Fade
 } from '@mui/material';
-import { Add, Delete, Edit } from '@mui/icons-material';
+import { Add, Delete, Edit, Clock } from '@mui/icons-material';
 import api from '../services/api';
 
 const AvailabilityManager = () => {
@@ -137,137 +139,246 @@ const AvailabilityManager = () => {
 
   if (loading) {
     return (
-      <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
-          <CircularProgress />
-        </Box>
-      </Container>
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
+        <CircularProgress sx={{ color: '#14B8A6' }} />
+      </Box>
     );
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Box sx={{ py: 2 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h4">
+        <Typography variant="h5" sx={{ color: '#E2E8F0', fontWeight: 600 }}>
           Manage Availability
         </Typography>
         <Button
           variant="contained"
           startIcon={<Add />}
           onClick={() => setDialogOpen(true)}
+          sx={{
+            bgcolor: '#14B8A6',
+            color: '#0F172A',
+            fontWeight: 600,
+            '&:hover': {
+              bgcolor: '#0D9488'
+            }
+          }}
         >
           Add Availability
         </Button>
       </Box>
 
       {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
+        <Alert 
+          severity="error" 
+          sx={{ 
+            mb: 2,
+            bgcolor: 'rgba(239, 68, 68, 0.15)',
+            color: '#FCA5A5',
+            border: '1px solid rgba(239, 68, 68, 0.3)',
+            '& .MuiAlert-icon': { color: '#FCA5A5' }
+          }}
+        >
           {error}
         </Alert>
       )}
 
       {success && (
-        <Alert severity="success" sx={{ mb: 2 }}>
+        <Alert 
+          severity="success" 
+          sx={{ 
+            mb: 2,
+            bgcolor: 'rgba(34, 197, 94, 0.15)',
+            color: '#86EFAC',
+            border: '1px solid rgba(34, 197, 94, 0.3)',
+            '& .MuiAlert-icon': { color: '#86EFAC' }
+          }}
+        >
           {success}
         </Alert>
       )}
 
       {Object.keys(groupedAvailability).length === 0 ? (
-        <Box textAlign="center" py={4}>
-          <Typography variant="h6" color="text.secondary" mb={2}>
+        <Paper
+          elevation={0}
+          sx={{
+            textAlign: 'center',
+            py: 6,
+            bgcolor: '#1A2332',
+            border: '2px dashed #1E293B',
+            borderRadius: 2
+          }}
+        >
+          <Clock sx={{ fontSize: 48, color: '#94A3B8', mb: 2, opacity: 0.5 }} />
+          <Typography variant="h6" sx={{ color: '#CBD5E1', mb: 1 }}>
             No availability slots set up yet
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" sx={{ color: '#94A3B8' }}>
             Add your available time slots so students can book sessions with you.
           </Typography>
-        </Box>
+        </Paper>
       ) : (
-        ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map(day => {
-          const daySlots = groupedAvailability[day] || [];
-          return (
-            <Card key={day} sx={{ mb: 2 }}>
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  {getDayName(day)}
-                </Typography>
-
-                {daySlots.length === 0 ? (
-                  <Typography variant="body2" color="text.secondary">
-                    No availability set for this day
+        <Box>
+          {['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map(day => {
+            const daySlots = groupedAvailability[day] || [];
+            return (
+              <Paper
+                key={day}
+                elevation={0}
+                sx={{
+                  mb: 2,
+                  bgcolor: '#1A2332',
+                  border: '1px solid #1E293B',
+                  borderRadius: 2,
+                  overflow: 'hidden',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    borderColor: '#14B8A6'
+                  }
+                }}
+              >
+                <Box sx={{ 
+                  p: 2.5, 
+                  bgcolor: 'rgba(20, 184, 166, 0.1)', 
+                  borderBottom: '1px solid #1E293B'
+                }}>
+                  <Typography variant="h6" sx={{ color: '#E2E8F0', fontWeight: 600 }}>
+                    {getDayName(day)}
                   </Typography>
-                ) : (
-                  <Grid container spacing={2}>
-                    {daySlots.map((slot) => (
-                      <Grid item xs={12} sm={6} md={4} key={slot.id}>
-                        <Box
-                          sx={{
-                            p: 2,
-                            border: '1px solid',
-                            borderColor: 'divider',
-                            borderRadius: 1,
-                            bgcolor: slot.is_available ? 'success.light' : 'grey.100'
-                          }}
-                        >
-                          <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-                            <Typography variant="body1" fontWeight="bold">
-                              {slot.start_time} - {slot.end_time}
-                            </Typography>
-                            <Chip
-                              label={slot.is_available ? 'Available' : 'Unavailable'}
-                              color={slot.is_available ? 'success' : 'default'}
-                              size="small"
-                            />
-                          </Box>
+                </Box>
 
-                          <Box display="flex" gap={1}>
-                            <Button
-                              size="small"
-                              startIcon={<Edit />}
-                              onClick={() => handleEdit(slot)}
+                <CardContent>
+                  {daySlots.length === 0 ? (
+                    <Typography variant="body2" sx={{ color: '#94A3B8' }}>
+                      No availability set for this day
+                    </Typography>
+                  ) : (
+                    <Grid container spacing={2}>
+                      {daySlots.map((slot, index) => (
+                        <Grid item xs={12} sm={6} md={4} key={slot.id}>
+                          <Fade in={true} style={{ transitionDelay: `${index * 50}ms` }}>
+                            <Paper
+                              elevation={0}
+                              sx={{
+                                p: 2,
+                                bgcolor: slot.is_available ? 'rgba(20, 184, 166, 0.05)' : 'rgba(107, 114, 128, 0.05)',
+                                border: `1px solid ${slot.is_available ? 'rgba(20, 184, 166, 0.2)' : 'rgba(107, 114, 128, 0.2)'}`,
+                                borderRadius: 1.5,
+                                transition: 'all 0.3s ease',
+                                '&:hover': {
+                                  borderColor: slot.is_available ? '#14B8A6' : '#6B7280',
+                                  transform: 'translateY(-2px)'
+                                }
+                              }}
                             >
-                              Edit
-                            </Button>
-                            <Button
-                              size="small"
-                              color="error"
-                              startIcon={<Delete />}
-                              onClick={() => handleDelete(slot.id)}
-                            >
-                              Delete
-                            </Button>
-                          </Box>
-                        </Box>
-                      </Grid>
-                    ))}
-                  </Grid>
-                )}
-              </CardContent>
-            </Card>
-          );
-        })
+                              <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                                <Typography variant="body1" sx={{ fontWeight: 600, color: '#E2E8F0' }}>
+                                  {slot.start_time} - {slot.end_time}
+                                </Typography>
+                                <Chip
+                                  label={slot.is_available ? 'Available' : 'Unavailable'}
+                                  size="small"
+                                  sx={{
+                                    bgcolor: slot.is_available ? 'rgba(34, 197, 94, 0.2)' : 'rgba(107, 114, 128, 0.2)',
+                                    color: slot.is_available ? '#86EFAC' : '#D1D5DB',
+                                    border: `1px solid ${slot.is_available ? '#86EFAC' : '#D1D5DB'}`,
+                                    fontWeight: 600
+                                  }}
+                                />
+                              </Box>
+
+                              <Box display="flex" gap={1}>
+                                <Button
+                                  size="small"
+                                  startIcon={<Edit />}
+                                  onClick={() => handleEdit(slot)}
+                                  sx={{
+                                    color: '#14B8A6',
+                                    borderColor: '#14B8A6',
+                                    flex: 1,
+                                    fontWeight: 600,
+                                    '&:hover': {
+                                      bgcolor: 'rgba(20, 184, 166, 0.1)',
+                                      borderColor: '#0D9488'
+                                    }
+                                  }}
+                                  variant="outlined"
+                                >
+                                  Edit
+                                </Button>
+                                <Button
+                                  size="small"
+                                  startIcon={<Delete />}
+                                  onClick={() => handleDelete(slot.id)}
+                                  sx={{
+                                    color: '#EF4444',
+                                    borderColor: '#EF4444',
+                                    flex: 1,
+                                    fontWeight: 600,
+                                    '&:hover': {
+                                      bgcolor: 'rgba(239, 68, 68, 0.1)',
+                                      borderColor: '#DC2626'
+                                    }
+                                  }}
+                                  variant="outlined"
+                                >
+                                  Delete
+                                </Button>
+                              </Box>
+                            </Paper>
+                          </Fade>
+                        </Grid>
+                      ))}
+                    </Grid>
+                  )}
+                </CardContent>
+              </Paper>
+            );
+          })}
+        </Box>
       )}
 
       {/* Add/Edit Dialog */}
-      <Dialog open={dialogOpen} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
-        <DialogTitle>
+      <Dialog 
+        open={dialogOpen} 
+        onClose={handleCloseDialog} 
+        maxWidth="sm" 
+        fullWidth
+        sx={{
+          '& .MuiDialog-paper': {
+            bgcolor: '#1A2332',
+            border: '1px solid #1E293B',
+            backgroundImage: 'none'
+          }
+        }}
+      >
+        <DialogTitle sx={{ color: '#E2E8F0', fontWeight: 600, borderBottom: '1px solid #1E293B' }}>
           {editingSlot ? 'Edit Availability' : 'Add Availability'}
         </DialogTitle>
-        <DialogContent>
-          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
+        <DialogContent sx={{ mt: 2 }}>
+          <Box component="form" onSubmit={handleSubmit}>
             <FormControl fullWidth sx={{ mb: 2 }}>
-              <InputLabel>Day of Week</InputLabel>
+              <InputLabel sx={{ color: '#94A3B8' }}>Day of Week</InputLabel>
               <Select
                 value={formData.day_of_week}
                 onChange={(e) => setFormData(prev => ({ ...prev, day_of_week: e.target.value }))}
                 label="Day of Week"
+                sx={{
+                  color: '#E2E8F0',
+                  bgcolor: '#0F172A',
+                  '& .MuiOutlinedInput-notchedOutline': { borderColor: '#1E293B' },
+                  '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#14B8A6' },
+                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#14B8A6' },
+                  '& .MuiSvgIcon-root': { color: '#14B8A6' }
+                }}
               >
-                <MenuItem value="monday">Monday</MenuItem>
-                <MenuItem value="tuesday">Tuesday</MenuItem>
-                <MenuItem value="wednesday">Wednesday</MenuItem>
-                <MenuItem value="thursday">Thursday</MenuItem>
-                <MenuItem value="friday">Friday</MenuItem>
-                <MenuItem value="saturday">Saturday</MenuItem>
-                <MenuItem value="sunday">Sunday</MenuItem>
+                <MenuItem value="monday" sx={{ bgcolor: '#1A2332', color: '#E2E8F0', '&:hover': { bgcolor: '#0F172A' } }}>Monday</MenuItem>
+                <MenuItem value="tuesday" sx={{ bgcolor: '#1A2332', color: '#E2E8F0', '&:hover': { bgcolor: '#0F172A' } }}>Tuesday</MenuItem>
+                <MenuItem value="wednesday" sx={{ bgcolor: '#1A2332', color: '#E2E8F0', '&:hover': { bgcolor: '#0F172A' } }}>Wednesday</MenuItem>
+                <MenuItem value="thursday" sx={{ bgcolor: '#1A2332', color: '#E2E8F0', '&:hover': { bgcolor: '#0F172A' } }}>Thursday</MenuItem>
+                <MenuItem value="friday" sx={{ bgcolor: '#1A2332', color: '#E2E8F0', '&:hover': { bgcolor: '#0F172A' } }}>Friday</MenuItem>
+                <MenuItem value="saturday" sx={{ bgcolor: '#1A2332', color: '#E2E8F0', '&:hover': { bgcolor: '#0F172A' } }}>Saturday</MenuItem>
+                <MenuItem value="sunday" sx={{ bgcolor: '#1A2332', color: '#E2E8F0', '&:hover': { bgcolor: '#0F172A' } }}>Sunday</MenuItem>
               </Select>
             </FormControl>
 
@@ -280,6 +391,19 @@ const AvailabilityManager = () => {
                 required
                 fullWidth
                 InputLabelProps={{ shrink: true }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    color: '#E2E8F0',
+                    bgcolor: '#0F172A',
+                    '& fieldset': { borderColor: '#1E293B' },
+                    '&:hover fieldset': { borderColor: '#14B8A6' },
+                    '&.Mui-focused fieldset': { borderColor: '#14B8A6' }
+                  },
+                  '& .MuiInputLabel-root': {
+                    color: '#94A3B8',
+                    '&.Mui-focused': { color: '#14B8A6' }
+                  }
+                }}
               />
 
               <TextField
@@ -290,6 +414,19 @@ const AvailabilityManager = () => {
                 required
                 fullWidth
                 InputLabelProps={{ shrink: true }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    color: '#E2E8F0',
+                    bgcolor: '#0F172A',
+                    '& fieldset': { borderColor: '#1E293B' },
+                    '&:hover fieldset': { borderColor: '#14B8A6' },
+                    '&.Mui-focused fieldset': { borderColor: '#14B8A6' }
+                  },
+                  '& .MuiInputLabel-root': {
+                    color: '#94A3B8',
+                    '&.Mui-focused': { color: '#14B8A6' }
+                  }
+                }}
               />
             </Box>
 
@@ -298,20 +435,47 @@ const AvailabilityManager = () => {
                 <Switch
                   checked={formData.is_available}
                   onChange={(e) => setFormData(prev => ({ ...prev, is_available: e.target.checked }))}
+                  sx={{
+                    '& .MuiSwitch-switchBase.Mui-checked': {
+                      color: '#14B8A6',
+                      '& + .MuiSwitch-track': {
+                        backgroundColor: '#14B8A6'
+                      }
+                    },
+                    '& .MuiSwitch-track': {
+                      backgroundColor: '#1E293B'
+                    }
+                  }}
                 />
               }
-              label="Available for booking"
+              label={<Typography sx={{ color: '#CBD5E1' }}>Available for booking</Typography>}
             />
           </Box>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button onClick={handleSubmit} variant="contained">
+        <DialogActions sx={{ p: 2, borderTop: '1px solid #1E293B' }}>
+          <Button 
+            onClick={handleCloseDialog}
+            sx={{ color: '#CBD5E1' }}
+          >
+            Cancel
+          </Button>
+          <Button 
+            onClick={handleSubmit} 
+            variant="contained"
+            sx={{
+              bgcolor: '#14B8A6',
+              color: '#0F172A',
+              fontWeight: 600,
+              '&:hover': {
+                bgcolor: '#0D9488'
+              }
+            }}
+          >
             {editingSlot ? 'Update' : 'Add'} Availability
           </Button>
         </DialogActions>
       </Dialog>
-    </Container>
+    </Box>
   );
 };
 
