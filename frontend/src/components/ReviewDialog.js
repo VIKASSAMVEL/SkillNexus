@@ -20,6 +20,11 @@ const ReviewDialog = ({ open, onClose, session, currentUser }) => {
   const [reviewText, setReviewText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Early return if required props are missing
+  if (!session || !currentUser) {
+    return null;
+  }
+
   // Determine if current user is learner or provider
   const isLearner = session.learner_id === currentUser.id;
   const revieweeId = isLearner ? session.provider_id : session.learner_id;

@@ -280,7 +280,7 @@ const SessionRoom = () => {
 
       // Get current user info
       const userResponse = await api.get('/auth/me');
-      setCurrentUser(userResponse.data.user);
+      setCurrentUser(userResponse.data);
 
       // Fetch session details
       const sessionResponse = await api.get(`/sessions/${sessionId}`);

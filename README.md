@@ -757,8 +757,4 @@ All third-party libraries and frameworks used are open-source and properly attri
 
 This project was developed during the WEB HACKATHON timeframe. All code is original and developed during the hackathon period. Pre-existing open-source libraries/frameworks are declared in the references section.
 
-For any doubts or questions, please refer to the Doubts Form provided by the organizers.
-
 ---
-
-**Note**: This README serves as both project documentation and submission material for the WEB HACKATHON. Ensure all links and placeholders are updated with actual content before final submission.
