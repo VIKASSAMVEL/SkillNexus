@@ -776,12 +776,18 @@ We welcome contributions to SkillNexus! To contribute:
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License.
 
 All third-party libraries and frameworks used are open-source and properly attributed in the References section.
 
 ## Submission Details
 
 This project was developed during the WEB HACKATHON timeframe. All code is original and developed during the hackathon period. Pre-existing open-source libraries/frameworks are declared in the references section.
+
+## Acknowledgements
+
+We thank the Tech Zephyr team ( IIT Bhubaneshwar ) for providing us with the opportunity to participate for this event. 
+
+We also acknowledge the contribution of AI in building this along with the services of github copilot.
 
 ---
