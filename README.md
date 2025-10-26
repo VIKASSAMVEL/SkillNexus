@@ -1,4 +1,4 @@
-# SkillNexus: A Full-Stack Platform for Hyperlocal Talent Sharing
+<img width="975" height="462" alt="image" src="https://github.com/user-attachments/assets/ddba1e37-844d-43b7-adef-c6bc285add0b" /><img width="975" height="442" alt="image" src="https://github.com/user-attachments/assets/4dc4188f-5fa9-4848-8d9c-9c01f94b3d22" /># SkillNexus: A Full-Stack Platform for Hyperlocal Talent Sharing
 
 ## Project Overview
 
@@ -391,6 +391,40 @@ Create a robust, scalable, and user-friendly full-stack web application that not
 Figure 1: The user registration interface (Register.js) with fields for profile creation and location setup.
 <img width="975" height="468" alt="image" src="https://github.com/user-attachments/assets/91ce81e4-5782-4f85-9116-8220beedf80e" />
 Figure 2: The secure login portal (Login.js) demonstrating the JWT-based authentication entry point. 
+<img width="975" height="469" alt="image" src="https://github.com/user-attachments/assets/98a5f589-4330-4424-aef5-68f30028e0ab" />
+Figure 3: A user's profile page displaying their listed skills, trust score, and verification status.
+<img width="975" height="465" alt="image" src="https://github.com/user-attachments/assets/6760edd5-ad2b-4756-9ab1-7078e7d3d27e" />
+<img width="975" height="465" alt="image" src="https://github.com/user-attachments/assets/3c80cb5f-72ba-40da-a2a6-b2677357424e" />
+<img width="975" height="459" alt="image" src="https://github.com/user-attachments/assets/e919a835-c996-4b5a-b2e0-4a1d7148d602" />
+Figure 4: The main skills marketplace (Skills.js) showing a grid view of available skills with search and category filters.
+<img width="975" height="462" alt="image" src="https://github.com/user-attachments/assets/3a99be99-0ece-422a-9c20-b58946ed1559" />
+Figure 5: The detailed view of a skill (SkillDetails.js), including the provider's information, user reviews, and the booking interface.
+<img width="975" height="465" alt="image" src="https://github.com/user-attachments/assets/4ba37d70-fcf6-47b8-ac36-e36ecb22745a" />
+Figure 6: The interface for skill creation (AddSkillForm.js), allowing providers to define details, pricing, and availability.
+<img width="975" height="462" alt="image" src="https://github.com/user-attachments/assets/11cd0ca2-9335-4703-bd51-cb1f70ac2e28" />
+<img width="975" height="442" alt="image" src="https://github.com/user-attachments/assets/1d3ebe4f-79d3-47b9-b0d3-2e704cb580bc" />
+Figure 7: The geo-spatial discovery engine in action (SkillsMap.js), with skill markers displayed on an interactive Google Map and a radius filter.
+<img width="975" height="465" alt="image" src="https://github.com/user-attachments/assets/7a0f29cf-8e10-449f-91d4-03508716600b" />
+Figure 8: The user's booking dashboard (Bookings.js), showing upcoming and past sessions with their current status.
+<img width="975" height="462" alt="image" src="https://github.com/user-attachments/assets/fab742b8-c0bc-4cd5-a85b-2a05b1477339" />
+<img width="975" height="469" alt="image" src="https://github.com/user-attachments/assets/5b2034a0-1171-41e2-a2c9-f40918be9100" />
+<img width="975" height="470" alt="image" src="https://github.com/user-attachments/assets/66008e9e-da09-4d77-9e21-3dc649f4c1b0" />
+Figure 9: The real-time collaboration suite, showcasing the integrated WebRTC video call, interactive whiteboard, and live chat panel.
+<img width="975" height="463" alt="image" src="https://github.com/user-attachments/assets/e06f5ae3-4e9b-402b-9f56-fb6daff84804" />
+<img width="975" height="471" alt="image" src="https://github.com/user-attachments/assets/81dfa9b5-53a2-4fb3-866d-82e9156a1f71" />
+Figure 10: The community forum, displaying a list of discussion topics with user engagement metrics and also creation of new topics.
+<img width="975" height="462" alt="image" src="https://github.com/user-attachments/assets/fee5b3b1-9b70-4048-9633-e744d1eb94b9" />
+<img width="975" height="497" alt="image" src="https://github.com/user-attachments/assets/00a5ae96-b5de-4c3c-91b6-cc71ea96b2eb" />
+<img width="975" height="466" alt="image" src="https://github.com/user-attachments/assets/bac84ab1-fba8-4c8a-a7eb-925a7679e04c" />
+Figure 11: The community projects page, where users can browse and join collaborative local initiatives.
+<img width="975" height="459" alt="image" src="https://github.com/user-attachments/assets/2c4c1f92-46b7-4af3-93bf-640ad7a2fd45" />
+<img width="975" height="467" alt="image" src="https://github.com/user-attachments/assets/a22f8616-219f-4af6-a817-31d847e79640" />
+<img width="975" height="458" alt="image" src="https://github.com/user-attachments/assets/03761dec-61cb-49e3-bb90-602398bd7e1d" />
+Figure 12:AI-Based Personalized Recommendations and Suggestions based on user’s intent.
+
+
+
+
 
 ## Links
 
