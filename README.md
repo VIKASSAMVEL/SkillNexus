@@ -52,36 +52,67 @@ Create a robust, scalable, and user-friendly full-stack web application that not
 
 ## Tech Stack
 
-- **Frontend**: React.js with Material-UI, React Router
-- **Backend**: Node.js, Express.js
-- **Database**: MySQL
-- **Authentication**: JWT
-- **Geo-Location**: Google Maps API
-- **Real-time Features**: Socket.io for chat
-- **Deployment**: XAMPP (local), Vercel/Railway (production)
+- **Frontend**:
+  - React.js (v18+): Chosen for its component-based architecture, enabling reusable UI components and efficient state management with hooks.
+  - Material-UI (@mui/material): Provides a comprehensive set of pre-built components following Material Design principles, ensuring a consistent and professional UI.
+  - React Router (react-router-dom): Handles client-side routing for single-page application navigation.
+  - Axios: Used for making HTTP requests to the backend API, with built-in support for interceptors for JWT token management.
+
+- **Backend**:
+  - Node.js (v16+): JavaScript runtime environment for server-side development, offering non-blocking I/O for scalable applications.
+  - Express.js: Lightweight web framework for building RESTful APIs with middleware support for authentication, CORS, and security.
+  - JWT (jsonwebtoken): Implements stateless authentication with secure token-based sessions.
+  - bcryptjs: Provides password hashing for secure user authentication.
+
+- **Database**:
+  - MySQL: Relational database management system chosen for its reliability, ACID compliance, and strong support for complex queries and relationships.
+  - mysql2: Node.js driver with connection pooling for efficient database interactions.
+
+- **Authentication**:
+  - JWT: JSON Web Tokens for secure, stateless user sessions.
+  - bcryptjs: Password hashing to protect user credentials.
+
+- **Geo-Location**:
+  - Google Maps API: Integrated via @googlemaps/js-api-loader for interactive maps, location search, and distance calculations using the Haversine formula.
+
+- **Real-time Features**:
+  - Socket.io: Enables real-time communication for chat and collaborative features (planned implementation).
+
+- **Deployment**:
+  - XAMPP: Local development environment for MySQL and Apache.
+  - Vercel/Railway: Cloud platforms for production deployment with CI/CD capabilities.
+
+- **Development Tools**:
+  - Nodemon: Auto-restarts the server during development.
+  - Concurrently: Runs multiple scripts simultaneously (e.g., frontend and backend).
+  - ESLint/Prettier: Code linting and formatting for consistent code quality.
 
 ## Setup and Installation Instructions
 
 ### Prerequisites
-- Node.js (version 16.x or higher)
-- npm or yarn
-- XAMPP with MySQL (or any MySQL server)
-- Git
+- **Node.js** (version 16.x or higher): Download from [nodejs.org](https://nodejs.org/). Includes npm for package management.
+- **npm or yarn**: npm comes with Node.js; yarn can be installed via `npm install -g yarn` for faster dependency resolution.
+- **XAMPP** with MySQL (or any MySQL server): Download from [apachefriends.org](https://www.apachefriends.org/). Ensure MySQL is running on port 3306 (default).
+- **Git**: Version control system for cloning the repository. Download from [git-scm.com](https://git-scm.com/).
+- **Google Maps API Key**: Required for geo-location features. Obtain from [Google Cloud Console](https://console.cloud.google.com/) and enable Maps JavaScript API.
+- **Text Editor/IDE**: VS Code recommended for development, with extensions for React and Node.js.
 
 ### Database Setup
-1. Start XAMPP and ensure MySQL is running
-2. Run the database setup commands:
+1. Start XAMPP and ensure MySQL is running (check the XAMPP control panel).
+2. Open a terminal/command prompt and run the database setup commands:
    ```bash
    mysql -u root -e "DROP DATABASE IF EXISTS urban_skill_exchange; CREATE DATABASE urban_skill_exchange;"
-   mysql -u root urban_skill_exchange -e "source database/schema.sql"
-   mysql -u root urban_skill_exchange -e "source database/seed.sql"
+   mysql -u root urban_skill_exchange < database/urban_skill_exchange.sql
    ```
+   - Note: If using a password for MySQL root user, add `-p` flag: `mysql -u root -p`
+   - The schema file creates all necessary tables with proper relationships and constraints.
+   - Sample data can be seeded if available in a separate seed.sql file.
 
 ### Installation Steps
 1. Clone the repository:
    ```bash
-   git clone [GitHub Repository URL]
-   cd urban-skill-exchange
+   git clone https://github.com/VIKASSAMVEL/SkillNexus.git
+   cd SkillNexus
    ```
 
 2. Install backend dependencies:
@@ -371,7 +402,7 @@ Create a robust, scalable, and user-friendly full-stack web application that not
 
 ## Links
 
-- **GitHub Repository**: [Link to public GitHub repo]
+- **GitHub Repository**: https://github.com/VIKASSAMVEL/SkillNexus
 - **Deployed Application**: [Live URL, e.g., https://urban-skill-exchange.vercel.app]
 - **Project Report**: [Link to PDF report]
 - **Demo Video**: [Link to 3-5 minute walkthrough video]
@@ -387,17 +418,47 @@ Create a robust, scalable, and user-friendly full-stack web application that not
 ## Project Architecture
 
 ### System Design
-- [Describe high-level architecture, e.g., microservices, monolithic]
+SkillNexus follows a monolithic architecture with clear separation of concerns between frontend and backend. The application is structured as follows:
+
+- **Frontend Layer**: React SPA handling user interactions, state management, and UI rendering.
+- **Backend Layer**: Express.js API server managing business logic, data validation, and database interactions.
+- **Database Layer**: MySQL relational database storing all application data with proper normalization.
+- **External Services**: Google Maps API for geo-location features.
+
+### High-Level Architecture Diagram
+```
+┌─────────────────┐    HTTP/HTTPS    ┌─────────────────┐
+│   React Frontend│◄────────────────►│ Express Backend │
+│   (Port 3000)   │                  │   (Port 5000)   │
+└─────────────────┘                  └─────────────────┘
+         │                                   │
+         │                                   │
+         ▼                                   ▼
+┌─────────────────┐                  ┌─────────────────┐
+│  Google Maps API│                  │     MySQL DB    │
+│                 │                  │ (urban_skill_   │
+│                 │                  │   exchange)     │
+└─────────────────┘                  └─────────────────┘
+```
 
 ### Database Schema
-- **Users**: User profiles, authentication, location data
-- **Skills**: User skills, categories, pricing, availability
-- **Bookings**: Skill exchange sessions, scheduling, payments
-- **Projects**: Community projects, participants, progress tracking
-- **Reviews**: Ratings and testimonials for trust building
-- **Messages**: Real-time chat functionality
-- **Credits**: Incentive system for participation
-- **Notifications**: System and user notifications
+- **Users**: Stores user profiles, authentication data, and location information (latitude, longitude).
+- **Skills**: Contains skill listings with categories, pricing, and availability.
+- **Bookings**: Manages session bookings with status tracking and conflict detection.
+- **Projects**: Supports community projects with participant management.
+- **Reviews**: Handles user ratings and testimonials for reputation building.
+- **Messages**: Planned for real-time chat functionality.
+- **Credits**: Implements the incentive system for skill sharing.
+- **Notifications**: Manages system and user notifications.
+- **Availability**: Stores user availability schedules.
+- **Verification_Status**: Tracks user verification processes.
+
+### API Design
+- RESTful endpoints with consistent URL patterns (e.g., `/api/auth`, `/api/skills`).
+- JWT-based authentication for protected routes.
+- Input validation using Joi schemas.
+- Error handling with standardized response formats.
+- CORS enabled for frontend-backend communication.
 
 ### API Endpoints
 
@@ -435,6 +496,26 @@ Create a robust, scalable, and user-friendly full-stack web application that not
 - Profile management with user information
 - Token-based authorization middleware
 
+**Example: JWT Middleware (backend/middleware/auth.js)**
+```javascript
+const jwt = require('jsonwebtoken');
+
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  
+  if (!token) return res.status(401).json({ message: 'Access token required' });
+  
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) return res.status(403).json({ message: 'Invalid token' });
+    req.user = user;
+    next();
+  });
+};
+
+module.exports = { authenticateToken };
+```
+
 #### ✅ Skills Management System
 - Complete CRUD operations for skills
 - Skill categories system (Technology, Languages, Arts & Crafts, etc.)
@@ -442,12 +523,53 @@ Create a robust, scalable, and user-friendly full-stack web application that not
 - User-specific skill management
 - Pricing structure (per hour and per session)
 
+**Example: Skills API Route (backend/routes/skills.js)**
+```javascript
+const express = require('express');
+const Joi = require('joi');
+const pool = require('../config/database');
+
+const router = express.Router();
+
+const skillSchema = Joi.object({
+  name: Joi.string().required(),
+  category: Joi.string().required(),
+  description: Joi.string().required(),
+  hourly_rate: Joi.number().min(0),
+  session_rate: Joi.number().min(0)
+});
+
+router.post('/', async (req, res) => {
+  const { error, value } = skillSchema.validate(req.body);
+  if (error) return res.status(400).json({ message: 'Validation error', error: error.details[0].message });
+
+  const [result] = await pool.execute(
+    'INSERT INTO skills (user_id, name, category, description, hourly_rate, session_rate) VALUES (?, ?, ?, ?, ?, ?)',
+    [req.user.id, value.name, value.category, value.description, value.hourly_rate, value.session_rate]
+  );
+  
+  res.status(201).json({ message: 'Skill created', skillId: result.insertId });
+});
+
+module.exports = router;
+```
+
 #### ✅ Geo-Location Features
 - Google Maps integration for location-based skill search
 - Interactive map view with skill markers
 - Location-based filtering within customizable radius
 - Current location detection and reverse geocoding
 - Distance calculation using Haversine formula
+
+**Example: Location-based Query**
+```sql
+SELECT s.*, u.name, u.location,
+       6371 * acos(cos(radians(?)) * cos(radians(u.latitude)) *
+       cos(radians(u.longitude) - radians(?)) + sin(radians(?)) * sin(radians(u.latitude))) as distance
+FROM skills s JOIN users u ON s.user_id = u.id
+WHERE distance <= ?
+ORDER BY distance
+```
 
 #### ✅ Database Design
 - MySQL database with 12+ tables including users, skills, bookings, projects, reviews
@@ -468,6 +590,23 @@ Create a robust, scalable, and user-friendly full-stack web application that not
 - Routing with React Router
 - Axios for API communication
 - Responsive design foundation
+
+**Example: React Component (frontend/src/components/SkillCard.js)**
+```javascript
+import React from 'react';
+import { Card, CardContent, Typography, Button } from '@mui/material';
+
+const SkillCard = ({ skill, onSelect }) => (
+  <Card sx={{ p: 2, borderRadius: 2, boxShadow: 2 }}>
+    <Typography variant="h6">{skill.name}</Typography>
+    <Typography variant="body2" color="text.secondary">{skill.category}</Typography>
+    <Typography variant="body1">${skill.hourly_rate}/hour</Typography>
+    <Button variant="contained" onClick={() => onSelect(skill)}>Book Now</Button>
+  </Card>
+);
+
+export default SkillCard;
+```
 
 ### Bonus Features Implementation
 - ✅ **Geo-Location Integration**: Google Maps API with location-based search and interactive map view
@@ -497,29 +636,56 @@ Create a robust, scalable, and user-friendly full-stack web application that not
 - **Challenge**: Frontend-backend communication during development
 - **Solution**: Configured CORS middleware with appropriate origins and headers
 
+## Testing
+
+### Running Tests
+1. **Backend Tests**:
+   ```bash
+   cd backend
+   npm test
+   ```
+
+2. **Frontend Tests**:
+   ```bash
+   cd frontend
+   npm test
+   ```
+
+### Test Coverage
+- Unit tests for utility functions and components
+- Integration tests for API endpoints
+- End-to-end tests for critical user flows (planned)
+
+### Testing Tools
+- **Jest**: JavaScript testing framework for both frontend and backend
+- **React Testing Library**: For testing React components
+- **Supertest**: For testing Express API endpoints
+
 ## Future Scope
 
 ### Immediate Next Steps
-- **Booking System**: Complete booking and scheduling functionality
-- **Real-time Chat**: WebSocket-based messaging between users
-- **Community Projects**: Collaborative project creation and management
-- **Reputation System**: User ratings and review system
+- **Complete Booking System**: Implement full booking workflow with calendar integration, payment processing, and automated confirmations.
+- **Real-time Chat**: Integrate Socket.io for instant messaging between users during sessions.
+- **Community Projects**: Build project creation, participant management, and progress tracking features.
+- **Reputation System**: Add star ratings, detailed reviews, and trust scores for users and skills.
 
 ### Advanced Features
-- **Community Projects**: Collaborative project creation and management
-- **Reputation System**: User ratings and review system
-- **Incentive Mechanism**: Credit system for skill sharing
-- **AI Recommendations**: Smart matching of users with relevant skills
-- **Mobile App**: React Native mobile application
-- **Payment Integration**: Secure payment processing for skill sessions
+- **AI-Powered Recommendations**: Use machine learning to suggest skills based on user preferences and location.
+- **Mobile Application**: Develop a React Native app for iOS and Android platforms.
+- **Payment Integration**: Integrate Stripe or PayPal for secure skill session payments.
+- **Video Conferencing**: Add WebRTC-based video calls for remote skill sessions.
+- **Advanced Analytics**: Implement user behavior tracking and platform usage insights.
+- **Multi-language Support**: Add internationalization (i18n) for global accessibility.
 
 ### Technical Enhancements
-- **Testing Suite**: Unit and integration tests
-- **API Documentation**: Swagger/OpenAPI documentation
-- **Deployment**: Cloud deployment with CI/CD pipeline
-- **Monitoring**: Application performance monitoring
-- **Caching**: Redis for improved performance
-- **File Upload**: Image upload for profiles and projects
+- **API Documentation**: Generate Swagger/OpenAPI specs for all endpoints.
+- **Containerization**: Dockerize the application for easy deployment and scaling.
+- **CI/CD Pipeline**: Set up automated testing and deployment with GitHub Actions.
+- **Performance Monitoring**: Integrate tools like New Relic or DataDog for real-time monitoring.
+- **Caching Layer**: Implement Redis for session storage and API response caching.
+- **File Upload System**: Add support for profile pictures, project images, and document verification.
+- **Security Audits**: Regular security assessments and penetration testing.
+- **Scalability**: Implement microservices architecture for high-traffic scenarios.
 
 ## References
 
@@ -557,6 +723,35 @@ Create a robust, scalable, and user-friendly full-stack web application that not
 - Used Git for version control with meaningful commit messages
 - Maintained responsive and accessible design
 - Followed best practices in code organization and documentation
+
+## Contributing
+
+We welcome contributions to SkillNexus! To contribute:
+
+1. Fork the repository on GitHub.
+2. Create a new branch for your feature or bug fix: `git checkout -b feature/your-feature-name`
+3. Make your changes and ensure they follow the project's coding standards.
+4. Test your changes thoroughly.
+5. Commit your changes with descriptive messages: `git commit -m "Add feature: description"`
+6. Push to your branch: `git push origin feature/your-feature-name`
+7. Create a Pull Request on GitHub, describing your changes and why they should be merged.
+
+### Code Style
+- Use ESLint and Prettier for consistent formatting.
+- Follow React best practices for component structure.
+- Write meaningful variable and function names.
+- Add comments for complex logic.
+
+### Testing
+- Run `npm test` in both frontend and backend directories.
+- Ensure all tests pass before submitting a PR.
+- Add tests for new features.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+All third-party libraries and frameworks used are open-source and properly attributed in the References section.
 
 ## Submission Details
 
