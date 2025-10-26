@@ -1,4 +1,5 @@
-<img width="975" height="462" alt="image" src="https://github.com/user-attachments/assets/ddba1e37-844d-43b7-adef-c6bc285add0b" /><img width="975" height="442" alt="image" src="https://github.com/user-attachments/assets/4dc4188f-5fa9-4848-8d9c-9c01f94b3d22" /># SkillNexus: A Full-Stack Platform for Hyperlocal Talent Sharing
+# SkillNexus: A Full-Stack Platform for Hyperlocal Talent Sharing
+
 
 ## Project Overview
 
