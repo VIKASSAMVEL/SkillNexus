@@ -387,18 +387,10 @@ Create a robust, scalable, and user-friendly full-stack web application that not
 
 ## Screenshots
 
-[Include screenshots or GIFs demonstrating the application's flow]
-
-- Home Page - Platform overview and feature highlights
-- Login/Register - Authentication interface
-- Skills Discovery - Browsing and filtering skills
-- Skills Map - Location-based skill search
-- Skill Details - Individual skill information with booking
-- Add Skill - Create and manage your skills
-- User Profile - Profile management and history
-- Bookings - Schedule and manage sessions
-- Projects - Community collaboration interface
-- Trust & Safety - Verification and safety features
+<img width="975" height="467" alt="image" src="https://github.com/user-attachments/assets/e98e3523-e5a5-47a1-b9f4-bb332c9fd8cb" />
+Figure 1: The user registration interface (Register.js) with fields for profile creation and location setup.
+<img width="975" height="468" alt="image" src="https://github.com/user-attachments/assets/91ce81e4-5782-4f85-9116-8220beedf80e" />
+Figure 2: The secure login portal (Login.js) demonstrating the JWT-based authentication entry point. 
 
 ## Links
 
