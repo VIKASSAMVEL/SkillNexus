@@ -23,7 +23,7 @@ const skillQuerySchema = Joi.object({
   search: Joi.string().optional(),
   latitude: Joi.number().min(-90).max(90).optional(),
   longitude: Joi.number().min(-180).max(180).optional(),
-  radius: Joi.number().min(1).max(100).default(10), // miles
+  radius: Joi.number().min(1).max(100).default(10), // kilometers
   limit: Joi.number().integer().min(1).max(100).default(20),
   offset: Joi.number().integer().min(0).default(0)
 }).options({ convert: true });
@@ -79,7 +79,7 @@ router.get('/', async (req, res) => {
     // Location-based filtering using Haversine formula
     if (latitude && longitude) {
       query += ` AND (
-        3959 * acos(
+        6371 * acos(
           cos(radians(?)) * cos(radians(u.latitude)) *
           cos(radians(u.longitude) - radians(?)) +
           sin(radians(?)) * sin(radians(u.latitude))
@@ -120,7 +120,7 @@ router.get('/', async (req, res) => {
 
     if (latitude && longitude) {
       countQuery += ` AND (
-        3959 * acos(
+        6371 * acos(
           cos(radians(?)) * cos(radians(u.latitude)) *
           cos(radians(u.longitude) - radians(?)) +
           sin(radians(?)) * sin(radians(u.latitude))

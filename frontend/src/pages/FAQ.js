@@ -10,6 +10,7 @@ import {
   Divider
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Footer from '../components/Footer';
 
 const FAQ = () => {
   const faqs = [
@@ -40,8 +41,9 @@ const FAQ = () => {
   ];
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: '#0F172A', py: 8 }}>
-      <Container maxWidth="md">
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', bgcolor: '#0F172A' }}>
+      <Box sx={{ flex: 1, py: 8 }}>
+        <Container maxWidth="md">
         {/* Header Section */}
         <Box sx={{ textAlign: 'center', mb: 6 }}>
           <Typography
@@ -182,6 +184,8 @@ const FAQ = () => {
           </Box>
         </Box>
       </Container>
+      </Box>
+      <Footer />
     </Box>
   );
 };

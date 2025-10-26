@@ -121,7 +121,7 @@ const Credits = () => {
         payment_method: 'demo'
       });
 
-      setSuccess(`Successfully added $${amount} to your account!`);
+      setSuccess(`Successfully added ${formatCurrency(amount)} to your account!`);
       setAmount('');
       setAddDialogOpen(false);
       fetchCredits();
@@ -244,7 +244,7 @@ const Credits = () => {
                       }}
                       sx={{ borderColor: '#14B8A6', color: '#14B8A6', '&:hover': { backgroundColor: 'rgba(20, 184, 166, 0.1)', borderColor: '#0F766E', color: '#0F766E' } }}
                     >
-                      ${amt}
+                      {formatCurrency(amt)}
                     </Button>
                   ))}
                 </Box>
@@ -315,7 +315,7 @@ const Credits = () => {
             <StyledTextField
               autoFocus
               margin="dense"
-              label="Amount ($)"
+              label="Amount (₹)"
               type="number"
               fullWidth
               variant="outlined"

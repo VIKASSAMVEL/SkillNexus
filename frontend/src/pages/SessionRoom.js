@@ -60,6 +60,7 @@ import api from '../services/api';
 import Whiteboard from '../components/Whiteboard';
 import SessionChat from '../components/Chat';
 import FileSharing from '../components/FileSharing';
+import ReviewDialog from '../components/ReviewDialog';
 
 const StyledContainer = styled(Container)(({ theme }) => ({
   padding: 0,
@@ -142,6 +143,8 @@ const SessionRoom = () => {
   const [isFileSharingOpen, setIsFileSharingOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [menuAnchor, setMenuAnchor] = useState(null);
+  const [showReviewDialog, setShowReviewDialog] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
 
   // Media state
   const [isMicOn, setIsMicOn] = useState(true);
@@ -274,6 +277,10 @@ const SessionRoom = () => {
   const initializeSession = async () => {
     try {
       setLoading(true);
+
+      // Get current user info
+      const userResponse = await api.get('/auth/me');
+      setCurrentUser(userResponse.data.user);
 
       // Fetch session details
       const sessionResponse = await api.get(`/sessions/${sessionId}`);
@@ -493,13 +500,40 @@ const SessionRoom = () => {
     }
   };
 
-  const leaveSession = () => {
-    if (socketRef.current) {
-      socketRef.current.emit('leave-session', { sessionId });
-      socketRef.current.disconnect();
+  const leaveSession = async () => {
+    try {
+      // End the session if it's still in progress
+      if (session && session.status !== 'completed') {
+        await api.post(`/sessions/${sessionId}/end`);
+        
+        // Refresh session data to get updated status
+        const sessionResponse = await api.get(`/sessions/${sessionId}`);
+        setSession(sessionResponse.data.session);
+      }
+
+      // Show review dialog if session is completed and user is learner
+      if (session && session.status === 'completed' && currentUser && session.learner_id === currentUser.id) {
+        setShowReviewDialog(true);
+        return; // Don't leave yet, show review dialog first
+      }
+
+      // Leave the session
+      if (socketRef.current) {
+        socketRef.current.emit('leave-session', { sessionId });
+        socketRef.current.disconnect();
+      }
+      cleanup();
+      navigate('/sessions');
+    } catch (error) {
+      console.error('Error ending session:', error);
+      // Still leave the session even if ending fails
+      if (socketRef.current) {
+        socketRef.current.emit('leave-session', { sessionId });
+        socketRef.current.disconnect();
+      }
+      cleanup();
+      navigate('/sessions');
     }
-    cleanup();
-    navigate('/sessions');
   };
 
   const cleanup = () => {
@@ -523,6 +557,17 @@ const SessionRoom = () => {
 
   const handleMenuClose = () => {
     setMenuAnchor(null);
+  };
+
+  const handleReviewDialogClose = () => {
+    setShowReviewDialog(false);
+    // Now actually leave the session
+    if (socketRef.current) {
+      socketRef.current.emit('leave-session', { sessionId });
+      socketRef.current.disconnect();
+    }
+    cleanup();
+    navigate('/sessions');
   };
 
   if (loading) {
@@ -869,6 +914,14 @@ const SessionRoom = () => {
           />
         </FileSharingDrawer>
       </Box>
+
+      {/* Review Dialog */}
+      <ReviewDialog
+        open={showReviewDialog}
+        onClose={handleReviewDialogClose}
+        session={session}
+        currentUser={currentUser}
+      />
     </StyledContainer>
   );
 };

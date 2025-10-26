@@ -210,20 +210,53 @@ const BookingForm = ({ open, onClose, skill, teacher }) => {
   };
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle>
+    <Dialog 
+      open={open} 
+      onClose={onClose} 
+      maxWidth="md" 
+      fullWidth
+      PaperProps={{
+        sx: {
+          bgcolor: '#1A2332',
+          backgroundImage: 'none',
+          border: '1px solid #0F766E',
+          borderRadius: 2
+        }
+      }}
+    >
+      <DialogTitle
+        sx={{
+          bgcolor: '#0F766E',
+          color: '#ffffff',
+          fontWeight: 600,
+          fontSize: '1.3rem',
+          borderBottom: '2px solid #14B8A6'
+        }}
+      >
         Book Session: {skill?.name}
       </DialogTitle>
-      <DialogContent>
+      <DialogContent
+        sx={{
+          bgcolor: '#1A2332',
+          color: '#e0e7ff'
+        }}
+      >
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
-          <Typography variant="subtitle1" gutterBottom>
+          <Typography 
+            variant="subtitle1" 
+            gutterBottom
+            sx={{
+              color: '#14B8A6',
+              fontWeight: 500
+            }}
+          >
             Teacher: {teacher?.name}
           </Typography>
 
           {userCredits && (
-            <Box sx={{ mb: 2, p: 2, bgcolor: 'grey.50', borderRadius: 1 }}>
-              <Typography variant="body2" color="text.secondary">
-                Your Credit Balance: <strong>${formatCurrency(userCredits.balance)}</strong>
+            <Box sx={{ mb: 2, p: 2, bgcolor: '#0F172A', borderRadius: 1, border: '1px solid #14B8A6' }}>
+              <Typography variant="body2" sx={{ color: '#cbd5e1' }}>
+                Your Credit Balance: <strong style={{ color: '#14B8A6' }}>{formatCurrency(userCredits.balance)}</strong>
               </Typography>
             </Box>
           )}
@@ -253,13 +286,40 @@ const BookingForm = ({ open, onClose, skill, teacher }) => {
                 min: new Date().toISOString().split('T')[0],
                 max: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] // 90 days from now
               }}
-              sx={{ flex: 1 }}
+              sx={{ 
+                flex: 1,
+                '& .MuiOutlinedInput-root': {
+                  color: '#e0e7ff',
+                  '& fieldset': {
+                    borderColor: '#0F766E'
+                  },
+                  '&:hover fieldset': {
+                    borderColor: '#14B8A6'
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#14B8A6'
+                  }
+                },
+                '& .MuiInputBase-input': {
+                  color: '#e0e7ff'
+                },
+                '& .MuiInputLabel-root': {
+                  color: '#cbd5e1',
+                  '&.Mui-focused': {
+                    color: '#14B8A6'
+                  }
+                }
+              }}
             />
           </Box>
 
           {formData.booking_date && (
             <>
-              <Typography variant="h6" gutterBottom>
+              <Typography 
+                variant="h6" 
+                gutterBottom
+                sx={{ color: '#14B8A6', fontWeight: 600 }}
+              >
                 Available Time Slots
               </Typography>
               {generateAvailableTimeSlots().length > 0 ? (
@@ -270,19 +330,32 @@ const BookingForm = ({ open, onClose, skill, teacher }) => {
                       variant={formData.start_time === slot.start && formData.end_time === slot.end ? "contained" : "outlined"}
                       size="small"
                       onClick={() => handleTimeSlotSelect(slot)}
-                      sx={{ minWidth: '120px' }}
+                      sx={{ 
+                        minWidth: '120px',
+                        color: formData.start_time === slot.start && formData.end_time === slot.end ? '#ffffff' : '#14B8A6',
+                        borderColor: '#14B8A6',
+                        backgroundColor: formData.start_time === slot.start && formData.end_time === slot.end ? '#0F766E' : 'transparent',
+                        '&:hover': {
+                          backgroundColor: formData.start_time === slot.start && formData.end_time === slot.end ? '#0F766E' : '#0F172A',
+                          borderColor: '#14B8A6'
+                        }
+                      }}
                     >
                       {slot.label}
                     </Button>
                   ))}
                 </Box>
               ) : (
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                <Typography variant="body2" sx={{ color: '#94a3b8', mb: 2 }}>
                   No available time slots for this date.
                 </Typography>
               )}
 
-              <Typography variant="subtitle2" gutterBottom sx={{ mt: 2 }}>
+              <Typography 
+                variant="subtitle2" 
+                gutterBottom 
+                sx={{ mt: 2, color: '#14B8A6', fontWeight: 500 }}
+              >
                 Or enter custom times:
               </Typography>
               <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
@@ -294,7 +367,30 @@ const BookingForm = ({ open, onClose, skill, teacher }) => {
                   required
                   fullWidth
                   InputLabelProps={{ shrink: true }}
-                  sx={{ flex: 1 }}
+                  sx={{ 
+                    flex: 1,
+                    '& .MuiOutlinedInput-root': {
+                      color: '#e0e7ff',
+                      '& fieldset': {
+                        borderColor: '#0F766E'
+                      },
+                      '&:hover fieldset': {
+                        borderColor: '#14B8A6'
+                      },
+                      '&.Mui-focused fieldset': {
+                        borderColor: '#14B8A6'
+                      }
+                    },
+                    '& .MuiInputBase-input': {
+                      color: '#e0e7ff'
+                    },
+                    '& .MuiInputLabel-root': {
+                      color: '#cbd5e1',
+                      '&.Mui-focused': {
+                        color: '#14B8A6'
+                      }
+                    }
+                  }}
                 />
 
                 <TextField
@@ -305,14 +401,47 @@ const BookingForm = ({ open, onClose, skill, teacher }) => {
                   required
                   fullWidth
                   InputLabelProps={{ shrink: true }}
-                  sx={{ flex: 1 }}
+                  sx={{ 
+                    flex: 1,
+                    '& .MuiOutlinedInput-root': {
+                      color: '#e0e7ff',
+                      '& fieldset': {
+                        borderColor: '#0F766E'
+                      },
+                      '&:hover fieldset': {
+                        borderColor: '#14B8A6'
+                      },
+                      '&.Mui-focused fieldset': {
+                        borderColor: '#14B8A6'
+                      }
+                    },
+                    '& .MuiInputBase-input': {
+                      color: '#e0e7ff'
+                    },
+                    '& .MuiInputLabel-root': {
+                      color: '#cbd5e1',
+                      '&.Mui-focused': {
+                        color: '#14B8A6'
+                      }
+                    }
+                  }}
                 />
               </Box>
             </>
           )}
 
           {!isTimeSlotAvailable(formData.start_time, formData.end_time) && formData.start_time && formData.end_time && formData.booking_date && (
-            <Alert severity="warning" sx={{ mb: 2 }}>
+            <Alert 
+              severity="warning" 
+              sx={{ 
+                mb: 2,
+                bgcolor: '#7C2D12',
+                color: '#FED7AA',
+                '& .MuiAlert-icon': {
+                  color: '#FED7AA'
+                }
+              }}
+            >
               This time slot is not available. Please choose from the available slots above or select a different time.
             </Alert>
           )}
@@ -324,24 +453,57 @@ const BookingForm = ({ open, onClose, skill, teacher }) => {
             label="Notes (optional)"
             value={formData.notes || ''}
             onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
-            sx={{ mb: 2 }}
+            sx={{ 
+              mb: 2,
+              '& .MuiOutlinedInput-root': {
+                color: '#e0e7ff',
+                '& fieldset': {
+                  borderColor: '#0F766E'
+                },
+                '&:hover fieldset': {
+                  borderColor: '#14B8A6'
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#14B8A6'
+                }
+              },
+              '& .MuiInputBase-input': {
+                color: '#e0e7ff'
+              },
+              '& .MuiInputLabel-root': {
+                color: '#cbd5e1',
+                '&.Mui-focused': {
+                  color: '#14B8A6'
+                }
+              }
+            }}
           />
 
-          <Box sx={{ p: 2, bgcolor: 'grey.50', borderRadius: 1 }}>
-            <Typography variant="h6">
-              Total Price: ${calculatePrice().toFixed(2)}
+          <Box sx={{ p: 2, bgcolor: '#0F172A', borderRadius: 1, border: '1px solid #14B8A6' }}>
+            <Typography variant="h6" sx={{ color: '#14B8A6', fontWeight: 600 }}>
+              Total Price: {formatCurrency(calculatePrice())}
             </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {skill?.price_per_hour ? `$${skill.price_per_hour}/hour` : `$${skill?.price_per_session} per session`}
+            <Typography variant="body2" sx={{ color: '#cbd5e1' }}>
+              {skill?.price_per_hour ? `${formatCurrency(skill.price_per_hour)}/hour` : `${formatCurrency(skill?.price_per_session)} per session`}
             </Typography>
             {userCredits && calculatePrice() > safeNumber(userCredits.balance) && (
-              <Alert severity="warning" sx={{ mt: 1 }}>
-                Insufficient credits! You need ${calculatePrice().toFixed(2)} but only have ${formatCurrency(userCredits.balance)}.
+              <Alert 
+                severity="warning" 
+                sx={{ 
+                  mt: 1,
+                  bgcolor: '#7C2D12',
+                  color: '#FED7AA',
+                  '& .MuiAlert-icon': {
+                    color: '#FED7AA'
+                  }
+                }}
+              >
+                Insufficient credits! You need {formatCurrency(calculatePrice())} but only have {formatCurrency(userCredits.balance)}.
                 <Button
                   size="small"
                   component={Link}
                   to="/credits"
-                  sx={{ ml: 1 }}
+                  sx={{ ml: 1, color: '#FED7AA', '&:hover': { textDecoration: 'underline' } }}
                   onClick={onClose}
                 >
                   Add Credits
@@ -351,14 +513,31 @@ const BookingForm = ({ open, onClose, skill, teacher }) => {
           </Box>
         </Box>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
+      <DialogActions sx={{ bgcolor: '#1A2332', borderTop: '1px solid #0F766E', p: 2 }}>
+        <Button 
+          onClick={onClose}
+          sx={{ color: '#cbd5e1', '&:hover': { bgcolor: '#0F172A' } }}
+        >
+          Cancel
+        </Button>
         <Button
           onClick={handleSubmit}
           variant="contained"
           disabled={loading || !isTimeSlotAvailable(formData.start_time, formData.end_time) || (userCredits && calculatePrice() > userCredits.balance)}
+          sx={{
+            backgroundColor: '#14B8A6',
+            color: '#0F172A',
+            fontWeight: 600,
+            '&:hover': {
+              backgroundColor: '#0D9488'
+            },
+            '&:disabled': {
+              backgroundColor: '#0F766E',
+              color: '#64748b'
+            }
+          }}
         >
-          {loading ? <CircularProgress size={20} /> : 'Book Session'}
+          {loading ? <CircularProgress size={20} sx={{ color: '#0F172A' }} /> : 'Book Session'}
         </Button>
       </DialogActions>
     </Dialog>

@@ -36,12 +36,15 @@ import {
   Refresh
 } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
+import Footer from './Footer';
 import api from '../services/api';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
   marginBottom: theme.spacing(3),
   borderRadius: theme.spacing(2),
+  backgroundColor: '#1A2332',
+  border: '1px solid #1E293B',
   boxShadow: '0 4px 12px rgba(20, 184, 166, 0.15)'
 }));
 
@@ -205,10 +208,11 @@ const NotificationPreferences = () => {
   }
 
   return (
-    <Box sx={{ maxWidth: 800, mx: 'auto', p: 2 }}>
-      <Typography variant="h4" gutterBottom sx={{ color: '#E2E8F0', mb: 3 }}>
-        Notification Preferences
-      </Typography>
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: '#0F172A' }}>
+      <Box sx={{ flex: 1, maxWidth: 800, mx: 'auto', p: 2, width: '100%' }}>
+        <Typography variant="h4" gutterBottom sx={{ color: '#E2E8F0', mb: 3 }}>
+          Notification Preferences
+        </Typography>
 
       {error && (
         <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>
@@ -230,7 +234,7 @@ const NotificationPreferences = () => {
         </Typography>
 
         <Grid container spacing={3}>
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid item xs={12} md={6}>
             <FormControlLabel
               control={
                 <Switch
@@ -247,7 +251,7 @@ const NotificationPreferences = () => {
             </Typography>
           </Grid>
 
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid item xs={12} md={6}>
             <FormControlLabel
               control={
                 <Switch
@@ -278,7 +282,7 @@ const NotificationPreferences = () => {
         </Typography>
 
         <Grid container spacing={2}>
-          <Grid size={{ xs: 12, sm: 4 }}>
+          <Grid item xs={12} sm={4}>
             <FormControlLabel
               control={
                 <Switch
@@ -292,7 +296,7 @@ const NotificationPreferences = () => {
             />
           </Grid>
 
-          <Grid size={{ xs: 12, sm: 4 }}>
+          <Grid item xs={12} sm={4}>
             <FormControlLabel
               control={
                 <Switch
@@ -306,7 +310,7 @@ const NotificationPreferences = () => {
             />
           </Grid>
 
-          <Grid size={{ xs: 12, sm: 4 }}>
+          <Grid item xs={12} sm={4}>
             <FormControlLabel
               control={
                 <Switch
@@ -330,7 +334,7 @@ const NotificationPreferences = () => {
         </Typography>
 
         <Grid container spacing={3}>
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid item xs={12} md={6}>
             <FormControlLabel
               control={
                 <Switch
@@ -347,7 +351,7 @@ const NotificationPreferences = () => {
             </Typography>
           </Grid>
 
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid item xs={12} md={6}>
             <FormControlLabel
               control={
                 <Switch
@@ -364,7 +368,7 @@ const NotificationPreferences = () => {
             </Typography>
           </Grid>
 
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid item xs={12} md={6}>
             <FormControlLabel
               control={
                 <Switch
@@ -381,7 +385,7 @@ const NotificationPreferences = () => {
             </Typography>
           </Grid>
 
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid item xs={12} md={6}>
             <FormControlLabel
               control={
                 <Switch
@@ -497,19 +501,6 @@ const NotificationPreferences = () => {
         >
           {saving ? 'Saving...' : 'Save Preferences'}
         </Button>
-
-        <Button
-          variant="outlined"
-          startIcon={<Refresh />}
-          onClick={testNotification}
-          sx={{
-            borderColor: '#14B8A6',
-            color: '#14B8A6',
-            '&:hover': { borderColor: '#0F766E', color: '#0F766E' }
-          }}
-        >
-          Test Email
-        </Button>
       </Box>
 
       {/* Emergency Contact Dialog */}
@@ -530,7 +521,7 @@ const NotificationPreferences = () => {
         </DialogTitle>
         <DialogContent>
           <Grid container spacing={2} sx={{ mt: 1 }}>
-            <Grid size={{ xs: 12 }}>
+            <Grid item xs={12}>
               <TextField
                 fullWidth
                 label="Contact Name"
@@ -549,7 +540,7 @@ const NotificationPreferences = () => {
               />
             </Grid>
 
-            <Grid size={{ xs: 12, sm: 6 }}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
                 label="Email"
@@ -568,7 +559,7 @@ const NotificationPreferences = () => {
               />
             </Grid>
 
-            <Grid size={{ xs: 12, sm: 6 }}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
                 label="Phone"
@@ -586,7 +577,7 @@ const NotificationPreferences = () => {
               />
             </Grid>
 
-            <Grid size={{ xs: 12 }}>
+            <Grid item xs={12}>
               <TextField
                 fullWidth
                 label="Relationship"
@@ -610,7 +601,7 @@ const NotificationPreferences = () => {
               </TextField>
             </Grid>
 
-            <Grid size={{ xs: 12 }}>
+            <Grid item xs={12}>
               <FormControlLabel
                 control={
                   <Switch
@@ -641,6 +632,8 @@ const NotificationPreferences = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      </Box>
+      <Footer />
     </Box>
   );
 };

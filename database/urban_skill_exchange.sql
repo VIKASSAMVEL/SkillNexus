@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 25, 2025 at 05:22 PM
+-- Generation Time: Oct 25, 2025 at 11:51 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -47,7 +47,8 @@ INSERT INTO `availability` (`id`, `user_id`, `day_of_week`, `start_time`, `end_t
 (2, 7, 'tuesday', '09:00:00', '17:00:00', 1, '2025-10-25 07:08:18', '2025-10-25 07:08:18'),
 (3, 7, 'wednesday', '09:00:00', '17:00:00', 1, '2025-10-25 07:08:18', '2025-10-25 07:08:18'),
 (4, 7, 'thursday', '09:00:00', '17:00:00', 1, '2025-10-25 07:08:18', '2025-10-25 07:08:18'),
-(5, 7, 'friday', '09:00:00', '17:00:00', 1, '2025-10-25 07:08:18', '2025-10-25 07:08:18');
+(5, 7, 'friday', '09:00:00', '17:00:00', 1, '2025-10-25 07:08:18', '2025-10-25 07:08:18'),
+(6, 7, 'sunday', '00:00:00', '23:00:00', 1, '2025-10-25 19:24:08', '2025-10-25 19:24:08');
 
 -- --------------------------------------------------------
 
@@ -85,6 +86,25 @@ INSERT INTO `bookings` (`id`, `student_id`, `teacher_id`, `skill_id`, `booking_d
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `conflict_alerts`
+--
+
+CREATE TABLE `conflict_alerts` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `session_id` int(11) NOT NULL,
+  `conflicting_session_id` int(11) DEFAULT NULL,
+  `conflict_type` enum('overlap','double_booking','timezone_issue') DEFAULT 'overlap',
+  `conflict_details` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`conflict_details`)),
+  `resolved` tinyint(1) DEFAULT 0,
+  `resolved_at` datetime DEFAULT NULL,
+  `resolution_action` enum('cancelled','rescheduled','ignored','contacted') DEFAULT 'ignored',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `credit_transactions`
 --
 
@@ -108,6 +128,113 @@ INSERT INTO `credit_transactions` (`id`, `user_id`, `amount`, `transaction_type`
 (2, 8, 20.00, 'bonus', 'Credit purchase', NULL, '', '2025-10-25 07:52:19'),
 (3, 8, 10.00, 'spent', 'Booking payment', 1, 'booking', '2025-10-25 07:54:16'),
 (4, 7, 10.00, 'earned', 'Booking earnings', 1, 'booking', '2025-10-25 07:54:16');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `emergency_contacts`
+--
+
+CREATE TABLE `emergency_contacts` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `contact_name` varchar(100) NOT NULL,
+  `contact_email` varchar(255) DEFAULT NULL,
+  `contact_phone` varchar(20) DEFAULT NULL,
+  `relationship` varchar(50) DEFAULT NULL,
+  `is_primary` tinyint(1) DEFAULT 0,
+  `notification_enabled` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `forum_likes`
+--
+
+CREATE TABLE `forum_likes` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `content_type` enum('topic','reply') NOT NULL,
+  `content_id` int(11) NOT NULL,
+  `like_type` enum('like','dislike') DEFAULT 'like',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `forum_likes`
+--
+
+INSERT INTO `forum_likes` (`id`, `user_id`, `content_type`, `content_id`, `like_type`, `created_at`) VALUES
+(1, 2, 'topic', 1, 'like', '2025-10-25 08:15:00'),
+(2, 3, 'topic', 1, 'like', '2025-10-25 08:20:00'),
+(3, 4, 'topic', 1, 'like', '2025-10-25 08:30:00'),
+(4, 1, 'reply', 4, 'like', '2025-10-25 09:05:00'),
+(5, 2, 'reply', 4, 'like', '2025-10-25 09:10:00'),
+(7, 8, 'reply', 1, 'like', '2025-10-25 20:18:44'),
+(8, 8, 'reply', 7, 'like', '2025-10-25 20:20:48');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `forum_replies`
+--
+
+CREATE TABLE `forum_replies` (
+  `id` int(11) NOT NULL,
+  `topic_id` int(11) NOT NULL,
+  `content` text NOT NULL,
+  `author_id` int(11) NOT NULL,
+  `parent_reply_id` int(11) DEFAULT NULL,
+  `is_solution` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `forum_replies`
+--
+
+INSERT INTO `forum_replies` (`id`, `topic_id`, `content`, `author_id`, `parent_reply_id`, `is_solution`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Thanks for creating this forum! I\'m excited to connect with other skill learners and teachers in the community.', 2, NULL, 0, '2025-10-25 08:15:00', '2025-10-25 08:15:00'),
+(2, 1, 'Welcome everyone! This platform has already helped me find amazing mentors for my coding journey.', 3, NULL, 0, '2025-10-25 08:20:00', '2025-10-25 08:20:00'),
+(3, 1, 'Looking forward to sharing my photography skills and learning from others!', 4, NULL, 0, '2025-10-25 08:30:00', '2025-10-25 08:30:00'),
+(4, 2, 'Great question! I use interactive whiteboards and screen sharing extensively. Also, I find that starting with icebreakers and setting clear objectives helps maintain engagement.', 3, NULL, 0, '2025-10-25 09:00:00', '2025-10-25 09:00:00'),
+(5, 2, 'I agree with the icebreakers! Also, using breakout rooms for smaller group discussions when teaching larger groups has been very effective.', 4, NULL, 0, '2025-10-25 09:15:00', '2025-10-25 09:15:00'),
+(6, 3, 'I\'m interested! I have experience with urban gardening and would love to help organize community workshops.', 4, NULL, 0, '2025-10-25 10:00:00', '2025-10-25 10:00:00'),
+(7, 1, 'hi', 8, NULL, 0, '2025-10-25 20:19:06', '2025-10-25 20:19:06');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `forum_topics`
+--
+
+CREATE TABLE `forum_topics` (
+  `id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `author_id` int(11) NOT NULL,
+  `category` enum('general','skills','projects','help','announcements') DEFAULT 'general',
+  `is_pinned` tinyint(1) DEFAULT 0,
+  `is_locked` tinyint(1) DEFAULT 0,
+  `view_count` int(11) DEFAULT 0,
+  `reply_count` int(11) DEFAULT 0,
+  `last_reply_at` timestamp NULL DEFAULT NULL,
+  `last_reply_user_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `forum_topics`
+--
+
+INSERT INTO `forum_topics` (`id`, `title`, `content`, `author_id`, `category`, `is_pinned`, `is_locked`, `view_count`, `reply_count`, `last_reply_at`, `last_reply_user_id`, `created_at`, `updated_at`) VALUES
+(1, 'Welcome to SkillNexus Community Forum', 'Welcome to our community discussion forum! This is a place where you can connect with other skill enthusiasts, share your experiences, ask questions, and collaborate on projects. Feel free to introduce yourself and start discussions about skills, learning, and community projects.', 1, 'announcements', 1, 0, 50, 4, '2025-10-25 20:19:06', 8, '2025-10-25 08:00:00', '2025-10-25 20:27:38'),
+(2, 'Best practices for online skill sharing sessions', 'I\'ve been doing some online tutoring sessions and wanted to share some tips that have worked well for me. What techniques do you use to keep students engaged during virtual sessions?', 2, 'skills', 0, 0, 23, 2, '2025-10-25 09:15:00', 3, '2025-10-25 08:45:00', '2025-10-25 20:25:16'),
+(3, 'Looking for collaborators on community garden project', 'I\'m starting a community garden project in Brooklyn and looking for people interested in gardening, urban farming, or community organizing. We could use skills in landscaping, composting, and community outreach.', 1, 'projects', 0, 0, 8, 1, '2025-10-25 10:00:00', 4, '2025-10-25 09:30:00', '2025-10-25 10:00:00');
 
 -- --------------------------------------------------------
 
@@ -211,10 +338,11 @@ CREATE TABLE `projects` (
 --
 
 INSERT INTO `projects` (`id`, `title`, `description`, `creator_id`, `category`, `location`, `latitude`, `longitude`, `max_participants`, `current_participants`, `start_date`, `end_date`, `status`, `project_type`, `created_at`, `updated_at`) VALUES
-(1, 'Community Garden Project', 'Creating a community vegetable garden in the neighborhood park', 1, 'community_service', 'Central Park, NY', 40.78290000, -73.96540000, 20, 1, NULL, NULL, 'planning', 'community_service', '2025-10-25 05:17:34', '2025-10-25 11:32:52'),
+(1, 'Community Garden Project', 'Creating a community vegetable garden in the neighborhood park', 1, 'community_service', 'Central Park, NY', 40.78290000, -73.96540000, 20, 0, NULL, NULL, 'planning', 'community_service', '2025-10-25 05:17:34', '2025-10-25 18:22:42'),
 (2, 'Coding Workshop for Kids', 'Teaching basic programming to local children aged 10-14', 1, 'educational', 'Brooklyn Library', 40.67820000, -73.94420000, 15, 0, NULL, NULL, 'planning', 'educational', '2025-10-25 05:17:34', '2025-10-25 05:17:34'),
 (3, 'Neighborhood Photography Club', 'Monthly photography sessions and exhibitions', 2, 'creative', 'Queens Arts Center', 40.72820000, -73.79490000, 12, 0, NULL, NULL, 'planning', 'creative', '2025-10-25 05:17:34', '2025-10-25 05:17:34'),
-(4, 'Test Community Project', 'A test project for community building', 5, 'Community Service', NULL, NULL, NULL, NULL, 0, NULL, NULL, 'planning', 'community_service', '2025-10-25 09:06:28', '2025-10-25 09:06:28');
+(4, 'Test Community Project', 'A test project for community building', 5, 'Community Service', NULL, NULL, NULL, NULL, 0, NULL, NULL, 'planning', 'community_service', '2025-10-25 09:06:28', '2025-10-25 18:23:14'),
+(5, 'ncc', 'taking care of the village', 8, 'Community Service', 'avadi', NULL, NULL, 10, 0, '2025-10-26', '2025-12-31', 'planning', 'community_service', '2025-10-25 18:21:53', '2025-10-25 18:21:53');
 
 -- --------------------------------------------------------
 
@@ -237,12 +365,12 @@ INSERT INTO `project_participants` (`project_id`, `user_id`, `role`, `joined_at`
 (1, 1, 'creator', '2025-10-25 05:17:34'),
 (1, 2, 'participant', '2025-10-25 05:17:34'),
 (1, 4, 'participant', '2025-10-25 05:17:34'),
-(1, 8, 'participant', '2025-10-25 11:32:52'),
 (2, 1, 'creator', '2025-10-25 05:17:34'),
 (2, 3, 'mentor', '2025-10-25 05:17:34'),
 (3, 1, 'participant', '2025-10-25 05:17:34'),
 (3, 2, 'creator', '2025-10-25 05:17:34'),
-(4, 5, 'creator', '2025-10-25 09:06:28');
+(4, 5, 'creator', '2025-10-25 09:06:28'),
+(5, 8, 'creator', '2025-10-25 18:21:53');
 
 -- --------------------------------------------------------
 
@@ -337,6 +465,41 @@ INSERT INTO `review_votes` (`id`, `review_id`, `voter_id`, `vote_type`, `created
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `scheduled_reminders`
+--
+
+CREATE TABLE `scheduled_reminders` (
+  `id` int(11) NOT NULL,
+  `session_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `reminder_type` enum('24h','1h','15m','follow_up','conflict','reschedule') NOT NULL,
+  `scheduled_time` datetime NOT NULL,
+  `sent` tinyint(1) DEFAULT 0,
+  `sent_at` datetime DEFAULT NULL,
+  `delivery_status` enum('pending','sent','failed','cancelled') DEFAULT 'pending',
+  `delivery_method` enum('email','sms','both') DEFAULT 'email',
+  `retry_count` int(11) DEFAULT 0,
+  `error_message` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `scheduled_reminders`
+--
+
+INSERT INTO `scheduled_reminders` (`id`, `session_id`, `user_id`, `reminder_type`, `scheduled_time`, `sent`, `sent_at`, `delivery_status`, `delivery_method`, `retry_count`, `error_message`, `created_at`) VALUES
+(1, 1, 8, '24h', '2025-10-30 12:00:00', 0, NULL, 'pending', 'email', 0, NULL, '2025-10-25 18:36:55'),
+(2, 1, 8, '1h', '2025-10-31 11:00:00', 0, NULL, 'pending', 'email', 0, NULL, '2025-10-25 18:36:55'),
+(3, 1, 8, '15m', '2025-10-31 11:45:00', 0, NULL, 'pending', 'email', 0, NULL, '2025-10-25 18:36:55'),
+(4, 1, 7, '24h', '2025-10-30 12:00:00', 0, NULL, 'pending', 'email', 0, NULL, '2025-10-25 18:36:55'),
+(5, 1, 7, '1h', '2025-10-31 11:00:00', 0, NULL, 'pending', 'email', 0, NULL, '2025-10-25 18:36:55'),
+(6, 1, 7, '15m', '2025-10-31 11:45:00', 0, NULL, 'pending', 'email', 0, NULL, '2025-10-25 18:36:55'),
+(7, 1, 8, 'follow_up', '2025-11-01 13:00:00', 0, NULL, 'pending', 'email', 0, NULL, '2025-10-25 18:36:55'),
+(8, 1, 7, 'follow_up', '2025-11-01 13:00:00', 0, NULL, 'pending', 'email', 0, NULL, '2025-10-25 18:36:55');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `sessions`
 --
 
@@ -348,7 +511,7 @@ CREATE TABLE `sessions` (
   `scheduled_at` datetime NOT NULL,
   `duration_minutes` int(11) NOT NULL DEFAULT 60,
   `session_type` enum('one-on-one','group','workshop') DEFAULT 'one-on-one',
-  `status` enum('scheduled','in-progress','completed','cancelled','no-show') DEFAULT 'scheduled',
+  `status` enum('booked','scheduled','in-progress','completed','cancelled','no-show') DEFAULT 'booked',
   `notes` text DEFAULT NULL,
   `room_id` varchar(255) DEFAULT NULL,
   `recording_url` varchar(500) DEFAULT NULL,
@@ -357,6 +520,16 @@ CREATE TABLE `sessions` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `sessions`
+--
+
+INSERT INTO `sessions` (`id`, `learner_id`, `provider_id`, `skill_id`, `scheduled_at`, `duration_minutes`, `session_type`, `status`, `notes`, `room_id`, `recording_url`, `started_at`, `ended_at`, `created_at`, `updated_at`) VALUES
+(1, 8, 7, 9, '2025-10-31 12:00:00', 60, 'one-on-one', 'completed', 'lecture about react', NULL, NULL, '2025-10-26 00:46:01', '2025-10-26 00:46:06', '2025-10-25 18:36:55', '2025-10-25 19:16:06'),
+(2, 8, 7, 9, '2025-10-31 11:00:00', 60, 'one-on-one', 'booked', '', NULL, NULL, NULL, NULL, '2025-10-25 19:22:09', '2025-10-25 19:42:19'),
+(3, 8, 7, 9, '2025-10-26 08:00:00', 60, 'one-on-one', 'completed', '', NULL, NULL, '2025-10-26 01:13:23', '2025-10-26 02:43:38', '2025-10-25 19:24:35', '2025-10-25 21:13:38'),
+(4, 8, 7, 9, '2025-10-26 01:00:00', 60, 'one-on-one', 'booked', '', NULL, NULL, NULL, NULL, '2025-10-25 19:25:08', '2025-10-25 19:42:19');
 
 -- --------------------------------------------------------
 
@@ -457,23 +630,25 @@ CREATE TABLE `skills` (
   `price_per_hour` decimal(10,2) DEFAULT NULL,
   `price_per_session` decimal(10,2) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `latitude` decimal(10,8) DEFAULT NULL,
+  `longitude` decimal(11,8) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `skills`
 --
 
-INSERT INTO `skills` (`id`, `user_id`, `name`, `category`, `description`, `proficiency_level`, `is_available`, `price_per_hour`, `price_per_session`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Web Development', 'Technology', 'Full-stack web development with React, Node.js, and databases', 'advanced', 1, 50.00, 150.00, '2025-10-25 05:17:34', '2025-10-25 05:17:34'),
-(2, 1, 'JavaScript Programming', 'Technology', 'Modern JavaScript, ES6+, and frameworks', 'expert', 1, 45.00, 135.00, '2025-10-25 05:17:34', '2025-10-25 05:17:34'),
-(3, 2, 'Photography', 'Arts & Crafts', 'Portrait and event photography with professional equipment', 'expert', 1, 75.00, 200.00, '2025-10-25 05:17:34', '2025-10-25 05:17:34'),
-(4, 2, 'Graphic Design', 'Arts & Crafts', 'Logo design, branding, and digital graphics', 'advanced', 1, 40.00, 120.00, '2025-10-25 05:17:34', '2025-10-25 05:17:34'),
-(5, 3, 'Spanish Language', 'Languages', 'Conversational Spanish for beginners and intermediate learners', 'advanced', 1, 25.00, 75.00, '2025-10-25 05:17:34', '2025-10-25 05:17:34'),
-(6, 4, 'Yoga Instruction', 'Sports & Fitness', 'Hatha yoga classes for all levels', 'expert', 1, 35.00, 100.00, '2025-10-25 05:17:34', '2025-10-25 05:17:34'),
-(7, 4, 'Meditation', 'Health & Wellness', 'Mindfulness and meditation techniques', 'intermediate', 1, 30.00, 80.00, '2025-10-25 05:17:34', '2025-10-25 05:17:34'),
-(8, 6, 'Python Programming', 'Technology', 'Learn Python programming from basics to advanced', 'intermediate', 1, 40.00, 120.00, '2025-10-25 05:25:57', '2025-10-25 05:25:57'),
-(9, 7, 'python', 'Education', 'introduction to python', 'beginner', 1, 10.00, 10.00, '2025-10-25 07:02:40', '2025-10-25 07:02:40');
+INSERT INTO `skills` (`id`, `user_id`, `name`, `category`, `description`, `proficiency_level`, `is_available`, `price_per_hour`, `price_per_session`, `created_at`, `updated_at`, `latitude`, `longitude`) VALUES
+(1, 1, 'Web Development', 'Technology', 'Full-stack web development with React, Node.js, and databases', 'advanced', 1, 50.00, 150.00, '2025-10-25 05:17:34', '2025-10-25 16:11:11', 40.71280000, -74.00600000),
+(2, 1, 'JavaScript Programming', 'Technology', 'Modern JavaScript, ES6+, and frameworks', 'expert', 1, 45.00, 135.00, '2025-10-25 05:17:34', '2025-10-25 16:11:11', 34.05220000, -118.24370000),
+(3, 2, 'Photography', 'Arts & Crafts', 'Portrait and event photography with professional equipment', 'expert', 1, 75.00, 200.00, '2025-10-25 05:17:34', '2025-10-25 16:11:11', 41.87810000, -87.62980000),
+(4, 2, 'Graphic Design', 'Arts & Crafts', 'Logo design, branding, and digital graphics', 'advanced', 1, 40.00, 120.00, '2025-10-25 05:17:34', '2025-10-25 16:11:11', 29.76040000, -95.36980000),
+(5, 3, 'Spanish Language', 'Languages', 'Conversational Spanish for beginners and intermediate learners', 'advanced', 1, 25.00, 75.00, '2025-10-25 05:17:34', '2025-10-25 16:11:11', 33.44840000, -112.07400000),
+(6, 4, 'Yoga Instruction', 'Sports & Fitness', 'Hatha yoga classes for all levels', 'expert', 1, 35.00, 100.00, '2025-10-25 05:17:34', '2025-10-25 05:17:34', NULL, NULL),
+(7, 4, 'Meditation', 'Health & Wellness', 'Mindfulness and meditation techniques', 'intermediate', 1, 30.00, 80.00, '2025-10-25 05:17:34', '2025-10-25 05:17:34', NULL, NULL),
+(8, 6, 'Python Programming', 'Technology', 'Learn Python programming from basics to advanced', 'intermediate', 1, 40.00, 120.00, '2025-10-25 05:25:57', '2025-10-25 05:25:57', NULL, NULL),
+(9, 7, 'python', 'Education', 'introduction to python', 'beginner', 1, 10.00, 10.00, '2025-10-25 07:02:40', '2025-10-25 07:02:40', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -570,6 +745,7 @@ CREATE TABLE `users` (
   `longitude` decimal(11,8) DEFAULT NULL,
   `bio` text DEFAULT NULL,
   `profile_image` varchar(500) DEFAULT NULL,
+  `resume_path` varchar(500) DEFAULT NULL,
   `is_verified` tinyint(1) DEFAULT 0,
   `email_verified` tinyint(1) DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -588,15 +764,15 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `password_hash`, `phone`, `location`, `latitude`, `longitude`, `bio`, `profile_image`, `is_verified`, `email_verified`, `created_at`, `updated_at`, `learning_style`, `preferred_session_duration`, `preferred_session_frequency`, `skill_goals`, `experience_level`, `availability_preferences`, `budget_range_min`, `budget_range_max`) VALUES
-(1, 'Alice Johnson', 'alice@example.com', '.cchHt4Wi.CVYO.CoiH6YEluOV8XJ5Dz0Ik/W8f6ivnKe', '+1234567890', 'New York, NY', 40.71280000, -74.00600000, 'Experienced web developer passionate about teaching coding to beginners.', NULL, 1, 0, '2025-10-25 05:17:34', '2025-10-25 08:07:19', NULL, 'flexible', 'once', NULL, 'beginner', NULL, 0.00, 100.00),
-(2, 'Bob Smith', 'bob@example.com', '.cchHt4Wi.CVYO.CoiH6YEluOV8XJ5Dz0Ik/W8f6ivnKe', '+1234567891', 'Brooklyn, NY', 40.67820000, -73.94420000, 'Professional photographer and graphic designer.', NULL, 1, 0, '2025-10-25 05:17:34', '2025-10-25 08:07:19', NULL, 'flexible', 'once', NULL, 'beginner', NULL, 0.00, 100.00),
-(3, 'Carol Davis', 'carol@example.com', '.cchHt4Wi.CVYO.CoiH6YEluOV8XJ5Dz0Ik/W8f6ivnKe', '+1234567892', 'Queens, NY', 40.72820000, -73.79490000, 'Native Spanish speaker offering language lessons.', NULL, 0, 0, '2025-10-25 05:17:34', '2025-10-25 08:07:19', NULL, 'flexible', 'once', NULL, 'beginner', NULL, 0.00, 100.00),
-(4, 'David Wilson', 'david@example.com', '.cchHt4Wi.CVYO.CoiH6YEluOV8XJ5Dz0Ik/W8f6ivnKe', '+1234567893', 'Manhattan, NY', 40.78310000, -73.97120000, 'Fitness trainer specializing in yoga and meditation.', NULL, 1, 0, '2025-10-25 05:17:34', '2025-10-25 08:07:19', NULL, 'flexible', 'once', NULL, 'beginner', NULL, 0.00, 100.00),
-(5, 'Test User', 'test@example.com', '.cchHt4Wi.CVYO.CoiH6YEluOV8XJ5Dz0Ik/W8f6ivnKe', NULL, 'Test City', NULL, NULL, NULL, NULL, 0, 0, '2025-10-25 05:19:55', '2025-10-25 08:07:19', NULL, 'flexible', 'once', NULL, 'beginner', NULL, 0.00, 100.00),
-(6, 'Test User', 'testuser@example.com', '.cchHt4Wi.CVYO.CoiH6YEluOV8XJ5Dz0Ik/W8f6ivnKe', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2025-10-25 05:25:45', '2025-10-25 08:07:19', NULL, 'flexible', 'once', NULL, 'beginner', NULL, 0.00, 100.00),
-(7, 'A P devendran', 'deva@example.com', '.cchHt4Wi.CVYO.CoiH6YEluOV8XJ5Dz0Ik/W8f6ivnKe', '7904193427', 'chennai', NULL, NULL, 'hi', NULL, 0, 0, '2025-10-25 07:01:44', '2025-10-25 08:07:19', NULL, 'flexible', 'once', NULL, 'beginner', NULL, 0.00, 100.00),
-(8, 'S Vikas', 'vikassamvel123@gmail.com', '', '9790801678', 'chennai', NULL, NULL, 'hi', NULL, 0, 0, '2025-10-25 07:28:36', '2025-10-25 14:56:27', NULL, 'flexible', 'once', NULL, 'beginner', NULL, 0.00, 100.00);
+INSERT INTO `users` (`id`, `name`, `email`, `password_hash`, `phone`, `location`, `latitude`, `longitude`, `bio`, `profile_image`, `resume_path`, `is_verified`, `email_verified`, `created_at`, `updated_at`, `learning_style`, `preferred_session_duration`, `preferred_session_frequency`, `skill_goals`, `experience_level`, `availability_preferences`, `budget_range_min`, `budget_range_max`) VALUES
+(1, 'Alice Johnson', 'alice@example.com', '.cchHt4Wi.CVYO.CoiH6YEluOV8XJ5Dz0Ik/W8f6ivnKe', '+1234567890', 'New York, NY', 40.71280000, -74.00600000, 'Experienced web developer passionate about teaching coding to beginners.', NULL, NULL, 1, 0, '2025-10-25 05:17:34', '2025-10-25 08:07:19', NULL, 'flexible', 'once', NULL, 'beginner', NULL, 0.00, 100.00),
+(2, 'Bob Smith', 'bob@example.com', '.cchHt4Wi.CVYO.CoiH6YEluOV8XJ5Dz0Ik/W8f6ivnKe', '+1234567891', 'Brooklyn, NY', 40.67820000, -73.94420000, 'Professional photographer and graphic designer.', NULL, NULL, 1, 0, '2025-10-25 05:17:34', '2025-10-25 08:07:19', NULL, 'flexible', 'once', NULL, 'beginner', NULL, 0.00, 100.00),
+(3, 'Carol Davis', 'carol@example.com', '.cchHt4Wi.CVYO.CoiH6YEluOV8XJ5Dz0Ik/W8f6ivnKe', '+1234567892', 'Queens, NY', 40.72820000, -73.79490000, 'Native Spanish speaker offering language lessons.', NULL, NULL, 0, 0, '2025-10-25 05:17:34', '2025-10-25 08:07:19', NULL, 'flexible', 'once', NULL, 'beginner', NULL, 0.00, 100.00),
+(4, 'David Wilson', 'david@example.com', '.cchHt4Wi.CVYO.CoiH6YEluOV8XJ5Dz0Ik/W8f6ivnKe', '+1234567893', 'Manhattan, NY', 40.78310000, -73.97120000, 'Fitness trainer specializing in yoga and meditation.', NULL, NULL, 1, 0, '2025-10-25 05:17:34', '2025-10-25 08:07:19', NULL, 'flexible', 'once', NULL, 'beginner', NULL, 0.00, 100.00),
+(5, 'Test User', 'test@example.com', '.cchHt4Wi.CVYO.CoiH6YEluOV8XJ5Dz0Ik/W8f6ivnKe', NULL, 'Test City', NULL, NULL, NULL, NULL, NULL, 0, 0, '2025-10-25 05:19:55', '2025-10-25 08:07:19', NULL, 'flexible', 'once', NULL, 'beginner', NULL, 0.00, 100.00),
+(6, 'Test User', 'testuser@example.com', '.cchHt4Wi.CVYO.CoiH6YEluOV8XJ5Dz0Ik/W8f6ivnKe', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '2025-10-25 05:25:45', '2025-10-25 08:07:19', NULL, 'flexible', 'once', NULL, 'beginner', NULL, 0.00, 100.00),
+(7, 'A P devendran', 'deva@example.com', '.cchHt4Wi.CVYO.CoiH6YEluOV8XJ5Dz0Ik/W8f6ivnKe', '7904193427', 'chennai', NULL, NULL, 'hi', NULL, NULL, 0, 0, '2025-10-25 07:01:44', '2025-10-25 08:07:19', NULL, 'flexible', 'once', NULL, 'beginner', NULL, 0.00, 100.00),
+(8, 'S Vikas', 'vikassamvel123@gmail.com', '', '9790801678', 'chennai', NULL, NULL, '3rd year computer science undergraduate studying at Veltech', NULL, NULL, 0, 0, '2025-10-25 07:28:36', '2025-10-25 21:16:46', 'visual', '1hour', 'once', '', 'beginner', '{\"weekdays\":true,\"weekends\":true,\"mornings\":true,\"afternoons\":true,\"evenings\":true}', 0.00, 100.00);
 
 -- --------------------------------------------------------
 
@@ -658,6 +834,37 @@ INSERT INTO `user_credits` (`id`, `user_id`, `balance`, `total_earned`, `total_s
 (6, 5, 100.00, 200.00, 0.00, '2025-10-25 07:18:16', '2025-10-25 07:18:16'),
 (7, 6, 100.00, 200.00, 0.00, '2025-10-25 07:18:16', '2025-10-25 07:18:16'),
 (8, 8, 310.00, 300.00, 11.00, '2025-10-25 07:31:03', '2025-10-25 07:54:16');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_notification_preferences`
+--
+
+CREATE TABLE `user_notification_preferences` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `email_reminders` tinyint(1) DEFAULT 1,
+  `sms_reminders` tinyint(1) DEFAULT 0,
+  `reminder_24h` tinyint(1) DEFAULT 1,
+  `reminder_1h` tinyint(1) DEFAULT 1,
+  `reminder_15m` tinyint(1) DEFAULT 1,
+  `conflict_alerts` tinyint(1) DEFAULT 1,
+  `reschedule_suggestions` tinyint(1) DEFAULT 1,
+  `follow_up_emails` tinyint(1) DEFAULT 1,
+  `emergency_contacts` tinyint(1) DEFAULT 0,
+  `timezone` varchar(50) DEFAULT 'UTC',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user_notification_preferences`
+--
+
+INSERT INTO `user_notification_preferences` (`id`, `user_id`, `email_reminders`, `sms_reminders`, `reminder_24h`, `reminder_1h`, `reminder_15m`, `conflict_alerts`, `reschedule_suggestions`, `follow_up_emails`, `emergency_contacts`, `timezone`, `created_at`, `updated_at`) VALUES
+(1, 8, 1, 0, 1, 1, 1, 1, 1, 1, 0, 'UTC', '2025-10-25 16:20:04', '2025-10-25 21:25:03'),
+(2, 7, 1, 0, 1, 1, 1, 1, 1, 1, 0, 'UTC', '2025-10-25 17:37:24', '2025-10-25 17:37:24');
 
 -- --------------------------------------------------------
 
@@ -769,11 +976,60 @@ ALTER TABLE `bookings`
   ADD KEY `idx_bookings_date` (`booking_date`);
 
 --
+-- Indexes for table `conflict_alerts`
+--
+ALTER TABLE `conflict_alerts`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `conflicting_session_id` (`conflicting_session_id`),
+  ADD KEY `idx_user` (`user_id`),
+  ADD KEY `idx_session` (`session_id`),
+  ADD KEY `idx_resolved` (`resolved`);
+
+--
 -- Indexes for table `credit_transactions`
 --
 ALTER TABLE `credit_transactions`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `emergency_contacts`
+--
+ALTER TABLE `emergency_contacts`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_user` (`user_id`),
+  ADD KEY `idx_primary` (`is_primary`);
+
+--
+-- Indexes for table `forum_likes`
+--
+ALTER TABLE `forum_likes`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_user_content` (`user_id`,`content_type`,`content_id`),
+  ADD KEY `idx_forum_likes_content` (`content_type`,`content_id`),
+  ADD KEY `idx_forum_likes_created` (`created_at`);
+
+--
+-- Indexes for table `forum_replies`
+--
+ALTER TABLE `forum_replies`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `topic_id` (`topic_id`),
+  ADD KEY `author_id` (`author_id`),
+  ADD KEY `parent_reply_id` (`parent_reply_id`),
+  ADD KEY `idx_forum_replies_created` (`created_at`);
+
+--
+-- Indexes for table `forum_topics`
+--
+ALTER TABLE `forum_topics`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `author_id` (`author_id`),
+  ADD KEY `last_reply_user_id` (`last_reply_user_id`),
+  ADD KEY `idx_forum_topics_category` (`category`),
+  ADD KEY `idx_forum_topics_pinned` (`is_pinned`),
+  ADD KEY `idx_forum_topics_created` (`created_at`),
+  ADD KEY `idx_forum_topics_last_reply` (`last_reply_at`);
 
 --
 -- Indexes for table `learning_paths`
@@ -863,6 +1119,16 @@ ALTER TABLE `review_votes`
   ADD UNIQUE KEY `unique_vote` (`review_id`,`voter_id`),
   ADD KEY `voter_id` (`voter_id`),
   ADD KEY `idx_review_votes_review` (`review_id`);
+
+--
+-- Indexes for table `scheduled_reminders`
+--
+ALTER TABLE `scheduled_reminders`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_session` (`session_id`),
+  ADD KEY `idx_user` (`user_id`),
+  ADD KEY `idx_scheduled` (`scheduled_time`),
+  ADD KEY `idx_status` (`delivery_status`);
 
 --
 -- Indexes for table `sessions`
@@ -994,6 +1260,13 @@ ALTER TABLE `user_credits`
   ADD UNIQUE KEY `user_id` (`user_id`);
 
 --
+-- Indexes for table `user_notification_preferences`
+--
+ALTER TABLE `user_notification_preferences`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_user_prefs` (`user_id`);
+
+--
 -- Indexes for table `user_reputation_metrics`
 --
 ALTER TABLE `user_reputation_metrics`
@@ -1033,7 +1306,7 @@ ALTER TABLE `user_trust_scores`
 -- AUTO_INCREMENT for table `availability`
 --
 ALTER TABLE `availability`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `bookings`
@@ -1042,10 +1315,40 @@ ALTER TABLE `bookings`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `conflict_alerts`
+--
+ALTER TABLE `conflict_alerts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `credit_transactions`
 --
 ALTER TABLE `credit_transactions`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `emergency_contacts`
+--
+ALTER TABLE `emergency_contacts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `forum_likes`
+--
+ALTER TABLE `forum_likes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `forum_replies`
+--
+ALTER TABLE `forum_replies`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `forum_topics`
+--
+ALTER TABLE `forum_topics`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `learning_paths`
@@ -1075,7 +1378,7 @@ ALTER TABLE `notifications`
 -- AUTO_INCREMENT for table `projects`
 --
 ALTER TABLE `projects`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `provider_compatibility`
@@ -1102,10 +1405,16 @@ ALTER TABLE `review_votes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `scheduled_reminders`
+--
+ALTER TABLE `scheduled_reminders`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT for table `sessions`
 --
 ALTER TABLE `sessions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `session_analytics`
@@ -1192,6 +1501,12 @@ ALTER TABLE `user_credits`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
+-- AUTO_INCREMENT for table `user_notification_preferences`
+--
+ALTER TABLE `user_notification_preferences`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `user_reputation_metrics`
 --
 ALTER TABLE `user_reputation_metrics`
@@ -1201,7 +1516,7 @@ ALTER TABLE `user_reputation_metrics`
 -- AUTO_INCREMENT for table `user_skill_interests`
 --
 ALTER TABLE `user_skill_interests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `user_trust_scores`
@@ -1228,10 +1543,45 @@ ALTER TABLE `bookings`
   ADD CONSTRAINT `bookings_ibfk_3` FOREIGN KEY (`skill_id`) REFERENCES `skills` (`id`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `conflict_alerts`
+--
+ALTER TABLE `conflict_alerts`
+  ADD CONSTRAINT `conflict_alerts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `conflict_alerts_ibfk_2` FOREIGN KEY (`session_id`) REFERENCES `sessions` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `conflict_alerts_ibfk_3` FOREIGN KEY (`conflicting_session_id`) REFERENCES `sessions` (`id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `credit_transactions`
 --
 ALTER TABLE `credit_transactions`
   ADD CONSTRAINT `credit_transactions_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `emergency_contacts`
+--
+ALTER TABLE `emergency_contacts`
+  ADD CONSTRAINT `emergency_contacts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `forum_likes`
+--
+ALTER TABLE `forum_likes`
+  ADD CONSTRAINT `forum_likes_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `forum_replies`
+--
+ALTER TABLE `forum_replies`
+  ADD CONSTRAINT `forum_replies_ibfk_1` FOREIGN KEY (`topic_id`) REFERENCES `forum_topics` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `forum_replies_ibfk_2` FOREIGN KEY (`author_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `forum_replies_ibfk_3` FOREIGN KEY (`parent_reply_id`) REFERENCES `forum_replies` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `forum_topics`
+--
+ALTER TABLE `forum_topics`
+  ADD CONSTRAINT `forum_topics_ibfk_1` FOREIGN KEY (`author_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `forum_topics_ibfk_2` FOREIGN KEY (`last_reply_user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `learning_paths`
@@ -1306,6 +1656,13 @@ ALTER TABLE `review_reports`
 ALTER TABLE `review_votes`
   ADD CONSTRAINT `review_votes_ibfk_1` FOREIGN KEY (`review_id`) REFERENCES `reviews` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `review_votes_ibfk_2` FOREIGN KEY (`voter_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `scheduled_reminders`
+--
+ALTER TABLE `scheduled_reminders`
+  ADD CONSTRAINT `scheduled_reminders_ibfk_1` FOREIGN KEY (`session_id`) REFERENCES `sessions` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `scheduled_reminders_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `sessions`
@@ -1394,6 +1751,12 @@ ALTER TABLE `user_badges`
 --
 ALTER TABLE `user_credits`
   ADD CONSTRAINT `user_credits_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `user_notification_preferences`
+--
+ALTER TABLE `user_notification_preferences`
+  ADD CONSTRAINT `user_notification_preferences_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `user_reputation_metrics`

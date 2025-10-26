@@ -8,11 +8,12 @@ const { authenticateToken } = require('../middleware/auth');
 const reviewSchema = Joi.object({
   booking_id: Joi.number().integer().optional(),
   project_id: Joi.number().integer().optional(),
+  session_id: Joi.number().integer().optional(),
   rating: Joi.number().integer().min(1).max(5).required(),
   review_text: Joi.string().max(1000).optional(),
   review_type: Joi.string().valid('skill_session', 'project_participation').required(),
   is_anonymous: Joi.boolean().default(false)
-}).xor('booking_id', 'project_id'); // Must have either booking_id OR project_id, but not both
+}).xor('booking_id', 'project_id', 'session_id'); // Must have either booking_id OR project_id OR session_id, but not multiple
 
 const endorsementSchema = Joi.object({
   skill_id: Joi.number().integer().required(),
@@ -41,32 +42,27 @@ router.post('/', authenticateToken, async (req, res) => {
     }
 
     const reviewer_id = req.user.userId;
-    const { booking_id, project_id, rating, review_text, review_type, is_anonymous } = value;
+    const { booking_id, project_id, session_id, rating, review_text, review_type, is_anonymous } = value;
 
     const pool = getPool();
 
-    // Determine the reviewee based on booking or project
-    let reviewee_id, booking_check, project_check;
+    // Determine the reviewee based on booking, project, or session
+    let reviewee_id, booking_check, project_check, session_check;
 
     if (booking_id) {
       // Check if user participated in this booking
       [booking_check] = await pool.execute(
-        'SELECT student_id, teacher_id FROM bookings WHERE id = ? AND (student_id = ? OR teacher_id = ?)',
+        'SELECT student_id, teacher_id FROM bookings WHERE id = ? AND (student_id = ? OR teacher_id = ?) AND status = "completed"',
         [booking_id, reviewer_id, reviewer_id]
       );
 
       if (booking_check.length === 0) {
-        return res.status(403).json({ message: 'You can only review bookings you participated in' });
+        return res.status(403).json({ message: 'You can only review completed bookings you participated in' });
       }
 
       // Reviewee is the other participant
       reviewee_id = booking_check[0].student_id === reviewer_id ?
                    booking_check[0].teacher_id : booking_check[0].student_id;
-
-      // Check if booking is completed
-      if (booking_check[0].status !== 'completed') {
-        return res.status(400).json({ message: 'You can only review completed bookings' });
-      }
     } else if (project_id) {
       // Check if user participated in this project
       [project_check] = await pool.execute(
@@ -90,12 +86,26 @@ router.post('/', authenticateToken, async (req, res) => {
       }
 
       reviewee_id = project[0].creator_id;
+    } else if (session_id) {
+      // Check if user participated in this session
+      [session_check] = await pool.execute(
+        'SELECT learner_id, provider_id FROM sessions WHERE id = ? AND (learner_id = ? OR provider_id = ?) AND status = "completed"',
+        [session_id, reviewer_id, reviewer_id]
+      );
+
+      if (session_check.length === 0) {
+        return res.status(403).json({ message: 'You can only review completed sessions you participated in' });
+      }
+
+      // Reviewee is the other participant (if learner, review provider; if provider, review learner)
+      reviewee_id = session_check[0].learner_id === reviewer_id ?
+                   session_check[0].provider_id : session_check[0].learner_id;
     }
 
-    // Check if user already reviewed this booking/project
+    // Check if user already reviewed this booking/project/session
     const [existingReview] = await pool.execute(
-      'SELECT id FROM reviews WHERE reviewer_id = ? AND ((booking_id = ? AND ? IS NOT NULL) OR (project_id = ? AND ? IS NOT NULL))',
-      [reviewer_id, booking_id, booking_id, project_id, project_id]
+      'SELECT id FROM reviews WHERE reviewer_id = ? AND ((booking_id = ? AND ? IS NOT NULL) OR (project_id = ? AND ? IS NOT NULL) OR (session_id = ? AND ? IS NOT NULL))',
+      [reviewer_id, booking_id, booking_id, project_id, project_id, session_id, session_id]
     );
 
     if (existingReview.length > 0) {
@@ -104,9 +114,9 @@ router.post('/', authenticateToken, async (req, res) => {
 
     // Insert the review
     const [result] = await pool.execute(
-      `INSERT INTO reviews (reviewer_id, reviewee_id, booking_id, project_id, rating, review_text, review_type, is_anonymous)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      [reviewer_id, reviewee_id, booking_id || null, project_id || null, rating, review_text || null, review_type, is_anonymous]
+      `INSERT INTO reviews (reviewer_id, reviewee_id, booking_id, project_id, session_id, rating, review_text, review_type, is_anonymous)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [reviewer_id, reviewee_id, booking_id || null, project_id || null, session_id || null, rating, review_text || null, review_type, is_anonymous]
     );
 
     // Update trust scores
@@ -132,11 +142,13 @@ router.get('/user/:userId', async (req, res) => {
     let query = `
       SELECT r.*, u.name as reviewer_name, u.profile_image as reviewer_image,
              b.booking_date, b.start_time, b.end_time,
-             p.title as project_title
+             p.title as project_title,
+             s.scheduled_at as session_date, s.skill_id
       FROM reviews r
       LEFT JOIN users u ON r.reviewer_id = u.id AND r.is_anonymous = FALSE
       LEFT JOIN bookings b ON r.booking_id = b.id
       LEFT JOIN projects p ON r.project_id = p.id
+      LEFT JOIN sessions s ON r.session_id = s.id
       WHERE r.reviewee_id = ? AND r.moderation_status = 'approved'
     `;
 
@@ -441,8 +453,34 @@ router.get('/trust-score/:userId', async (req, res) => {
       [userId]
     );
 
+    // If no trust score exists, create a default one
     if (trustScore.length === 0) {
-      return res.status(404).json({ message: 'Trust score not found' });
+      try {
+        await pool.execute(
+          `INSERT INTO user_trust_scores (user_id, overall_score, rating_count, average_rating, completion_rate, response_time_minutes, total_sessions, successful_sessions)
+           VALUES (?, 3.0, 0, 0.00, 0.00, 60, 0, 0)`,
+          [userId]
+        );
+      } catch (err) {
+        // Trust score might have been created by another request, ignore duplicate entry error
+        if (err.code !== 'ER_DUP_ENTRY') {
+          throw err;
+        }
+      }
+
+      // Fetch the newly created trust score
+      const [newTrustScore] = await pool.execute(
+        'SELECT * FROM user_trust_scores WHERE user_id = ?',
+        [userId]
+      );
+
+      if (newTrustScore.length > 0) {
+        return res.json({
+          trustScore: newTrustScore[0],
+          badges: [],
+          endorsementCount: 0
+        });
+      }
     }
 
     // Get badges

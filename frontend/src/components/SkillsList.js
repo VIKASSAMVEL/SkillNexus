@@ -209,7 +209,7 @@ const SkillsList = ({ onBookSkill, onViewSkillDetails }) => {
           </Typography>
           {filters.latitude && (
             <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mt: 0.5 }}>
-              Within {filters.radius} miles of your location
+              Within {filters.radius} km of your location
             </Typography>
           )}
         </Box>

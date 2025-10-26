@@ -228,11 +228,11 @@ const LocationSearch = ({ onLocationSearch, onLocationChange }) => {
                 '& .MuiSvgIcon-root': { color: '#14B8A6' }
               }}
             >
-              <MenuItem value={1}>1 mile</MenuItem>
-              <MenuItem value={5}>5 miles</MenuItem>
-              <MenuItem value={10}>10 miles</MenuItem>
-              <MenuItem value={25}>25 miles</MenuItem>
-              <MenuItem value={50}>50 miles</MenuItem>
+              <MenuItem value={1}>1 km</MenuItem>
+              <MenuItem value={5}>5 km</MenuItem>
+              <MenuItem value={10}>10 km</MenuItem>
+              <MenuItem value={25}>25 km</MenuItem>
+              <MenuItem value={50}>50 km</MenuItem>
             </Select>
           </FormControl>
         </Grid>

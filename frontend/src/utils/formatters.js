@@ -5,12 +5,12 @@
 /**
  * Safely formats a number as currency with 2 decimal places
  * @param {any} value - The value to format
- * @returns {string} Formatted currency string (e.g., "$123.45")
+ * @returns {string} Formatted currency string (e.g., "₹123.45")
  */
 export const formatCurrency = (value) => {
   const n = Number(value);
-  if (Number.isNaN(n)) return '$0.00';
-  return `$${n.toFixed(2)}`;
+  if (Number.isNaN(n)) return '₹0.00';
+  return `₹${n.toFixed(2)}`;
 };
 
 /**

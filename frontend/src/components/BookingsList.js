@@ -31,6 +31,7 @@ import {
 } from '@mui/icons-material';
 import api from '../services/api';
 import ReviewForm from './ReviewForm';
+import { formatCurrency } from '../utils/formatters';
 
 const BookingsList = () => {
   const [bookings, setBookings] = useState([]);
@@ -285,7 +286,7 @@ const BookingsList = () => {
                         Duration
                       </Typography>
                       <Typography variant="h5" sx={{ color: '#14B8A6', fontWeight: 700, mt: 0.75 }}>
-                        {booking.duration_hours}h • ${booking.total_price}
+                        {booking.duration_hours}h • {formatCurrency(booking.total_price)}
                       </Typography>
                     </Box>
 

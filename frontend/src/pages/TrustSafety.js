@@ -22,6 +22,7 @@ import {
   Star as StarIcon
 } from '@mui/icons-material';
 import { Link as RouterLink } from 'react-router-dom';
+import Footer from '../components/Footer';
 
 const TrustSafety = () => {
   const safetyPillars = [
@@ -65,8 +66,9 @@ const TrustSafety = () => {
   ];
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: '#0F172A', py: 8 }}>
-      <Container maxWidth="lg">
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', bgcolor: '#0F172A' }}>
+      <Box sx={{ flex: 1, py: 8 }}>
+        <Container maxWidth="lg">
         {/* Header Section */}
         <Box sx={{ textAlign: 'center', mb: 6 }}>
           <Typography
@@ -276,6 +278,8 @@ const TrustSafety = () => {
           </Box>
         </Box>
       </Container>
+      </Box>
+      <Footer />
     </Box>
   );
 };

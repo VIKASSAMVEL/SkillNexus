@@ -342,7 +342,7 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
               </Typography>
               <TextField
                 fullWidth
-                label="Price per Hour ($)"
+                label="Price per Hour (₹)"
                 type="number"
                 value={formData.price_per_hour}
                 onChange={(e) => handleInputChange('price_per_hour', e.target.value)}
@@ -392,7 +392,7 @@ const AddSkillForm = ({ open, onClose, onSkillAdded }) => {
               </Typography>
               <TextField
                 fullWidth
-                label="Price per Session ($)"
+                label="Price per Session (₹)"
                 type="number"
                 value={formData.price_per_session}
                 onChange={(e) => handleInputChange('price_per_session', e.target.value)}

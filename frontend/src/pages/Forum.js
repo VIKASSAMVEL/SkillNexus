@@ -23,6 +23,7 @@ import { Add as AddIcon, Search as SearchIcon } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { formatDistanceToNow } from 'date-fns';
+import Footer from '../components/Footer';
 
 const Forum = () => {
   const [topics, setTopics] = useState([]);
@@ -185,7 +186,7 @@ const Forum = () => {
             </Grid>
             <Grid item xs={12} md={3}>
               <FormControl fullWidth>
-                <InputLabel sx={{ color: '#94A3B8' }}>Category</InputLabel>
+                <InputLabel sx={{ color: '#14B8A6', fontWeight: 600 }}>Category</InputLabel>
                 <Select
                   value={filters.category}
                   label="Category"
@@ -193,13 +194,41 @@ const Forum = () => {
                   sx={{
                     borderRadius: 2,
                     bgcolor: '#0F172A',
-                    border: '1px solid #1E293B',
-                    '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
-                    '& .MuiSelect-select': { color: '#E2E8F0' }
+                    border: '2px solid #0F766E',
+                    '& .MuiOutlinedInput-notchedOutline': { border: 'none !important' },
+                    '& .MuiSelect-select': { 
+                      color: '#E2E8F0',
+                      fontWeight: 500
+                    },
+                    '&:hover': {
+                      border: '2px solid #14B8A6'
+                    },
+                    '&.Mui-focused': {
+                      border: '2px solid #14B8A6'
+                    }
                   }}
                 >
                   {categories.map((category) => (
-                    <MenuItem key={category.id} value={category.id} sx={{ bgcolor: '#0F172A', color: '#E2E8F0' }}>
+                    <MenuItem 
+                      key={category.id} 
+                      value={category.id} 
+                      sx={{ 
+                        bgcolor: '#1A2332', 
+                        color: '#E2E8F0',
+                        '&:hover': {
+                          bgcolor: '#0F766E',
+                          color: '#14B8A6'
+                        },
+                        '&.Mui-selected': {
+                          bgcolor: '#0F766E',
+                          color: '#14B8A6',
+                          fontWeight: 600,
+                          '&:hover': {
+                            bgcolor: '#0F766E'
+                          }
+                        }
+                      }}
+                    >
                       {category.name}
                     </MenuItem>
                   ))}
@@ -208,7 +237,7 @@ const Forum = () => {
             </Grid>
             <Grid item xs={12} md={3}>
               <FormControl fullWidth>
-                <InputLabel sx={{ color: '#94A3B8' }}>Sort By</InputLabel>
+                <InputLabel sx={{ color: '#14B8A6', fontWeight: 600 }}>Sort By</InputLabel>
                 <Select
                   value={filters.sort}
                   label="Sort By"
@@ -216,15 +245,104 @@ const Forum = () => {
                   sx={{
                     borderRadius: 2,
                     bgcolor: '#0F172A',
-                    border: '1px solid #1E293B',
-                    '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
-                    '& .MuiSelect-select': { color: '#E2E8F0' }
+                    border: '2px solid #0F766E',
+                    '& .MuiOutlinedInput-notchedOutline': { border: 'none !important' },
+                    '& .MuiSelect-select': { 
+                      color: '#E2E8F0',
+                      fontWeight: 500
+                    },
+                    '&:hover': {
+                      border: '2px solid #14B8A6'
+                    },
+                    '&.Mui-focused': {
+                      border: '2px solid #14B8A6'
+                    }
                   }}
                 >
-                  <MenuItem value="latest" sx={{ bgcolor: '#0F172A', color: '#E2E8F0' }}>Latest Activity</MenuItem>
-                  <MenuItem value="oldest" sx={{ bgcolor: '#0F172A', color: '#E2E8F0' }}>Oldest First</MenuItem>
-                  <MenuItem value="most_replies" sx={{ bgcolor: '#0F172A', color: '#E2E8F0' }}>Most Replies</MenuItem>
-                  <MenuItem value="most_likes" sx={{ bgcolor: '#0F172A', color: '#E2E8F0' }}>Most Likes</MenuItem>
+                  <MenuItem 
+                    value="latest" 
+                    sx={{ 
+                      bgcolor: '#1A2332', 
+                      color: '#E2E8F0',
+                      '&:hover': {
+                        bgcolor: '#0F766E',
+                        color: '#14B8A6'
+                      },
+                      '&.Mui-selected': {
+                        bgcolor: '#0F766E',
+                        color: '#14B8A6',
+                        fontWeight: 600,
+                        '&:hover': {
+                          bgcolor: '#0F766E'
+                        }
+                      }
+                    }}
+                  >
+                    Latest Activity
+                  </MenuItem>
+                  <MenuItem 
+                    value="oldest" 
+                    sx={{ 
+                      bgcolor: '#1A2332', 
+                      color: '#E2E8F0',
+                      '&:hover': {
+                        bgcolor: '#0F766E',
+                        color: '#14B8A6'
+                      },
+                      '&.Mui-selected': {
+                        bgcolor: '#0F766E',
+                        color: '#14B8A6',
+                        fontWeight: 600,
+                        '&:hover': {
+                          bgcolor: '#0F766E'
+                        }
+                      }
+                    }}
+                  >
+                    Oldest First
+                  </MenuItem>
+                  <MenuItem 
+                    value="most_replies" 
+                    sx={{ 
+                      bgcolor: '#1A2332', 
+                      color: '#E2E8F0',
+                      '&:hover': {
+                        bgcolor: '#0F766E',
+                        color: '#14B8A6'
+                      },
+                      '&.Mui-selected': {
+                        bgcolor: '#0F766E',
+                        color: '#14B8A6',
+                        fontWeight: 600,
+                        '&:hover': {
+                          bgcolor: '#0F766E'
+                        }
+                      }
+                    }}
+                  >
+                    Most Replies
+                  </MenuItem>
+                  <MenuItem 
+                    value="most_likes" 
+                    sx={{ 
+                      bgcolor: '#1A2332', 
+                      color: '#E2E8F0',
+                      '&:hover': {
+                        bgcolor: '#0F766E',
+                        color: '#14B8A6'
+                      },
+                      '&.Mui-selected': {
+                        bgcolor: '#0F766E',
+                        color: '#14B8A6',
+                        fontWeight: 600,
+                        '&:hover': {
+                          bgcolor: '#0F766E'
+                        }
+                      }
+                    }}
+                  >
+                    Most Likes
+                  </MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -507,6 +625,8 @@ const Forum = () => {
           </Fab>
         )}
       </Container>
+
+      <Footer />
     </Box>
   );
 };

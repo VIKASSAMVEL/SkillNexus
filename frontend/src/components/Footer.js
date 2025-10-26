@@ -333,110 +333,95 @@ community projects that make a difference              </Typography>
             </Grid>
 
             {/* Column 4: Trust & Support */}
-            <Grid size={{ xs: 12, md: 3 }} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Grid size={{ xs: 12, md: 3 }}>
               <Typography
                 variant="h6"
                 sx={{
                   color: '#14B8A6',
-                  mb: 1,
-                  fontWeight: 600,
-                  textAlign: 'center'
+                  mb: 1.5,
+                  fontWeight: 600
                 }}
               >
                 Trust & Support
               </Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, alignItems: 'center', width: '100%' }}>
-                {/* Row 1 */}
-                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: 'center' }}>
-                  <Link
-                    component={RouterLink}
-                    to="/faq"
-                    sx={{
-                      color: '#CBD5E1',
-                      textDecoration: 'none',
-                      '&:hover': { color: '#14B8A6' },
-                      flex: '0 1 auto'
-                    }}
-                  >
-                    FAQs
-                  </Link>
-                  <Link
-                    component={RouterLink}
-                    to="/trust-safety"
-                    sx={{
-                      color: '#CBD5E1',
-                      textDecoration: 'none',
-                      '&:hover': { color: '#14B8A6' },
-                      flex: '0 1 auto'
-                    }}
-                  >
-                    Trust & Safety
-                  </Link>
-                  <Link
-                    component={RouterLink}
-                    to="/community-guidelines"
-                    sx={{
-                      color: '#CBD5E1',
-                      textDecoration: 'none',
-                      '&:hover': { color: '#14B8A6' },
-                      flex: '0 1 auto'
-                    }}
-                  >
-                    Community Guidelines
-                  </Link>
-                  <Link
-                    component={RouterLink}
-                    to="/report-user"
-                    sx={{
-                      color: '#CBD5E1',
-                      textDecoration: 'none',
-                      '&:hover': { color: '#14B8A6' },
-                      flex: '0 1 auto'
-                    }}
-                  >
-                    Report User
-                  </Link>
-                </Box>
-
-                {/* Row 2 */}
-                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: 'center' }}>
-                  <Link
-                    component={RouterLink}
-                    to="/verification-process"
-                    sx={{
-                      color: '#CBD5E1',
-                      textDecoration: 'none',
-                      '&:hover': { color: '#14B8A6' },
-                      flex: '0 1 auto'
-                    }}
-                  >
-                    Verification Process
-                  </Link>
-                  <Link
-                    component={RouterLink}
-                    to="/terms-of-service"
-                    sx={{
-                      color: '#CBD5E1',
-                      textDecoration: 'none',
-                      '&:hover': { color: '#14B8A6' },
-                      flex: '0 1 auto'
-                    }}
-                  >
-                    Terms of Service
-                  </Link>
-                  <Link
-                    component={RouterLink}
-                    to="/privacy-policy"
-                    sx={{
-                      color: '#CBD5E1',
-                      textDecoration: 'none',
-                      '&:hover': { color: '#14B8A6' },
-                      flex: '0 1 auto'
-                    }}
-                  >
-                    Privacy Policy
-                  </Link>
-                </Box>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.75 }}>
+                <Link
+                  component={RouterLink}
+                  to="/faq"
+                  sx={{
+                    color: '#CBD5E1',
+                    textDecoration: 'none',
+                    '&:hover': { color: '#14B8A6' }
+                  }}
+                >
+                  FAQs
+                </Link>
+                <Link
+                  component={RouterLink}
+                  to="/trust-safety"
+                  sx={{
+                    color: '#CBD5E1',
+                    textDecoration: 'none',
+                    '&:hover': { color: '#14B8A6' }
+                  }}
+                >
+                  Trust & Safety
+                </Link>
+                <Link
+                  component={RouterLink}
+                  to="/community-guidelines"
+                  sx={{
+                    color: '#CBD5E1',
+                    textDecoration: 'none',
+                    '&:hover': { color: '#14B8A6' }
+                  }}
+                >
+                  Community Guidelines
+                </Link>
+                <Link
+                  component={RouterLink}
+                  to="/report-user"
+                  sx={{
+                    color: '#CBD5E1',
+                    textDecoration: 'none',
+                    '&:hover': { color: '#14B8A6' }
+                  }}
+                >
+                  Report User
+                </Link>
+                <Link
+                  component={RouterLink}
+                  to="/verification-process"
+                  sx={{
+                    color: '#CBD5E1',
+                    textDecoration: 'none',
+                    '&:hover': { color: '#14B8A6' }
+                  }}
+                >
+                  Verification Process
+                </Link>
+                <Link
+                  component={RouterLink}
+                  to="/terms-of-service"
+                  sx={{
+                    color: '#CBD5E1',
+                    textDecoration: 'none',
+                    '&:hover': { color: '#14B8A6' }
+                  }}
+                >
+                  Terms of Service
+                </Link>
+                <Link
+                  component={RouterLink}
+                  to="/privacy-policy"
+                  sx={{
+                    color: '#CBD5E1',
+                    textDecoration: 'none',
+                    '&:hover': { color: '#14B8A6' }
+                  }}
+                >
+                  Privacy Policy
+                </Link>
               </Box>
             </Grid>
           </Grid>

@@ -567,7 +567,7 @@ const CalendarScheduler = ({ teacherId, skillId, onBookingCreated }) => {
                   </Box>
                 ) : (
                   <FormControl fullWidth>
-                    <InputLabel sx={{ color: '#94A3B8' }}>Choose a teacher</InputLabel>
+                    <InputLabel sx={{ color: '#14B8A6', fontWeight: 600 }}>Choose a teacher</InputLabel>
                     <Select
                       value={selectedTeacherId}
                       onChange={(e) => {
@@ -578,14 +578,35 @@ const CalendarScheduler = ({ teacherId, skillId, onBookingCreated }) => {
                       }}
                       sx={{
                         color: '#E2E8F0',
-                        '& .MuiOutlinedInput-notchedOutline': { borderColor: '#1E293B' },
+                        '& .MuiOutlinedInput-notchedOutline': { borderColor: '#0F766E' },
                         '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#14B8A6' },
                         '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#14B8A6' },
-                        '& .MuiSelect-icon': { color: '#94A3B8' }
+                        '& .MuiSelect-icon': { color: '#14B8A6' },
+                        border: '2px solid #0F766E',
+                        borderRadius: 2
                       }}
                     >
                       {teachers.map((teacher) => (
-                        <MenuItem key={teacher.id} value={teacher.id}>
+                        <MenuItem 
+                          key={teacher.id} 
+                          value={teacher.id}
+                          sx={{
+                            bgcolor: '#1A2332',
+                            color: '#E2E8F0',
+                            '&:hover': {
+                              bgcolor: '#0F766E',
+                              color: '#14B8A6'
+                            },
+                            '&.Mui-selected': {
+                              bgcolor: '#0F766E',
+                              color: '#14B8A6',
+                              fontWeight: 600,
+                              '&:hover': {
+                                bgcolor: '#0F766E'
+                              }
+                            }
+                          }}
+                        >
                           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                             <Avatar sx={{ width: 32, height: 32, bgcolor: '#14B8A6' }}>
                               {teacher.name.charAt(0).toUpperCase()}
@@ -626,7 +647,7 @@ const CalendarScheduler = ({ teacherId, skillId, onBookingCreated }) => {
                   </Box>
                 ) : (
                   <FormControl fullWidth>
-                    <InputLabel sx={{ color: '#94A3B8' }}>Choose a skill</InputLabel>
+                    <InputLabel sx={{ color: '#14B8A6', fontWeight: 600 }}>Choose a skill</InputLabel>
                     <Select
                       value={selectedSkillId}
                       onChange={(e) => {
@@ -636,16 +657,37 @@ const CalendarScheduler = ({ teacherId, skillId, onBookingCreated }) => {
                       disabled={!selectedTeacherId}
                       sx={{
                         color: '#E2E8F0',
-                        '& .MuiOutlinedInput-notchedOutline': { borderColor: '#1E293B' },
+                        '& .MuiOutlinedInput-notchedOutline': { borderColor: '#0F766E' },
                         '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#14B8A6' },
                         '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#14B8A6' },
-                        '& .MuiSelect-icon': { color: '#94A3B8' }
+                        '& .MuiSelect-icon': { color: '#14B8A6' },
+                        border: '2px solid #0F766E',
+                        borderRadius: 2
                       }}
                     >
                       {skills
                         .filter(skill => !selectedTeacherId || skill.user_id === parseInt(selectedTeacherId))
                         .map((skill) => (
-                        <MenuItem key={skill.id} value={skill.id}>
+                        <MenuItem 
+                          key={skill.id} 
+                          value={skill.id}
+                          sx={{
+                            bgcolor: '#1A2332',
+                            color: '#E2E8F0',
+                            '&:hover': {
+                              bgcolor: '#0F766E',
+                              color: '#14B8A6'
+                            },
+                            '&.Mui-selected': {
+                              bgcolor: '#0F766E',
+                              color: '#14B8A6',
+                              fontWeight: 600,
+                              '&:hover': {
+                                bgcolor: '#0F766E'
+                              }
+                            }
+                          }}
+                        >
                           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                             <Box sx={{
                               width: 12,

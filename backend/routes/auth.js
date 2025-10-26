@@ -2,10 +2,41 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Joi = require('joi');
+const multer = require('multer');
+const path = require('path');
 const { getPool } = require('../config/database');
 const { authenticateToken } = require('../middleware/auth');
 
 const router = express.Router();
+
+// Configure multer for resume uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, '../uploads'));
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, 'resume-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = /pdf|doc|docx/;
+    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = allowedTypes.test(file.mimetype);
+
+    if (mimetype && extname) {
+      return cb(null, true);
+    } else {
+      cb(new Error('Only PDF, DOC, and DOCX files are allowed'));
+    }
+  }
+});
 
 // Validation schemas
 const registerSchema = Joi.object({
@@ -29,7 +60,7 @@ const generateToken = (userId) => {
 };
 
 // Register new user
-router.post('/register', async (req, res) => {
+router.post('/register', upload.single('resume'), async (req, res) => {
   try {
     const { error, value } = registerSchema.validate(req.body);
     if (error) {
@@ -56,10 +87,16 @@ router.post('/register', async (req, res) => {
     const saltRounds = 10;
     const passwordHash = await bcrypt.hash(password, saltRounds);
 
+    // Handle resume file path
+    let resumePath = null;
+    if (req.file) {
+      resumePath = req.file.filename;
+    }
+
     // Insert new user
     const [result] = await pool.execute(
-      'INSERT INTO users (name, email, password_hash, phone, location) VALUES (?, ?, ?, ?, ?)',
-      [name, email, passwordHash, phone || null, location || null]
+      'INSERT INTO users (name, email, password_hash, phone, location, resume_path) VALUES (?, ?, ?, ?, ?, ?)',
+      [name, email, passwordHash, phone || null, location || null, resumePath]
     );
 
     // Generate token
@@ -71,11 +108,18 @@ router.post('/register', async (req, res) => {
       user: {
         id: result.insertId,
         name,
-        email
+        email,
+        resume_path: resumePath
       }
     });
   } catch (error) {
     console.error('Registration error:', error);
+    if (error.message.includes('Only PDF, DOC, and DOCX files are allowed')) {
+      return res.status(400).json({ message: error.message });
+    }
+    if (error.code === 'LIMIT_FILE_SIZE') {
+      return res.status(400).json({ message: 'File size too large. Maximum 5MB allowed.' });
+    }
     res.status(500).json({ message: 'Internal server error' });
   }
 });

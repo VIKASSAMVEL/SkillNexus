@@ -29,6 +29,7 @@ import {
 import SkillRecommendations from '../components/SkillRecommendations';
 import LearningPathRecommendations from '../components/LearningPathRecommendations';
 import UserPreferencesForm from '../components/UserPreferencesForm';
+import Footer from '../components/Footer';
 
 const StyledContainer = styled(Container)(({ theme }) => ({
   paddingTop: theme.spacing(4),
@@ -393,6 +394,7 @@ const Recommendations = () => {
         </Dialog>
       </Container>
 
+      <Footer />
     </Box>
   );
 };

@@ -18,6 +18,7 @@ import {
   Security as SecurityIcon,
   Report as ReportIcon
 } from '@mui/icons-material';
+import Footer from '../components/Footer';
 
 const CommunityGuidelines = () => {
   const guidelines = [
@@ -54,8 +55,9 @@ const CommunityGuidelines = () => {
   ];
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: '#0F172A', py: 8 }}>
-      <Container maxWidth="md">
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', bgcolor: '#0F172A' }}>
+      <Box sx={{ flex: 1, py: 8 }}>
+        <Container maxWidth="md">
         {/* Header Section */}
         <Box sx={{ textAlign: 'center', mb: 6 }}>
           <Typography
@@ -181,6 +183,8 @@ const CommunityGuidelines = () => {
           </Box>
         </Box>
       </Container>
+      </Box>
+      <Footer />
     </Box>
   );
 };

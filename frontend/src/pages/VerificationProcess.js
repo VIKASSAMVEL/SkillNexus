@@ -16,6 +16,7 @@ import {
   VerifiedUser as VerifiedIcon,
   School as SchoolIcon
 } from '@mui/icons-material';
+import Footer from '../components/Footer';
 
 const VerificationProcess = () => {
   const verificationBadges = [
@@ -35,7 +36,7 @@ const VerificationProcess = () => {
       whatItMeans: "This member is active and has been positively reviewed by their peers."
     },
     {
-      title: "ID Verified Badge [FUTURE SCOPE]",
+      title: "ID Verified Badge ",
       icon: <VerifiedIcon sx={{ color: '#10B981', fontSize: 28 }} />,
       badge: <Chip
         label="ID Verified"
@@ -50,7 +51,7 @@ const VerificationProcess = () => {
       whatItMeans: "We have confirmed that this user's name and photo match their government ID, adding a strong layer of authenticity."
     },
     {
-      title: "Skill Verified Badge [FUTURE SCOPE]",
+      title: "Skill Verified Badge ",
       icon: <SchoolIcon sx={{ color: '#8B5CF6', fontSize: 28 }} />,
       badge: <Chip
         label="Skill Verified"
@@ -67,8 +68,9 @@ const VerificationProcess = () => {
   ];
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: '#0F172A', py: 8 }}>
-      <Container maxWidth="md">
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', bgcolor: '#0F172A' }}>
+      <Box sx={{ flex: 1, py: 8 }}>
+        <Container maxWidth="md">
         {/* Header Section */}
         <Box sx={{ textAlign: 'center', mb: 6 }}>
           <Typography
@@ -253,6 +255,8 @@ const VerificationProcess = () => {
           </Box>
         </Box>
       </Container>
+      </Box>
+      <Footer />
     </Box>
   );
 };
